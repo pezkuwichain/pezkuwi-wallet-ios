@@ -52,10 +52,10 @@ extension ParachainStaking {
     }
 
     final class ScheduledRequestsQueryFactory: ParaStkScheduledRequestsQueryFactoryProtocol {
-        let operationQueue: OperationQueue
+        let queryWrapperFactory: ParaStkScheduledRequestsQueryWrapperFactoryProtocol
 
-        init(operationQueue: OperationQueue) {
-            self.operationQueue = operationQueue
+        init(queryWrapperFactory: ParaStkScheduledRequestsQueryWrapperFactoryProtocol) {
+            self.queryWrapperFactory = queryWrapperFactory
         }
 
         func createOperation(
@@ -64,23 +64,14 @@ extension ParachainStaking {
             runtimeService: RuntimeCodingServiceProtocol,
             connection: JSONRPCEngine
         ) -> CompoundOperationWrapper<[ParachainStaking.DelegatorScheduledRequest]> {
-            let operationManager = OperationManager(operationQueue: operationQueue)
-
-            let queryFactory = StorageRequestFactory(
-                remoteFactory: StorageKeyFactory(),
-                operationManager: operationManager
-            )
-
             let codingFactoryOperation = runtimeService.fetchCoderFactoryOperation()
 
-            let queryWrapper: CompoundOperationWrapper<[StorageResponse<[ParachainStaking.ScheduledRequest]>]> =
-                queryFactory.queryItems(
-                    engine: connection,
-                    keyParams1: { collators },
-                    keyParams2: { [delegator] },
-                    factory: { try codingFactoryOperation.extractNoCancellableResultData() },
-                    storagePath: ParachainStaking.delegationRequestsPath
-                )
+            let queryWrapper = queryWrapperFactory.createQueryWrapper(
+                using: connection,
+                with: { collators },
+                delegator: { delegator },
+                codingFactory: { try codingFactoryOperation.extractNoCancellableResultData() }
+            )
 
             queryWrapper.addDependency(operations: [codingFactoryOperation])
 
@@ -88,12 +79,13 @@ extension ParachainStaking {
                 let responses = try queryWrapper.targetOperation.extractNoCancellableResultData()
 
                 return zip(collators, responses).compactMap { collator, response in
-                    guard
-                        let delegatorRequest = response.value?.first(
-                            where: { $0.delegator == delegator }
-                        ) else {
-                        return nil
+                    let delegatorRequest = response.value?.first { request in
+                        guard let requestDelegator = request.delegator else { return true }
+
+                        return requestDelegator.wrappedValue == delegator
                     }
+
+                    guard let delegatorRequest else { return nil }
 
                     return ParachainStaking.DelegatorScheduledRequest(
                         collatorId: collator,

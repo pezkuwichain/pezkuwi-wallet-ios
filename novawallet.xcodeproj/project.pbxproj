@@ -1975,6 +1975,7 @@
 		2D6F51AB2CDDD98300564C00 /* AssetsSearchFlowLayout+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6F51AA2CDDD98300564C00 /* AssetsSearchFlowLayout+Types.swift */; };
 		2D6F51B12CE11EB100564C00 /* SpendAssetOperationNetworkBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6F51B02CE11EB100564C00 /* SpendAssetOperationNetworkBuilder.swift */; };
 		2D6F51B32CE120AB00564C00 /* SpendAssetOperationNetworkListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6F51B22CE120AB00564C00 /* SpendAssetOperationNetworkListInteractor.swift */; };
+		2D72133F2F0FC52F00826C7B /* ParaStkScheduledRequestsQueryWrapperFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D72133E2F0FC52F00826C7B /* ParaStkScheduledRequestsQueryWrapperFactory.swift */; };
 		2D73AD382EC32587002DE18F /* WalletListFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D73AD372EC32587002DE18F /* WalletListFilter.swift */; };
 		2D73AD4A2EC32CDD002DE18F /* WalletsAccountsChooseViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D73AD492EC32CDD002DE18F /* WalletsAccountsChooseViewModelFactory.swift */; };
 		2D73AD4F2EC32EE8002DE18F /* GiftWalletChoosePresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D73AD4E2EC32EE8002DE18F /* GiftWalletChoosePresentable.swift */; };
@@ -8553,6 +8554,7 @@
 		2D6F51AA2CDDD98300564C00 /* AssetsSearchFlowLayout+Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssetsSearchFlowLayout+Types.swift"; sourceTree = "<group>"; };
 		2D6F51B02CE11EB100564C00 /* SpendAssetOperationNetworkBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendAssetOperationNetworkBuilder.swift; sourceTree = "<group>"; };
 		2D6F51B22CE120AB00564C00 /* SpendAssetOperationNetworkListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendAssetOperationNetworkListInteractor.swift; sourceTree = "<group>"; };
+		2D72133E2F0FC52F00826C7B /* ParaStkScheduledRequestsQueryWrapperFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParaStkScheduledRequestsQueryWrapperFactory.swift; sourceTree = "<group>"; };
 		2D73AD372EC32587002DE18F /* WalletListFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletListFilter.swift; sourceTree = "<group>"; };
 		2D73AD492EC32CDD002DE18F /* WalletsAccountsChooseViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsAccountsChooseViewModelFactory.swift; sourceTree = "<group>"; };
 		2D73AD4E2EC32EE8002DE18F /* GiftWalletChoosePresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftWalletChoosePresentable.swift; sourceTree = "<group>"; };
@@ -26279,6 +26281,7 @@
 				841E5558282E6A7700C8438F /* ParaStkDurationOperationFactory.swift */,
 				84C3420628314D9600156569 /* ParaStkScheduledRequestsQueryFactory.swift */,
 				84C11F162840BD46007F7C05 /* ParaStkCollatorsOperationFactory.swift */,
+				2D72133E2F0FC52F00826C7B /* ParaStkScheduledRequestsQueryWrapperFactory.swift */,
 			);
 			path = ParachainStaking;
 			sourceTree = "<group>";
@@ -31599,6 +31602,7 @@
 				0C13DFE12AFBBAF600E5F355 /* SwapBaseViewModelFactory.swift in Sources */,
 				843E9B3627C8B915009C143A /* NftFileDownloadService.swift in Sources */,
 				842B17FF28649CCD0014CC57 /* CrossChainSelectionState.swift in Sources */,
+				2D72133F2F0FC52F00826C7B /* ParaStkScheduledRequestsQueryWrapperFactory.swift in Sources */,
 				0CAB67532D49338000E3A844 /* StakingGenericRewardsViewController.swift in Sources */,
 				0C1CF72E2E54A73E00B1DA66 /* HydraExchange.swift in Sources */,
 				8437F7C12924FF6400DB6366 /* EvmSubscriptionMessage.swift in Sources */,

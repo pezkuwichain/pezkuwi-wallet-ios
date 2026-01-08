@@ -6,7 +6,7 @@ final class ParaStkScheduledRequestsUpdater: BaseStorageChildSubscription {
     let chainRegistry: ChainRegistryProtocol
     let accountId: AccountId
     let chainId: ChainModel.Id
-    let storageRequestFactory: StorageRequestFactoryProtocol
+    let queryWrapperFactory: ParaStkScheduledRequestsQueryWrapperFactoryProtocol
 
     private lazy var localKeyFactory = LocalStorageKeyFactory()
 
@@ -18,13 +18,13 @@ final class ParaStkScheduledRequestsUpdater: BaseStorageChildSubscription {
         accountId: AccountId,
         chainId: ChainModel.Id,
         operationManager: OperationManagerProtocol,
-        storageRequestFactory: StorageRequestFactoryProtocol,
+        queryWrapperFactory: ParaStkScheduledRequestsQueryWrapperFactoryProtocol,
         logger: LoggerProtocol
     ) {
         self.chainRegistry = chainRegistry
         self.accountId = accountId
         self.chainId = chainId
-        self.storageRequestFactory = storageRequestFactory
+        self.queryWrapperFactory = queryWrapperFactory
 
         super.init(
             remoteStorageKey: remoteStorageKey,
@@ -68,11 +68,13 @@ final class ParaStkScheduledRequestsUpdater: BaseStorageChildSubscription {
             let responses = try requestResponsesClosure()
 
             return zip(collators, responses).compactMap { collator, response in
-                guard
-                    let scheduledRequests = response.value,
-                    let delegationRequest = scheduledRequests.first(where: { $0.delegator == delegatorId }) else {
-                    return nil
+                let delegationRequest = response.value?.first { request in
+                    guard let requestDelegator = request.delegator else { return true }
+
+                    return requestDelegator.wrappedValue == delegatorId
                 }
+
+                guard let delegationRequest else { return nil }
 
                 return ParachainStaking.DelegatorScheduledRequest(
                     collatorId: collator,
@@ -109,20 +111,18 @@ final class ParaStkScheduledRequestsUpdater: BaseStorageChildSubscription {
         connection: JSONRPCEngine,
         blockHash: Data?
     ) -> CompoundOperationWrapper<[StorageResponse<[ParachainStaking.ScheduledRequest]>]> {
-        let collators: () throws -> [BytesCodable] = {
-            let delegator = try decodingOperation.extractNoCancellableResultData()
-            return delegator.collators().map { BytesCodable(wrappedValue: $0) }
-        }
-        let delegatorId = BytesCodable(wrappedValue: accountId)
+        let delegatorId = accountId
 
-        return storageRequestFactory.queryItems(
-            engine: connection,
-            keyParams1: collators,
-            keyParams2: { [delegatorId] },
-            factory: {
-                try codingFactoryOperation.extractNoCancellableResultData()
+        return queryWrapperFactory.createQueryWrapper(
+            using: connection,
+            with: {
+                try decodingOperation
+                    .extractNoCancellableResultData()
+                    .collators()
+                    .map { BytesCodable(wrappedValue: $0) }
             },
-            storagePath: ParachainStaking.delegationRequestsPath,
+            delegator: { delegatorId },
+            codingFactory: { try codingFactoryOperation.extractNoCancellableResultData() },
             at: blockHash
         )
     }
