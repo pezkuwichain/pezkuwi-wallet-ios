@@ -109,14 +109,16 @@ final class ParaStkScheduledRequestsUpdater: BaseStorageChildSubscription {
         connection: JSONRPCEngine,
         blockHash: Data?
     ) -> CompoundOperationWrapper<[StorageResponse<[ParachainStaking.ScheduledRequest]>]> {
-        let keyParams: () throws -> [BytesCodable] = {
+        let collators: () throws -> [BytesCodable] = {
             let delegator = try decodingOperation.extractNoCancellableResultData()
             return delegator.collators().map { BytesCodable(wrappedValue: $0) }
         }
+        let delegatorId = BytesCodable(wrappedValue: accountId)
 
         return storageRequestFactory.queryItems(
             engine: connection,
-            keyParams: keyParams,
+            keyParams1: collators,
+            keyParams2: { [delegatorId] },
             factory: {
                 try codingFactoryOperation.extractNoCancellableResultData()
             },

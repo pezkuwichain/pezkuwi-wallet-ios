@@ -76,7 +76,8 @@ extension ParachainStaking {
             let queryWrapper: CompoundOperationWrapper<[StorageResponse<[ParachainStaking.ScheduledRequest]>]> =
                 queryFactory.queryItems(
                     engine: connection,
-                    keyParams: { collators },
+                    keyParams1: { collators },
+                    keyParams2: { [delegator] },
                     factory: { try codingFactoryOperation.extractNoCancellableResultData() },
                     storagePath: ParachainStaking.delegationRequestsPath
                 )
