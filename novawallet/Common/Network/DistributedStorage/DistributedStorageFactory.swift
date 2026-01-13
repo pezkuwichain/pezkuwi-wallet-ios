@@ -6,7 +6,7 @@ protocol DistributedStorageOperationFactoryProtocol {
 }
 
 final class DistributedStorageOperationFactory: BaseFetchOperationFactory {
-    static let ipfsBaseUrl = URL(string: "https://image.w.kodadot.xyz/ipfs")!
+    static let ipfsBaseUrl = URL(string: "https://bucket.chaotic.art/ipfs")!
 
     static func resolveUrl(from storage: DistributedStorage) -> URL {
         switch storage {

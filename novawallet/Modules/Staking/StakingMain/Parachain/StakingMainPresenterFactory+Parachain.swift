@@ -94,6 +94,14 @@ extension StakingMainPresenterFactory {
 
         let applicationHandler = ApplicationHandler()
 
+        let queryWrapperFactory = ParaStkScheduledRequestsQueryWrapperFactory(
+            storageRequestFactory: storageRequestFactory,
+            operationManager: operationManager
+        )
+        let scheduledRequestsFactory = ParachainStaking.ScheduledRequestsQueryFactory(
+            queryWrapperFactory: queryWrapperFactory
+        )
+
         return StakingParachainInteractor(
             selectedWalletSettings: SelectedWalletSettings.shared,
             sharedState: state,
@@ -101,7 +109,7 @@ extension StakingMainPresenterFactory {
             priceLocalSubscriptionFactory: PriceProviderFactory.shared,
             networkInfoFactory: networkInfoFactory,
             durationOperationFactory: durationFactory,
-            scheduledRequestsFactory: ParachainStaking.ScheduledRequestsQueryFactory(operationQueue: operationQueue),
+            scheduledRequestsFactory: scheduledRequestsFactory,
             collatorsOperationFactory: collatorsOperationFactory,
             yieldBoostSupport: ParaStkYieldBoostSupport(),
             yieldBoostProviderFactory: ParaStkYieldBoostProviderFactory.shared,

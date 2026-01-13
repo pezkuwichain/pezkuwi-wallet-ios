@@ -24,7 +24,8 @@ extension ParachainStaking {
     }
 
     struct ScheduledRequest: Decodable, Encodable, Equatable {
-        @BytesCodable var delegator: AccountId
+        /// legacy field to comply with older parachain-staking pallet version
+        var delegator: BytesCodable?
         @StringCodable var whenExecutable: RoundIndex
         let action: DelegationAction
     }
