@@ -3,7 +3,7 @@ import UIKit_iOS
 import Kingfisher
 
 final class AssetListTotalBalanceView: UIView {
-    let backgroundBlurView = GladingFrostedCardView()
+    let backgroundBlurView = GladingCardView()
 
     let displayContentView: UIView = .create { view in
         view.backgroundColor = .clear
