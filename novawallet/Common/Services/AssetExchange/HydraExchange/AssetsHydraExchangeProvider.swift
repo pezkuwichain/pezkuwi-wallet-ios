@@ -88,6 +88,14 @@ final class AssetsHydraExchangeProvider: AssetsExchangeBaseProvider {
                 operationQueue: host.operationQueue
             ),
             quoteFactory: HydraStableswapQuoteFactory(flowState: flowState),
+            tradabilityFactory: .init(
+                requestFactory: StorageRequestFactory(
+                    remoteFactory: StorageKeyFactory(),
+                    operationManager: OperationManager(operationQueue: host.operationQueue)
+                ),
+                runtimeService: host.runtimeService,
+                connection: host.connection
+            ),
             logger: logger
         )
     }

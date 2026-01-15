@@ -1909,6 +1909,7 @@
 		2D5EBEB02D37D4090016AC4E /* WalletStorageCleanerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5EBEAF2D37D4090016AC4E /* WalletStorageCleanerFactory.swift */; };
 		2D5EBEB22D37DE440016AC4E /* RemovedWalletDAppSettingsCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5EBEB12D37DE440016AC4E /* RemovedWalletDAppSettingsCleaner.swift */; };
 		2D5EBEB42D38F0FD0016AC4E /* AssetListMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5EBEB32D38F0FD0016AC4E /* AssetListMeasurement.swift */; };
+		2D5F77F92F19013F005D77BC /* HydraStableswapTradabilityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5F77F82F19013F005D77BC /* HydraStableswapTradabilityFactory.swift */; };
 		2D5FC1A42C5220900013352B /* AccountVoteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FC1A32C5220900013352B /* AccountVoteFactory.swift */; };
 		2D60C9BD2D1AA97C00027EC6 /* ModalCardPresentationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D60C9BC2D1AA97C00027EC6 /* ModalCardPresentationConfiguration.swift */; };
 		2D60C9BF2D1AA9E500027EC6 /* ModalCardPresentationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D60C9BE2D1AA9E500027EC6 /* ModalCardPresentationStyle.swift */; };
@@ -8493,6 +8494,7 @@
 		2D5EBEAF2D37D4090016AC4E /* WalletStorageCleanerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletStorageCleanerFactory.swift; sourceTree = "<group>"; };
 		2D5EBEB12D37DE440016AC4E /* RemovedWalletDAppSettingsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletDAppSettingsCleaner.swift; sourceTree = "<group>"; };
 		2D5EBEB32D38F0FD0016AC4E /* AssetListMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetListMeasurement.swift; sourceTree = "<group>"; };
+		2D5F77F82F19013F005D77BC /* HydraStableswapTradabilityFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydraStableswapTradabilityFactory.swift; sourceTree = "<group>"; };
 		2D5FC1A32C5220900013352B /* AccountVoteFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVoteFactory.swift; sourceTree = "<group>"; };
 		2D60C9BC2D1AA97C00027EC6 /* ModalCardPresentationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalCardPresentationConfiguration.swift; sourceTree = "<group>"; };
 		2D60C9BE2D1AA9E500027EC6 /* ModalCardPresentationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalCardPresentationStyle.swift; sourceTree = "<group>"; };
@@ -15137,6 +15139,7 @@
 				0CA719992B79DF5B000B086E /* HydraStableswapApi.swift */,
 				0C11D8532CC9F82C003EC46D /* HydraStableswapExchangeEdge.swift */,
 				0C11D8572CC9FED7003EC46D /* AssetsHydraStableswapExchange.swift */,
+				2D5F77F82F19013F005D77BC /* HydraStableswapTradabilityFactory.swift */,
 			);
 			path = Stableswap;
 			sourceTree = "<group>";
@@ -32777,6 +32780,7 @@
 				8860F3E4289D50BA00C0BF86 /* Array+SectionProtocol.swift in Sources */,
 				7778FE392B907C220023E801 /* StorePathMigrator.swift in Sources */,
 				8454C26F2632BBAA00657DAD /* ExtrinsicProcessing.swift in Sources */,
+				2D5F77F92F19013F005D77BC /* HydraStableswapTradabilityFactory.swift in Sources */,
 				84E25BE227E5F23E00290BF1 /* PasteboardHandler.swift in Sources */,
 				8466782027ED9B39007935D3 /* PhishingErrorPresentable.swift in Sources */,
 				84FF2684284951AF003EC78D /* DelegationCallWrapper.swift in Sources */,
