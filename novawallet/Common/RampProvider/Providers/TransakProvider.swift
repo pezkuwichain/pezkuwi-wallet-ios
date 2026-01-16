@@ -20,11 +20,9 @@ final class TransakProvider: BaseURLStringProviding,
     RampHookFactoriesProviding,
     FiatPaymentPethodsProviding {
     #if F_RELEASE
-        static let pubToken = "861a131b-1721-4e99-8ec3-7349840c888f"
-        static let baseUrlString = "https://global.transak.com"
+        static let baseUrlString = "https://nova-transak.novasama-tech.org"
     #else
-        static let pubToken = "ed6a6887-57fd-493a-8075-4718b463913b"
-        static let baseUrlString = "https://staging-global.transak.com"
+        static let baseUrlString = "https://nova-transak-dev.novasama-tech.org"
     #endif
 
     private var callbackUrl: URL?
@@ -32,6 +30,7 @@ final class TransakProvider: BaseURLStringProviding,
 
     let offRampHookFactory: OffRampHookFactoryProtocol
     let onRampHookFactory: OnRampHookFactoryProtocol
+    let bundle: Bundle
 
     var baseUrlString: String {
         Self.baseUrlString
@@ -39,10 +38,12 @@ final class TransakProvider: BaseURLStringProviding,
 
     init(
         offRampHookFactory: OffRampHookFactoryProtocol = TransakOffRampHookFactory(),
-        onRampHookFactory: OnRampHookFactoryProtocol = TransakOnRampHookFactory()
+        onRampHookFactory: OnRampHookFactoryProtocol = TransakOnRampHookFactory(),
+        bundle: Bundle = .main
     ) {
         self.offRampHookFactory = offRampHookFactory
         self.onRampHookFactory = onRampHookFactory
+        self.bundle = bundle
     }
 }
 
@@ -62,7 +63,9 @@ private extension TransakProvider {
     ) -> [RampAction] {
         guard
             let transak = chainAsset.asset.sellProviders?.transak,
-            let address = try? accountId.toAddress(using: chainAsset.chain.chainFormat) else {
+            let address = try? accountId.toAddress(using: chainAsset.chain.chainFormat),
+            let referrerDomain = bundle.bundleIdentifier
+        else {
             return []
         }
 
@@ -71,10 +74,10 @@ private extension TransakProvider {
 
         let urlFactory = TransakRampURLFactory(
             actionType: .offRamp,
-            pubToken: Self.pubToken,
             baseURL: Self.baseUrlString,
             address: address,
             token: token,
+            referrerDomain: referrerDomain,
             network: network
         )
 
@@ -98,7 +101,9 @@ private extension TransakProvider {
     ) -> [RampAction] {
         guard
             let transak = chainAsset.asset.buyProviders?.transak,
-            let address = try? accountId.toAddress(using: chainAsset.chain.chainFormat) else {
+            let address = try? accountId.toAddress(using: chainAsset.chain.chainFormat),
+            let referrerDomain = bundle.bundleIdentifier
+        else {
             return []
         }
 
@@ -107,10 +112,10 @@ private extension TransakProvider {
 
         let urlFactory = TransakRampURLFactory(
             actionType: .onRamp,
-            pubToken: Self.pubToken,
             baseURL: Self.baseUrlString,
             address: address,
             token: token,
+            referrerDomain: referrerDomain,
             network: network
         )
 
