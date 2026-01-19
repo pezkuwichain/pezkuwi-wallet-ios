@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.novasamatech.novawallet</string>
+		<string>group.novafoundation.novawallet</string>
 	</array>
 </dict>
 </plist>

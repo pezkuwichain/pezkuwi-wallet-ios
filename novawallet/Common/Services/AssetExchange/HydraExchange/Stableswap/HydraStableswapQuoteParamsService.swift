@@ -117,7 +117,7 @@ private extension HydraStableswapQuoteParamsService {
         poolService = .init(
             poolAsset: poolAsset,
             assetIn: assetIn,
-            assetOut: assetIn,
+            assetOut: assetOut,
             connection: connection,
             runtimeProvider: runtimeProvider,
             operationQueue: operationQueue,

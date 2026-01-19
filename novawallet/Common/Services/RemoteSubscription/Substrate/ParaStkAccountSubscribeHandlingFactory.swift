@@ -28,6 +28,10 @@ final class ParaStkAccountSubscribeHandlingFactory: RemoteSubscriptionHandlingFa
             remoteFactory: StorageKeyFactory(),
             operationManager: operationManager
         )
+        let queryWrapperFactory = ParaStkScheduledRequestsQueryWrapperFactory(
+            storageRequestFactory: storageRequestFactory,
+            operationManager: operationManager
+        )
 
         return ParaStkScheduledRequestsUpdater(
             remoteStorageKey: remoteStorageKey,
@@ -37,7 +41,7 @@ final class ParaStkAccountSubscribeHandlingFactory: RemoteSubscriptionHandlingFa
             accountId: accountId,
             chainId: chainId,
             operationManager: operationManager,
-            storageRequestFactory: storageRequestFactory,
+            queryWrapperFactory: queryWrapperFactory,
             logger: logger
         )
     }
