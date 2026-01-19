@@ -6,7 +6,7 @@ final class NftListViewLayout: UIView {
     static let horizontalSpacing: CGFloat = 11.0
     static let verticalSpacing: CGFloat = 18.0
 
-    let backgroundView = UIImageView.background
+    let backgroundView = MultigradientView.background
 
     let navBarBlurView: UIView = {
         let blurView = BlurBackgroundView()

@@ -3,7 +3,7 @@ import SnapKit
 import UIKit_iOS
 
 final class SwipeGovViewLayout: UIView {
-    let backgroundView = UIImageView.background
+    let backgroundView = MultigradientView.background
 
     let votingListWidget: VotingListWidget = .create { view in
         view.alpha = 0

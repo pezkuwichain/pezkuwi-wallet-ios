@@ -21,7 +21,7 @@ final class StakingMainViewLayout: UIView {
         options: [.curveEaseInOut]
     )
 
-    let backgroundView = UIImageView.background
+    let backgroundView = MultigradientView.background
 
     let navBarBlurView: BlurBackgroundView = .create { view in
         view.cornerCut = []
