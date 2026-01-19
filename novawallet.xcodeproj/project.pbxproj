@@ -37441,7 +37441,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_ENTITLEMENTS = novawallet/novawalletDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 123;
 				DEVELOPMENT_TEAM = RD2HBGJZLF;
@@ -37460,7 +37460,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Ruslan't M2 Dev";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-adhoc-levan";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-dev-levan";
 				SWIFT_USE_INTEGRATED_DRIVER = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
