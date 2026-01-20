@@ -46,31 +46,31 @@ enum HydraStableswap {
     }
 
     struct TradabilityPairKey: JSONListConvertible, Hashable {
-        let assetIn: HydraDx.AssetId
-        let assetOut: HydraDx.AssetId
+        let poolId: HydraDx.AssetId
+        let assetId: HydraDx.AssetId
 
         init(jsonList: [JSON], context: [CodingUserInfoKey: Any]?) throws {
             guard jsonList.count == 2 else {
                 throw CommonError.dataCorruption
             }
 
-            assetIn = try jsonList[0].map(
+            poolId = try jsonList[0].map(
                 to: StringScaleMapper<HydraDx.AssetId>.self,
                 with: context
             ).value
 
-            assetOut = try jsonList[1].map(
+            assetId = try jsonList[1].map(
                 to: StringScaleMapper<HydraDx.AssetId>.self,
                 with: context
             ).value
         }
 
         init(
-            assetIn: HydraDx.AssetId,
-            assetOut: HydraDx.AssetId
+            poolId: HydraDx.AssetId,
+            assetId: HydraDx.AssetId
         ) {
-            self.assetIn = assetIn
-            self.assetOut = assetOut
+            self.poolId = poolId
+            self.assetId = assetId
         }
     }
 
