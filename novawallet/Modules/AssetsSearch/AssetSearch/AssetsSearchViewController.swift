@@ -74,7 +74,7 @@ class AssetsSearchViewController: UIViewController, ViewHolder {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        rootView.searchBar.textField.resignFirstResponder()
+        rootView.searchBar.resignFirstResponder()
     }
 
     func setupCollectionManager() {
