@@ -57,8 +57,6 @@ class PinSetupViewController: UIViewController, AdaptiveDesignable, NavigationDe
     // MARK: Configure
 
     private func configureNavigationBar() {
-        navigationBarTop.constant = UIApplication.shared.statusBarFrame.size.height
-
         navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationBar.shadowImage = UIImage()
         navigationBar.tintColor = R.color.colorTextPrimary()!

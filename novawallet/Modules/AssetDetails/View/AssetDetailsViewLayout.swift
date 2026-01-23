@@ -100,7 +100,24 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
 
         let assetView = UIStackView(arrangedSubviews: [assetIconView, assetLabel])
         assetView.spacing = 8
-        addSubview(assetView)
+
+        let assetViewContainer = UIView()
+
+        assetViewContainer.addSubview(assetView)
+
+        assetView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+
+            if #available(iOS 26.0, *) {
+                $0.top.equalToSuperview()
+            } else {
+                $0.centerY.equalToSuperview()
+            }
+
+            $0.height.equalTo(Constants.assetHeight)
+        }
+
+        addSubview(assetViewContainer)
 
         assetIconView.setContentHuggingPriority(.low, for: .horizontal)
         assetLabel.setContentHuggingPriority(.low, for: .horizontal)
@@ -109,11 +126,10 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
             $0.width.height.equalTo(Constants.assetImageViewSize)
         }
 
-        assetView.snp.makeConstraints {
-            $0.leading.greaterThanOrEqualToSuperview()
+        assetViewContainer.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(Constants.assetHeight)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.top).offset(-7.0)
+            $0.height.equalTo(44)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.top)
         }
 
         balanceWidget.snp.makeConstraints { make in
