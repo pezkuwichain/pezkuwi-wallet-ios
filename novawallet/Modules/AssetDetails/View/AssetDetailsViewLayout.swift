@@ -97,7 +97,45 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         backgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        layoutAssetIconView()
 
+        balanceWidget.snp.makeConstraints { make in
+            make.height.equalTo(balanceWidget.state.height)
+        }
+
+        containerView.stackView.spacing = Constants.sectionSpace
+
+        addArrangedSubview(balanceWidget)
+        addArrangedSubview(buttonsRow)
+        addArrangedSubview(chartContainerView)
+
+        chartContainerView.snp.makeConstraints { make in
+            make.height.equalTo(chartViewHeight)
+        }
+    }
+
+    var prefferedHeight: CGFloat {
+        let balanceSectionHeight = Constants.containerViewTopOffset
+            + currentBalanceHeight
+        let buttonsRowHeight = buttonsRow.preferredHeight ?? 0
+
+        return Constants.containerViewTopOffset
+            + containerView.stackView.layoutMargins.top
+            + balanceSectionHeight
+            + Constants.sectionSpace * 2
+            + buttonsRowHeight
+            + Constants.chartWidgetInset * 2
+            + chartViewHeight
+            + Constants.bottomOffset
+            + currentAHMAlertHeight
+    }
+}
+
+// MARK: - Private
+
+private extension AssetDetailsViewLayout {
+    func layoutAssetIconView() {
         let assetView = UIStackView(arrangedSubviews: [assetIconView, assetLabel])
         assetView.spacing = 8
 
@@ -131,23 +169,9 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
             $0.height.equalTo(44)
             $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.top)
         }
-
-        balanceWidget.snp.makeConstraints { make in
-            make.height.equalTo(balanceWidget.state.height)
-        }
-
-        containerView.stackView.spacing = Constants.sectionSpace
-
-        addArrangedSubview(balanceWidget)
-        addArrangedSubview(buttonsRow)
-        addArrangedSubview(chartContainerView)
-
-        chartContainerView.snp.makeConstraints { make in
-            make.height.equalTo(chartViewHeight)
-        }
     }
 
-    private func hideAlertWithAnimation() {
+    func hideAlertWithAnimation() {
         alertDisappearanceAnimator.animate(
             view: ahmAlertView,
             completionBlock: nil
@@ -166,7 +190,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         delegate?.didUpdateHeight(prefferedHeight)
     }
 
-    private func showAlertWithAnimation() {
+    func showAlertWithAnimation() {
         ahmAlertView.alpha = 0
 
         insertArrangedSubview(
@@ -195,7 +219,11 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         currentAHMAlertHeight = ahmAlertView.frame.height
         delegate?.didUpdateHeight(prefferedHeight)
     }
+}
 
+// MARK: - Internal
+
+extension AssetDetailsViewLayout {
     func set(locale: Locale) {
         let languages = locale.rLanguages
 
@@ -265,23 +293,9 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
             hideAlertWithAnimation()
         }
     }
-
-    var prefferedHeight: CGFloat {
-        let balanceSectionHeight = Constants.containerViewTopOffset
-            + currentBalanceHeight
-        let buttonsRowHeight = buttonsRow.preferredHeight ?? 0
-
-        return Constants.containerViewTopOffset
-            + containerView.stackView.layoutMargins.top
-            + balanceSectionHeight
-            + Constants.sectionSpace * 2
-            + buttonsRowHeight
-            + Constants.chartWidgetInset * 2
-            + chartViewHeight
-            + Constants.bottomOffset
-            + currentAHMAlertHeight
-    }
 }
+
+// MARK: - AssetDetailsBalanceWidgetDelegate
 
 extension AssetDetailsViewLayout: AssetDetailsBalanceWidgetDelegate {
     func didChangeState(to state: AssetDetailsBalanceWidget.State) {
@@ -299,6 +313,8 @@ extension AssetDetailsViewLayout: AssetDetailsBalanceWidgetDelegate {
         delegate?.didUpdateHeight(prefferedHeight)
     }
 }
+
+// MARK: - Constants
 
 extension AssetDetailsViewLayout {
     enum Constants {
