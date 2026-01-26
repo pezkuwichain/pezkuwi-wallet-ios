@@ -2083,6 +2083,17 @@
 		2D96D86F2DF04FF700159E91 /* DelegatedAccountsUpdateViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D96D8672DF04FF700159E91 /* DelegatedAccountsUpdateViewLayout.swift */; };
 		2D96D8702DF04FF700159E91 /* DelegatedAccountsUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D96D8652DF04FF700159E91 /* DelegatedAccountsUpdateViewController.swift */; };
 		2D96D8712DF04FF700159E91 /* DelegatedAccountsUpdateInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D96D8622DF04FF700159E91 /* DelegatedAccountsUpdateInteractor.swift */; };
+		2D98355B2F2773B200B184D4 /* InfoPopupProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98355A2F2773B200B184D4 /* InfoPopupProtocols.swift */; };
+		2D9835632F2773CE00B184D4 /* InfoPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835622F2773CE00B184D4 /* InfoPopupViewController.swift */; };
+		2D98356A2F2773E400B184D4 /* InfoPopupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835692F2773E400B184D4 /* InfoPopupViewModel.swift */; };
+		2D9835712F27740800B184D4 /* InfoPopupViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835702F27740800B184D4 /* InfoPopupViewLayout.swift */; };
+		2D9835782F27742600B184D4 /* InfoPopupPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835772F27742600B184D4 /* InfoPopupPresenter.swift */; };
+		2D98357C2F27743800B184D4 /* InfoPopupInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98357B2F27743800B184D4 /* InfoPopupInteractor.swift */; };
+		2D9835842F2774B500B184D4 /* InfoPopupContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835832F2774B500B184D4 /* InfoPopupContent.swift */; };
+		2D9835892F2774D200B184D4 /* InfoPopupWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835882F2774D200B184D4 /* InfoPopupWireframe.swift */; };
+		2D9835902F27750500B184D4 /* InfoPopupAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98358F2F27750500B184D4 /* InfoPopupAction.swift */; };
+		2D9835952F27751D00B184D4 /* InfoPopupViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */; };
+		2D98359C2F27754B00B184D4 /* InfoPopupContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */; };
 		2DA3AE8F2E5DB03300689F65 /* XcmDynamicModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D1B1D2DA3BE0A0008057B /* XcmDynamicModelFactory.swift */; };
 		2DA3AE902E5DB04200689F65 /* XcmUni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C42D9E957400F79C02 /* XcmUni.swift */; };
 		2DA3AE912E5DB06200689F65 /* XcmUni+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C62D9E95EC00F79C02 /* XcmUni+Location.swift */; };
@@ -8662,6 +8673,17 @@
 		2D96D8662DF04FF700159E91 /* DelegatedAccountsUpdateViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedAccountsUpdateViewFactory.swift; sourceTree = "<group>"; };
 		2D96D8672DF04FF700159E91 /* DelegatedAccountsUpdateViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedAccountsUpdateViewLayout.swift; sourceTree = "<group>"; };
 		2D96D8682DF04FF700159E91 /* DelegatedAccountsUpdateWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedAccountsUpdateWireframe.swift; sourceTree = "<group>"; };
+		2D98355A2F2773B200B184D4 /* InfoPopupProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupProtocols.swift; sourceTree = "<group>"; };
+		2D9835622F2773CE00B184D4 /* InfoPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupViewController.swift; sourceTree = "<group>"; };
+		2D9835692F2773E400B184D4 /* InfoPopupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupViewModel.swift; sourceTree = "<group>"; };
+		2D9835702F27740800B184D4 /* InfoPopupViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupViewLayout.swift; sourceTree = "<group>"; };
+		2D9835772F27742600B184D4 /* InfoPopupPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupPresenter.swift; sourceTree = "<group>"; };
+		2D98357B2F27743800B184D4 /* InfoPopupInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupInteractor.swift; sourceTree = "<group>"; };
+		2D9835832F2774B500B184D4 /* InfoPopupContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupContent.swift; sourceTree = "<group>"; };
+		2D9835882F2774D200B184D4 /* InfoPopupWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupWireframe.swift; sourceTree = "<group>"; };
+		2D98358F2F27750500B184D4 /* InfoPopupAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupAction.swift; sourceTree = "<group>"; };
+		2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupViewFactory.swift; sourceTree = "<group>"; };
+		2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupContentBuilder.swift; sourceTree = "<group>"; };
 		2DA3AE9A2E5DE6C300689F65 /* RemovedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA3AE9C2E5E203D00689F65 /* UpdatedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA4D5362EB21DC4006FCCC0 /* GiftSetupIssuesViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftSetupIssuesViewModelFactory.swift; sourceTree = "<group>"; };
@@ -18221,6 +18243,32 @@
 			path = DelegatedAccountsUpdate;
 			sourceTree = "<group>";
 		};
+		2D9835592F2773A300B184D4 /* InfoPopup */ = {
+			isa = PBXGroup;
+			children = (
+				2D9835A22F2775BA00B184D4 /* Model */,
+				2D98355A2F2773B200B184D4 /* InfoPopupProtocols.swift */,
+				2D9835772F27742600B184D4 /* InfoPopupPresenter.swift */,
+				2D98357B2F27743800B184D4 /* InfoPopupInteractor.swift */,
+				2D9835882F2774D200B184D4 /* InfoPopupWireframe.swift */,
+				2D9835622F2773CE00B184D4 /* InfoPopupViewController.swift */,
+				2D9835702F27740800B184D4 /* InfoPopupViewLayout.swift */,
+				2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */,
+			);
+			path = InfoPopup;
+			sourceTree = "<group>";
+		};
+		2D9835A22F2775BA00B184D4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2D9835692F2773E400B184D4 /* InfoPopupViewModel.swift */,
+				2D9835832F2774B500B184D4 /* InfoPopupContent.swift */,
+				2D98358F2F27750500B184D4 /* InfoPopupAction.swift */,
+				2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		2DA4D5302EB21DB1006FCCC0 /* Factory */ = {
 			isa = PBXGroup;
 			children = (
@@ -23907,6 +23955,7 @@
 		849013D224A9268D008F705E /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				2D9835592F2773A300B184D4 /* InfoPopup */,
 				2DE37C402EA0D824007C43A0 /* Gifts */,
 				0C3B126E2DDC663400A61597 /* WalletMigration */,
 				2D6CE43A2DE4C3FD00B94DBA /* DelegatedAccounts */,
@@ -31316,6 +31365,7 @@
 				77DB70EE2B709E4300288F26 /* Web3AlertRemoteModel.swift in Sources */,
 				0C0F6DBA2D3EE9C200943A7C /* MythosStakingDetails.swift in Sources */,
 				8471538D2653B29100CB91D8 /* ChangeRewardDestinationViewModelFactory.swift in Sources */,
+				2D9835902F27750500B184D4 /* InfoPopupAction.swift in Sources */,
 				84216FDA2827B25F00479375 /* StorageItemSyncService.swift in Sources */,
 				8499FEDE27C0AB0200712589 /* NftSource.swift in Sources */,
 				84D2F1B12775999F0040C680 /* DAppParsedExtrinsic.swift in Sources */,
@@ -31513,6 +31563,7 @@
 				8430AAE126022CA1005B1066 /* BaseStakingState.swift in Sources */,
 				8490141124A92F6D008F705E /* OnboardingMainViewController.swift in Sources */,
 				0CE94FF42D04969100E31D0C /* SwapInterEDNotMet.swift in Sources */,
+				2D9835892F2774D200B184D4 /* InfoPopupWireframe.swift in Sources */,
 				0CCCDF842B64C63D00473D42 /* HydraDxTokenConverter.swift in Sources */,
 				0CEBAD4E2D5A2BD9000EBA45 /* SwapsDifferenceModelFactory.swift in Sources */,
 				2D4431E02D01096300017951 /* DAppItemViewCollectionCell.swift in Sources */,
@@ -33156,6 +33207,7 @@
 				849976CC27B3905E00B14A6C /* DAppMetamaskDeniedState.swift in Sources */,
 				849976B327B2430300B14A6C /* DAppMetamaskTransport.swift in Sources */,
 				0C56B4FD2A4B0CA90030F9C9 /* AssetListBuilderResult.swift in Sources */,
+				2D98355B2F2773B200B184D4 /* InfoPopupProtocols.swift in Sources */,
 				8425D0EC28FE9ACB003B782A /* Gov2ExtrinsicFactory.swift in Sources */,
 				0CCE3AAF2BF5BE4300D55F03 /* IdentityProxyFactory.swift in Sources */,
 				84E1CCFA260DCBF9001E81B5 /* SwitchAccount+UsernameSetupWireframe.swift in Sources */,
@@ -33217,6 +33269,7 @@
 				77EFFC8A2A6E7A24009E28F8 /* AccountExistense.swift in Sources */,
 				8466BB472640152A00E065A8 /* StakingUnbondConfirmViewModelFactory.swift in Sources */,
 				84CE6A312566800000559427 /* ByteLengthProcessor+Username.swift in Sources */,
+				2D9835712F27740800B184D4 /* InfoPopupViewLayout.swift in Sources */,
 				0C3976AD2C33A64700998DD6 /* HydraXYKQuoteParamsService.swift in Sources */,
 				84B24F9C2A2E297000F9BF59 /* StakingDashboardViewModel.swift in Sources */,
 				8482F633281024B80006C3A0 /* Data+EthereumSign.swift in Sources */,
@@ -33538,6 +33591,7 @@
 				84B8AA7329F8EFC700347A37 /* DAppInteractionError.swift in Sources */,
 				8485035029FBC84300AE6909 /* WalletConnectSignModelFactory.swift in Sources */,
 				2D1C5D162C24553200E2DBDD /* NetworkNodeAddPresenter.swift in Sources */,
+				2D98359C2F27754B00B184D4 /* InfoPopupContentBuilder.swift in Sources */,
 				0CE8621B2D64E86700245992 /* StakingRewardsLocalSubscriber.swift in Sources */,
 				849E17F02791909C002D1744 /* DAppSettings.swift in Sources */,
 				2DA8DAC42DC20CBE00AFE390 /* MultisigPallet+CodingPath.swift in Sources */,
@@ -33997,6 +34051,7 @@
 				84F1CB3327CE575E0095D523 /* NftListUniquesViewModel.swift in Sources */,
 				AEBE173B262F3E6600DF257C /* StakingPayoutConfirmViewModelFactory.swift in Sources */,
 				0C500B272B07314000ABEE70 /* ExtrinsicProcessingResult.swift in Sources */,
+				2D9835952F27751D00B184D4 /* InfoPopupViewFactory.swift in Sources */,
 				84B64E3F2704567700914E88 /* StakingLocalStorageSubscriber.swift in Sources */,
 				847449512891F3B00042FD80 /* WalletSwitchControl.swift in Sources */,
 				AE3983A2272C08AE00BC8A85 /* BaseAccountImportPresenter.swift in Sources */,
@@ -35199,6 +35254,7 @@
 				413CCB7C7B22831147B8E815 /* ParaStkRedeemPresenter.swift in Sources */,
 				0C8FDBCF2CB25D7400775D7F /* MercuryoStatusChange.swift in Sources */,
 				35F9157CAA182493B2F0E1D3 /* ParaStkRedeemInteractor.swift in Sources */,
+				2D98357C2F27743800B184D4 /* InfoPopupInteractor.swift in Sources */,
 				771901A22AE7E34D00D9C918 /* SwapBaseInteractor.swift in Sources */,
 				2DF95D2A2D785AF1001D8785 /* HapticEngine.swift in Sources */,
 				C729BF3E60E6825AEED11383 /* CollatorStakingRedeemViewController.swift in Sources */,
@@ -35345,6 +35401,7 @@
 				012AE9F8BDA682C691B6F9FD /* PVWelcomeViewController.swift in Sources */,
 				DC2867A7DC1415052D090C53 /* PVWelcomeViewLayout.swift in Sources */,
 				0C0E0AA02B3F013800865F10 /* BalancesPallet.swift in Sources */,
+				2D9835842F2774B500B184D4 /* InfoPopupContent.swift in Sources */,
 				845B07F5291627A3005785D3 /* Gov1OperationFactory+Protocol.swift in Sources */,
 				97608590E8D770A86CCFBE86 /* PVWelcomeViewFactory.swift in Sources */,
 				8425D0E028FE738D003B782A /* ReferendumVoteSetupInteractorError.swift in Sources */,
@@ -36358,6 +36415,7 @@
 				4520C59F8C8CCB7669DDA4DF /* NotificationWalletListPresenter.swift in Sources */,
 				2D3286EE2DFFF910004D5D24 /* PendingMultisigChainSyncService.swift in Sources */,
 				AD87A679F6E61D7AA20DF60C /* NotificationWalletListInteractor.swift in Sources */,
+				2D98356A2F2773E400B184D4 /* InfoPopupViewModel.swift in Sources */,
 				6B1BDD1421916CCF59DF6F5F /* NotificationWalletListViewController.swift in Sources */,
 				0CA8AD622CE08FEE00ED9746 /* BlockEventsQueryFactory.swift in Sources */,
 				0CB618D22E70C3320018C766 /* Xcm+TransferType.swift in Sources */,
@@ -36518,6 +36576,7 @@
 				0CE94FF02D03AF9800E31D0C /* SwapPreferredFeeAssetModel.swift in Sources */,
 				EECFBA0B881DBD2AE2BC73B7 /* CustomNetworkProtocols.swift in Sources */,
 				440436412294F3569F426552 /* CustomNetworkWireframe.swift in Sources */,
+				2D9835782F27742600B184D4 /* InfoPopupPresenter.swift in Sources */,
 				F08729B3361332AC9E017BED /* CustomNetworkViewController.swift in Sources */,
 				A83FCCEF54DDA2C8CDA98AF5 /* CustomNetworkViewLayout.swift in Sources */,
 				D71D861DF5798FF122845B86 /* CustomNetworkViewFactory.swift in Sources */,
@@ -36581,6 +36640,7 @@
 				0C06C48E2EC9E3D600E06744 /* BatchGenericSubscriptionHandler.swift in Sources */,
 				13C118A723E684D4272845FB /* SwipeGovReferendumDetailsViewFactory.swift in Sources */,
 				00AE6FF475338CEF6C65F3B0 /* SwipeGovVotingConfirmProtocols.swift in Sources */,
+				2D9835632F2773CE00B184D4 /* InfoPopupViewController.swift in Sources */,
 				6919F96BC31D29A3FD1557AE /* SwipeGovVotingConfirmWireframe.swift in Sources */,
 				DD5B5692C208F627E2597D31 /* SwipeGovVotingConfirmPresenter.swift in Sources */,
 				514A75EB56856362C411EB7F /* SwipeGovVotingConfirmInteractor.swift in Sources */,
