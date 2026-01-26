@@ -3,8 +3,8 @@
     {
       "value" : {
         "linear-gradient" : [
-          "display-p3:0.00000,0.43922,0.84706,1.00000",
-          "display-p3:0.16078,0.16078,0.76471,1.00000"
+          "display-p3:0.17647,0.38824,0.90196,1.00000",
+          "display-p3:0.20784,0.30892,0.91765,1.00000"
         ]
       }
     },
@@ -24,7 +24,7 @@
           "fill" : {
             "linear-gradient" : [
               "display-p3:1.00000,1.00000,1.00000,1.00000",
-              "display-p3:0.62540,0.70079,1.00000,1.00000"
+              "display-p3:1.00000,1.00000,1.00000,0.82000"
             ]
           },
           "glass" : true,
@@ -37,6 +37,30 @@
             "translation-in-points" : [
               0,
               0
+            ]
+          }
+        },
+        {
+          "glass" : false,
+          "image-name" : "Ellipse 786 2.png",
+          "name" : "Ellipse 786 2",
+          "position" : {
+            "scale" : 0.95,
+            "translation-in-points" : [
+              -542.8292698509323,
+              509.51604129554926
+            ]
+          }
+        },
+        {
+          "glass" : false,
+          "image-name" : "Ellipse 787.png",
+          "name" : "Ellipse 787",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              242.24633747521753,
+              -238.08915144929145
             ]
           }
         }
