@@ -2094,6 +2094,11 @@
 		2D9835902F27750500B184D4 /* InfoPopupAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98358F2F27750500B184D4 /* InfoPopupAction.swift */; };
 		2D9835952F27751D00B184D4 /* InfoPopupViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */; };
 		2D98359C2F27754B00B184D4 /* InfoPopupContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */; };
+		2D9835AB2F28040F00B184D4 /* AHMInfoPopupInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835AA2F28040F00B184D4 /* AHMInfoPopupInteractor.swift */; };
+		2D9835B52F2805FD00B184D4 /* AHMInfoPopupPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835B42F2805FD00B184D4 /* AHMInfoPopupPresenter.swift */; };
+		2D9835BA2F28061200B184D4 /* AHMInfoPopupProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835B92F28061200B184D4 /* AHMInfoPopupProtocols.swift */; };
+		2D9835BF2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835BE2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift */; };
+		2D9835C62F28067E00B184D4 /* AHMInfoPopupViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835C52F28067E00B184D4 /* AHMInfoPopupViewFactory.swift */; };
 		2DA3AE8F2E5DB03300689F65 /* XcmDynamicModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D1B1D2DA3BE0A0008057B /* XcmDynamicModelFactory.swift */; };
 		2DA3AE902E5DB04200689F65 /* XcmUni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C42D9E957400F79C02 /* XcmUni.swift */; };
 		2DA3AE912E5DB06200689F65 /* XcmUni+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C62D9E95EC00F79C02 /* XcmUni+Location.swift */; };
@@ -8684,6 +8689,11 @@
 		2D98358F2F27750500B184D4 /* InfoPopupAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupAction.swift; sourceTree = "<group>"; };
 		2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupViewFactory.swift; sourceTree = "<group>"; };
 		2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupContentBuilder.swift; sourceTree = "<group>"; };
+		2D9835AA2F28040F00B184D4 /* AHMInfoPopupInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupInteractor.swift; sourceTree = "<group>"; };
+		2D9835B42F2805FD00B184D4 /* AHMInfoPopupPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupPresenter.swift; sourceTree = "<group>"; };
+		2D9835B92F28061200B184D4 /* AHMInfoPopupProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupProtocols.swift; sourceTree = "<group>"; };
+		2D9835BE2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupViewModelFactory.swift; sourceTree = "<group>"; };
+		2D9835C52F28067E00B184D4 /* AHMInfoPopupViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupViewFactory.swift; sourceTree = "<group>"; };
 		2DA3AE9A2E5DE6C300689F65 /* RemovedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA3AE9C2E5E203D00689F65 /* UpdatedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA4D5362EB21DC4006FCCC0 /* GiftSetupIssuesViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftSetupIssuesViewModelFactory.swift; sourceTree = "<group>"; };
@@ -18246,6 +18256,7 @@
 		2D9835592F2773A300B184D4 /* InfoPopup */ = {
 			isa = PBXGroup;
 			children = (
+				2D9835A92F28040800B184D4 /* AHM */,
 				2D9835A22F2775BA00B184D4 /* Model */,
 				2D98355A2F2773B200B184D4 /* InfoPopupProtocols.swift */,
 				2D9835772F27742600B184D4 /* InfoPopupPresenter.swift */,
@@ -18267,6 +18278,18 @@
 				2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		2D9835A92F28040800B184D4 /* AHM */ = {
+			isa = PBXGroup;
+			children = (
+				2D9835AA2F28040F00B184D4 /* AHMInfoPopupInteractor.swift */,
+				2D9835B42F2805FD00B184D4 /* AHMInfoPopupPresenter.swift */,
+				2D9835B92F28061200B184D4 /* AHMInfoPopupProtocols.swift */,
+				2D9835BE2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift */,
+				2D9835C52F28067E00B184D4 /* AHMInfoPopupViewFactory.swift */,
+			);
+			path = AHM;
 			sourceTree = "<group>";
 		};
 		2DA4D5302EB21DB1006FCCC0 /* Factory */ = {
@@ -32111,6 +32134,7 @@
 				842898CC265A8EC3002D5D65 /* RemoteImageViewModel.swift in Sources */,
 				84DA3B1424C6D7C700B5E27F /* RuntimeDispatchInfo.swift in Sources */,
 				840D92A7278EE8690007B979 /* DAppSignBytesConfirmInteractor.swift in Sources */,
+				2D9835C62F28067E00B184D4 /* AHMInfoPopupViewFactory.swift in Sources */,
 				84EC2D1A276C6600009B0BE1 /* PolkadotExtensionExtrinsic.swift in Sources */,
 				0C59E8E32AA61252001E11F3 /* NominationPoolExternalServiceFactory.swift in Sources */,
 				0CEBAD652D64560C000EBA45 /* DispatchCallError+Display.swift in Sources */,
@@ -32406,6 +32430,7 @@
 				AEF507F226259DF00098574D /* ValidationViewModel.swift in Sources */,
 				84FD91B229B08F8F007851D3 /* BaseTableSearchViewLayout.swift in Sources */,
 				2DC002D92E869FD700D49A42 /* OpenAHMUrlParsingService.swift in Sources */,
+				2D9835BA2F28061200B184D4 /* AHMInfoPopupProtocols.swift in Sources */,
 				847F2D4827A9DDC700AFD476 /* MultigradientView+Default.swift in Sources */,
 				8448F7A6288314250080CEA9 /* AssetListAssetsViewModelFactory.swift in Sources */,
 				0C59E8F42AA7649E001E11F3 /* OperationDetailsBaseProvider.swift in Sources */,
@@ -34604,6 +34629,7 @@
 				0CA72A842D4A2B1B00B3FD02 /* CollatorStkPartialUnstakeSetupLayout.swift in Sources */,
 				8480154E29BB6521008557F3 /* BorderedImageView.swift in Sources */,
 				2D3C71CF2E1151F500DF9E49 /* AssetListMultisigOperationsCell.swift in Sources */,
+				2D9835AB2F28040F00B184D4 /* AHMInfoPopupInteractor.swift in Sources */,
 				84BFE89C28C23A2500140F1F /* AutomationTime.swift in Sources */,
 				2D6287402C91ED5300060814 /* ReferendumVoteSetupPresenter.swift in Sources */,
 				846DA5592A2098BE006CD6C1 /* StakingResolvedAccountMapper.swift in Sources */,
@@ -34968,6 +34994,7 @@
 				599A81A7D18BB70B6C650393 /* DAppAuthConfirmViewFactory.swift in Sources */,
 				84FBDBE628C8982B00CC1037 /* ParaStkYieldBoostSetupInteractorError.swift in Sources */,
 				84E25BF227E8FDC100290BF1 /* DecodedProviderTypes.swift in Sources */,
+				2D9835B52F2805FD00B184D4 /* AHMInfoPopupPresenter.swift in Sources */,
 				841E5565282EA76C00C8438F /* ParachainStakingBaseState.swift in Sources */,
 				77CB33D72A3998FD00B6709A /* Array+Sort.swift in Sources */,
 				84B8AA8129F9097D00347A37 /* WalletConnectTransport.swift in Sources */,
@@ -36665,6 +36692,7 @@
 				14003DEC47A69E473B97B3E5 /* AppearanceSettingsViewController.swift in Sources */,
 				36EA1F22A0E7DDD3C987CF98 /* AppearanceSettingsViewLayout.swift in Sources */,
 				BC927FA9FDA6F1AC16E0AAAE /* AppearanceSettingsViewFactory.swift in Sources */,
+				2D9835BF2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift in Sources */,
 				0C0F6DEC2D427BE900943A7C /* CollatorStakingDelegationStatus.swift in Sources */,
 				076E4DC5984B431018CB9F65 /* SwapExecutionProtocols.swift in Sources */,
 				7BF57D772C522E7728585166 /* SwapExecutionWireframe.swift in Sources */,
