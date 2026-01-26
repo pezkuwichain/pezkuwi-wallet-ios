@@ -5,7 +5,6 @@ final class MainTabBarViewController: UITabBarController {
     let presenter: MainTabBarPresenterProtocol
 
     private var viewAppeared: Bool = false
-    private var tabBarConfigured: Bool = false
 
     private let sharedStatusBarPresenter = SharedStatusPresenter()
 
@@ -34,15 +33,8 @@ final class MainTabBarViewController: UITabBarController {
 
         definesPresentationContext = true
         sharedStatusBarPresenter.delegate = self
-    }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        guard !tabBarConfigured else { return }
-
-        tabBarConfigured = true
-        configureNewYearTabBar()
+        configureTabBar()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -54,32 +46,6 @@ final class MainTabBarViewController: UITabBarController {
         }
 
         presenter.viewDidAppear()
-    }
-
-    private func configureNewYearTabBar() {
-        let appearance = UITabBarAppearance()
-
-        appearance.shadowImage = UIImage()
-        appearance.backgroundEffect = UIBlurEffect(style: .dark)
-
-        guard let items = tabBar.items else { return }
-
-        let colors: [UIColor] = [
-            R.color.colorTabNewYearAssets()!,
-            R.color.colorTabNewYearVote()!,
-            R.color.colorTabNewYearBrowser()!,
-            R.color.colorTabNewYearStaking()!,
-            R.color.colorTabNewYearSettings()!
-        ]
-
-        items.enumerated().forEach { index, item in
-            congifureTabBarItem(item, with: colors[index])
-        }
-
-        tabBar.standardAppearance = appearance
-        tabBar.scrollEdgeAppearance = appearance
-
-        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
 
     private func configureTabBar() {
@@ -103,32 +69,6 @@ final class MainTabBarViewController: UITabBarController {
         tabBar.standardAppearance = appearance
 
         UITabBar.appearance().scrollEdgeAppearance = appearance
-    }
-
-    func congifureTabBarItem(
-        _ item: UITabBarItem,
-        with selectedColor: UIColor
-    ) {
-        let appearance = UITabBarAppearance()
-        let itemAppearance = UITabBarItemAppearance()
-
-        appearance.shadowImage = UIImage()
-
-        itemAppearance.normal.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: R.color.colorIconNavbarInactive()!,
-            NSAttributedString.Key.font: UIFont.caption2
-        ]
-        itemAppearance.selected.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: selectedColor,
-            NSAttributedString.Key.font: UIFont.caption2
-        ]
-
-        appearance.stackedLayoutAppearance = itemAppearance
-        appearance.inlineLayoutAppearance = itemAppearance
-        appearance.compactInlineLayoutAppearance = itemAppearance
-
-        item.standardAppearance = appearance
-        item.scrollEdgeAppearance = appearance
     }
 }
 

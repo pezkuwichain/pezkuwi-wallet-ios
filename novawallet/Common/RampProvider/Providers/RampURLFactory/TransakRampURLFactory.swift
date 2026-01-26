@@ -4,25 +4,25 @@ import Operation_iOS
 
 final class TransakRampURLFactory {
     private let actionType: RampActionType
-    private let pubToken: String
     private let baseURL: String
     private let address: String
     private let token: String
+    private let referrerDomain: String
     private let network: String
 
     init(
         actionType: RampActionType,
-        pubToken: String,
         baseURL: String,
         address: String,
         token: String,
+        referrerDomain: String,
         network: String
     ) {
         self.actionType = actionType
-        self.pubToken = pubToken
         self.baseURL = baseURL
         self.address = address
         self.token = token
+        self.referrerDomain = referrerDomain
         self.network = network
     }
 }
@@ -34,9 +34,9 @@ extension TransakRampURLFactory: RampURLFactory {
         var components = URLComponents(string: baseURL)
 
         var queryItems = [
-            URLQueryItem(name: "apiKey", value: pubToken),
             URLQueryItem(name: "network", value: network),
-            URLQueryItem(name: "cryptoCurrencyCode", value: token)
+            URLQueryItem(name: "cryptoCurrencyCode", value: token),
+            URLQueryItem(name: "referrerDomain", value: referrerDomain)
         ]
 
         let productsAvailed = switch actionType {

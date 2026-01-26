@@ -45,6 +45,35 @@ enum HydraStableswap {
         }
     }
 
+    struct TradabilityPairKey: JSONListConvertible, Hashable {
+        let poolId: HydraDx.AssetId
+        let assetId: HydraDx.AssetId
+
+        init(jsonList: [JSON], context: [CodingUserInfoKey: Any]?) throws {
+            guard jsonList.count == 2 else {
+                throw CommonError.dataCorruption
+            }
+
+            poolId = try jsonList[0].map(
+                to: StringScaleMapper<HydraDx.AssetId>.self,
+                with: context
+            ).value
+
+            assetId = try jsonList[1].map(
+                to: StringScaleMapper<HydraDx.AssetId>.self,
+                with: context
+            ).value
+        }
+
+        init(
+            poolId: HydraDx.AssetId,
+            assetId: HydraDx.AssetId
+        ) {
+            self.poolId = poolId
+            self.assetId = assetId
+        }
+    }
+
     static func poolAccountId(for asset: HydraDx.AssetId) throws -> AccountId {
         guard let accountIdPrefix = "sts".data(using: .utf8) else {
             throw CommonError.dataCorruption

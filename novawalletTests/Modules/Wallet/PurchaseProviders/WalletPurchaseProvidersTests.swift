@@ -35,16 +35,16 @@ class WalletRampProvidersTests: XCTestCase {
 
         let accountId = try address.toAccountId()
 
-        let apiKey = TransakProvider.pubToken
         let host = TransakProvider.baseUrlString
         let network = chain.name.lowercased()
+        let referrerDomain = "io.novafoundation.novawallet.dev"
 
         let expectedURL = switch rampActionType {
         case .offRamp:
-            "\(host)?apiKey=\(apiKey)&network=\(network)&cryptoCurrencyCode=\(asset.symbol)&productsAvailed=SELL"
+            "\(host)?network=\(network)&cryptoCurrencyCode=\(asset.symbol)&referrerDomain=\(referrerDomain)&productsAvailed=SELL"
                 .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         case .onRamp:
-            "\(host)?apiKey=\(apiKey)&network=\(network)&cryptoCurrencyCode=\(asset.symbol)&walletAddress=\(address)&disableWalletAddressForm=true&productsAvailed=BUY"
+            "\(host)?network=\(network)&cryptoCurrencyCode=\(asset.symbol)&referrerDomain=\(referrerDomain)&walletAddress=\(address)&disableWalletAddressForm=true&productsAvailed=BUY"
                 .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         }
 

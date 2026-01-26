@@ -1,7 +1,7 @@
 import UIKit
 
 final class WalletNameView: UIView {
-    let backgroundCardView = GladingFrostedCardView()
+    let backgroundCardView = GladingCardView()
 
     let logoView: UIImageView = .create { imageView in
         imageView.image = R.image.novaCardLogo()
