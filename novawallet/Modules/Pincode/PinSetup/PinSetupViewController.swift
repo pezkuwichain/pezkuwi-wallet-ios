@@ -3,10 +3,6 @@ import UIKit_iOS
 import Foundation_iOS
 
 class PinSetupViewController: UIViewController, AdaptiveDesignable, NavigationDependable {
-    private enum Constants {
-        static var cancelBottomMargin: CGFloat = 30.0
-    }
-
     var presenter: PinSetupPresenterProtocol!
     var mode = PinView.Mode.create
 
@@ -57,6 +53,7 @@ class PinSetupViewController: UIViewController, AdaptiveDesignable, NavigationDe
     // MARK: Configure
 
     private func configureNavigationBar() {
+        navigationBarTop.constant = Constants.navigationBarTopConstant
         navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationBar.shadowImage = UIImage()
         navigationBar.tintColor = R.color.colorTextPrimary()!
@@ -301,5 +298,19 @@ extension PinSetupViewController: Localizable {
             setupLocalization()
             view.setNeedsLayout()
         }
+    }
+}
+
+// MARK: - Constants
+
+private extension PinSetupViewController {
+    enum Constants {
+        static let navigationBarTopConstant = if #available(iOS 26.0, *) {
+            UIApplication.shared.statusBarFrame.height + 8
+        } else {
+            UIApplication.shared.statusBarFrame.height
+        }
+
+        static let cancelBottomMargin: CGFloat = 30.0
     }
 }

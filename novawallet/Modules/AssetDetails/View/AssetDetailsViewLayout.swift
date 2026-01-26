@@ -97,7 +97,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         backgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         layoutAssetIconView()
 
         balanceWidget.snp.makeConstraints { make in
