@@ -2092,13 +2092,16 @@
 		2D9835842F2774B500B184D4 /* InfoPopupContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835832F2774B500B184D4 /* InfoPopupContent.swift */; };
 		2D9835892F2774D200B184D4 /* InfoPopupWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835882F2774D200B184D4 /* InfoPopupWireframe.swift */; };
 		2D9835902F27750500B184D4 /* InfoPopupAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98358F2F27750500B184D4 /* InfoPopupAction.swift */; };
-		2D9835952F27751D00B184D4 /* InfoPopupViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */; };
 		2D98359C2F27754B00B184D4 /* InfoPopupContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */; };
 		2D9835AB2F28040F00B184D4 /* AHMInfoPopupInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835AA2F28040F00B184D4 /* AHMInfoPopupInteractor.swift */; };
 		2D9835B52F2805FD00B184D4 /* AHMInfoPopupPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835B42F2805FD00B184D4 /* AHMInfoPopupPresenter.swift */; };
 		2D9835BA2F28061200B184D4 /* AHMInfoPopupProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835B92F28061200B184D4 /* AHMInfoPopupProtocols.swift */; };
 		2D9835BF2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835BE2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift */; };
 		2D9835C62F28067E00B184D4 /* AHMInfoPopupViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835C52F28067E00B184D4 /* AHMInfoPopupViewFactory.swift */; };
+		2D9835CC2F280BDD00B184D4 /* ASMInfoPopupPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835CB2F280BDD00B184D4 /* ASMInfoPopupPresenter.swift */; };
+		2D9835D42F280D3500B184D4 /* ASMInfoPopupInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835D32F280D3500B184D4 /* ASMInfoPopupInteractor.swift */; };
+		2D9835D92F280D7100B184D4 /* ASMInfoPopupViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835D82F280D7100B184D4 /* ASMInfoPopupViewModelFactory.swift */; };
+		2D9835E02F28113800B184D4 /* ASMInfoViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9835DF2F28113800B184D4 /* ASMInfoViewFactory.swift */; };
 		2DA3AE8F2E5DB03300689F65 /* XcmDynamicModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D1B1D2DA3BE0A0008057B /* XcmDynamicModelFactory.swift */; };
 		2DA3AE902E5DB04200689F65 /* XcmUni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C42D9E957400F79C02 /* XcmUni.swift */; };
 		2DA3AE912E5DB06200689F65 /* XcmUni+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C62D9E95EC00F79C02 /* XcmUni+Location.swift */; };
@@ -8687,13 +8690,16 @@
 		2D9835832F2774B500B184D4 /* InfoPopupContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupContent.swift; sourceTree = "<group>"; };
 		2D9835882F2774D200B184D4 /* InfoPopupWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupWireframe.swift; sourceTree = "<group>"; };
 		2D98358F2F27750500B184D4 /* InfoPopupAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupAction.swift; sourceTree = "<group>"; };
-		2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupViewFactory.swift; sourceTree = "<group>"; };
 		2D98359B2F27754B00B184D4 /* InfoPopupContentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPopupContentBuilder.swift; sourceTree = "<group>"; };
 		2D9835AA2F28040F00B184D4 /* AHMInfoPopupInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupInteractor.swift; sourceTree = "<group>"; };
 		2D9835B42F2805FD00B184D4 /* AHMInfoPopupPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupPresenter.swift; sourceTree = "<group>"; };
 		2D9835B92F28061200B184D4 /* AHMInfoPopupProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupProtocols.swift; sourceTree = "<group>"; };
 		2D9835BE2F28062700B184D4 /* AHMInfoPopupViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupViewModelFactory.swift; sourceTree = "<group>"; };
 		2D9835C52F28067E00B184D4 /* AHMInfoPopupViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoPopupViewFactory.swift; sourceTree = "<group>"; };
+		2D9835CB2F280BDD00B184D4 /* ASMInfoPopupPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMInfoPopupPresenter.swift; sourceTree = "<group>"; };
+		2D9835D32F280D3500B184D4 /* ASMInfoPopupInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMInfoPopupInteractor.swift; sourceTree = "<group>"; };
+		2D9835D82F280D7100B184D4 /* ASMInfoPopupViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMInfoPopupViewModelFactory.swift; sourceTree = "<group>"; };
+		2D9835DF2F28113800B184D4 /* ASMInfoViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMInfoViewFactory.swift; sourceTree = "<group>"; };
 		2DA3AE9A2E5DE6C300689F65 /* RemovedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA3AE9C2E5E203D00689F65 /* UpdatedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA4D5362EB21DC4006FCCC0 /* GiftSetupIssuesViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftSetupIssuesViewModelFactory.swift; sourceTree = "<group>"; };
@@ -18256,6 +18262,7 @@
 		2D9835592F2773A300B184D4 /* InfoPopup */ = {
 			isa = PBXGroup;
 			children = (
+				2D9835CA2F280BD000B184D4 /* ASM */,
 				2D9835A92F28040800B184D4 /* AHM */,
 				2D9835A22F2775BA00B184D4 /* Model */,
 				2D98355A2F2773B200B184D4 /* InfoPopupProtocols.swift */,
@@ -18264,7 +18271,6 @@
 				2D9835882F2774D200B184D4 /* InfoPopupWireframe.swift */,
 				2D9835622F2773CE00B184D4 /* InfoPopupViewController.swift */,
 				2D9835702F27740800B184D4 /* InfoPopupViewLayout.swift */,
-				2D9835942F27751D00B184D4 /* InfoPopupViewFactory.swift */,
 			);
 			path = InfoPopup;
 			sourceTree = "<group>";
@@ -18290,6 +18296,17 @@
 				2D9835C52F28067E00B184D4 /* AHMInfoPopupViewFactory.swift */,
 			);
 			path = AHM;
+			sourceTree = "<group>";
+		};
+		2D9835CA2F280BD000B184D4 /* ASM */ = {
+			isa = PBXGroup;
+			children = (
+				2D9835CB2F280BDD00B184D4 /* ASMInfoPopupPresenter.swift */,
+				2D9835D32F280D3500B184D4 /* ASMInfoPopupInteractor.swift */,
+				2D9835D82F280D7100B184D4 /* ASMInfoPopupViewModelFactory.swift */,
+				2D9835DF2F28113800B184D4 /* ASMInfoViewFactory.swift */,
+			);
+			path = ASM;
 			sourceTree = "<group>";
 		};
 		2DA4D5302EB21DB1006FCCC0 /* Factory */ = {
@@ -31065,6 +31082,7 @@
 				0C2D1E3D2D9708350030E43C /* LedgerDeviceDisplayInfo.swift in Sources */,
 				8425D0E328FE766B003B782A /* ReferendumVoteProtocols.swift in Sources */,
 				0C3976A52C33050600998DD6 /* HydraXYKSwapQuoteFactory.swift in Sources */,
+				2D9835D42F280D3500B184D4 /* ASMInfoPopupInteractor.swift in Sources */,
 				F462B364260C88050005AB01 /* UITableView+Reuse.swift in Sources */,
 				0CBF5DE72AB1A60500087EBF /* SharedOperationStatus.swift in Sources */,
 				0C8FC21F2E60BD8C00034ED3 /* OffchainMultisigOperation.swift in Sources */,
@@ -31657,6 +31675,7 @@
 				84E4897329A79017008726FA /* SkeletonDecoration+View.swift in Sources */,
 				2AD0A19525D3D3EC00312428 /* GitHubOperationFactory.swift in Sources */,
 				2D039DE42BFBB2FE00A928E5 /* ExportRowView.swift in Sources */,
+				2D9835D92F280D7100B184D4 /* ASMInfoPopupViewModelFactory.swift in Sources */,
 				2D74CA3F2CF7262E004EAD8C /* BrowserOpening.swift in Sources */,
 				845B07FF2916F529005785D3 /* Gov1SubscriptionFactory.swift in Sources */,
 				888A3B6528F73DC300E15BD2 /* ReferendumVotingStatusView.swift in Sources */,
@@ -31899,6 +31918,7 @@
 				2D3A3A7E2EC466F00069FD31 /* ReferendumLinkFactory.swift in Sources */,
 				AEF7404E25E6DC9400407D41 /* InflationCurveRewardEngine.swift in Sources */,
 				2DEDEF572E4CF3B7008F07B2 /* RuntimeDefaultTypesSnapshotFactory.swift in Sources */,
+				2D9835CC2F280BDD00B184D4 /* ASMInfoPopupPresenter.swift in Sources */,
 				848CCB522833D29F00A1FD00 /* StakingParachainStatics.swift in Sources */,
 				84CA68D926BE9E7F003B9453 /* SpecVersionSubscription.swift in Sources */,
 				0C13DFCB2AF6182500E5F355 /* SwapModel.swift in Sources */,
@@ -33694,6 +33714,7 @@
 				06590486EED4050BADDD32C5 /* AccountManagementPresenter.swift in Sources */,
 				846A68292746234100D1A47A /* ChainConnection.swift in Sources */,
 				849A16452995229F00E235FE /* GovernanceDelegateConfirmPresenter+Updates.swift in Sources */,
+				2D9835E02F28113800B184D4 /* ASMInfoViewFactory.swift in Sources */,
 				0C0F6E532D48934400943A7C /* MythosStakingDelegatorState.swift in Sources */,
 				88B1C33F29B9C86D00DCA101 /* BagListCalls.swift in Sources */,
 				8487584127F0842D00495306 /* AddressQRMatcher.swift in Sources */,
@@ -34076,7 +34097,6 @@
 				84F1CB3327CE575E0095D523 /* NftListUniquesViewModel.swift in Sources */,
 				AEBE173B262F3E6600DF257C /* StakingPayoutConfirmViewModelFactory.swift in Sources */,
 				0C500B272B07314000ABEE70 /* ExtrinsicProcessingResult.swift in Sources */,
-				2D9835952F27751D00B184D4 /* InfoPopupViewFactory.swift in Sources */,
 				84B64E3F2704567700914E88 /* StakingLocalStorageSubscriber.swift in Sources */,
 				847449512891F3B00042FD80 /* WalletSwitchControl.swift in Sources */,
 				AE3983A2272C08AE00BC8A85 /* BaseAccountImportPresenter.swift in Sources */,

@@ -2,12 +2,13 @@ import Foundation
 import BigInt
 
 protocol AHMInfoPopupViewModelFactoryProtocol {
-    func createContent(
+    func createViewModel(
         from info: AHMRemoteData,
         sourceChain: ChainModel,
         destinationChain: ChainModel,
+        bannerState: BannersState,
         locale: Locale
-    ) -> InfoPopupContent
+    ) -> InfoPopupViewModel
 }
 
 final class AHMInfoPopupViewModelFactory {
@@ -54,8 +55,8 @@ private extension AHMInfoPopupViewModelFactory {
         sourceChain: ChainModel,
         destinationChain: ChainModel,
         locale: Locale
-    ) -> [InfoPopupContent.Feature] {
-        var features: [InfoPopupContent.Feature] = []
+    ) -> [InfoPopupViewModel.Feature] {
+        var features: [InfoPopupViewModel.Feature] = []
 
         guard
             let sourceAsset = sourceChain.asset(for: info.sourceData.assetId),
@@ -82,7 +83,7 @@ private extension AHMInfoPopupViewModelFactory {
         )
 
         features.append(
-            InfoPopupContent.Feature(
+            InfoPopupViewModel.Feature(
                 emoji: "👛",
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoFeatureMinBalance(
@@ -111,7 +112,7 @@ private extension AHMInfoPopupViewModelFactory {
         )
 
         features.append(
-            InfoPopupContent.Feature(
+            InfoPopupViewModel.Feature(
                 emoji: "💸",
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoFeatureFees(
@@ -125,7 +126,7 @@ private extension AHMInfoPopupViewModelFactory {
         // More tokens
         let tokensList = info.newTokenNames.joined(with: .commaSpace)
         features.append(
-            InfoPopupContent.Feature(
+            InfoPopupViewModel.Feature(
                 emoji: "🪙",
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoFeatureTokens(tokensList)
@@ -134,7 +135,7 @@ private extension AHMInfoPopupViewModelFactory {
 
         // Pay fees in any token
         features.append(
-            InfoPopupContent.Feature(
+            InfoPopupViewModel.Feature(
                 emoji: "🧾",
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoFeaturePayFees()
@@ -143,7 +144,7 @@ private extension AHMInfoPopupViewModelFactory {
 
         // Unified access
         features.append(
-            InfoPopupContent.Feature(
+            InfoPopupViewModel.Feature(
                 emoji: "🗂️",
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoFeatureUnified(sourceAsset.symbol)
@@ -156,14 +157,14 @@ private extension AHMInfoPopupViewModelFactory {
     func createInfoItems(
         sourceChain: ChainModel,
         locale: Locale
-    ) -> [InfoPopupContent.InfoItem] {
+    ) -> [InfoPopupViewModel.InfoItem] {
         [
-            InfoPopupContent.InfoItem(
+            InfoPopupViewModel.InfoItem(
                 icon: .history,
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoHistoryInfo(sourceChain.name)
             ),
-            InfoPopupContent.InfoItem(
+            InfoPopupViewModel.InfoItem(
                 icon: .migration,
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoMigrationInfo()
@@ -199,12 +200,13 @@ private extension AHMInfoPopupViewModelFactory {
 // MARK: - AHMInfoPopupViewModelFactoryProtocol
 
 extension AHMInfoPopupViewModelFactory: AHMInfoPopupViewModelFactoryProtocol {
-    func createContent(
+    func createViewModel(
         from info: AHMRemoteData,
         sourceChain: ChainModel,
         destinationChain: ChainModel,
+        bannerState: BannersState,
         locale: Locale
-    ) -> InfoPopupContent {
+    ) -> InfoPopupViewModel {
         let title = createTitle(
             from: info,
             sourceChain: sourceChain,
@@ -224,8 +226,8 @@ extension AHMInfoPopupViewModelFactory: AHMInfoPopupViewModelFactoryProtocol {
             locale: locale
         )
 
-        return InfoPopupContent(
-            bannerDomain: info.bannerPath,
+        return InfoPopupViewModel(
+            bannerState: bannerState,
             title: title,
             subtitle: R.string(preferredLanguages: locale.rLanguages)
                 .localizable.ahmInfoSubtitle(),
@@ -235,7 +237,8 @@ extension AHMInfoPopupViewModelFactory: AHMInfoPopupViewModelFactoryProtocol {
             mainActionTitle: R.string(preferredLanguages: locale.rLanguages)
                 .localizable.commonGotIt(),
             skipActionTitle: nil,
-            learnMoreURL: info.wikiURL
+            learnMoreTitle: R.string(preferredLanguages: locale.rLanguages)
+                .localizable.commonLearnMore()
         )
     }
 }

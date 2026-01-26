@@ -72,7 +72,7 @@ struct BannersViewFactory {
 
     private static func closeFeatureAvailability(for domain: Banners.Domain) -> Bool {
         switch domain {
-        case .dApps, .ahmKusama, .ahmPolkadot:
+        case .dApps, .ahmKusama, .ahmPolkadot, .appStoreMigration:
             false
         case .assets:
             true

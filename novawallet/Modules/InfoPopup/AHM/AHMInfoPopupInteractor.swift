@@ -1,8 +1,8 @@
 import Foundation
 import Keystore_iOS
 
-final class AHMInfoPopupInteractor {
-    weak var presenter: AHMInfoPopupInteractorOutputProtocol?
+final class AHMInfoPopupInteractor: InfoPopupInteractor {
+    weak var ahmPresenter: AHMInfoPopupInteractorOutputProtocol?
 
     private let info: AHMRemoteData
     private let chainRegistry: ChainRegistryProtocol
@@ -17,28 +17,20 @@ final class AHMInfoPopupInteractor {
         self.chainRegistry = chainRegistry
         self.settingsManager = settingsManager
     }
-}
 
-// MARK: - InfoPopupInteractorInputProtocol
-
-extension AHMInfoPopupInteractor: InfoPopupInteractorInputProtocol {
-    func setup() {
+    override func setup() {
         let sourceChain = chainRegistry.getChain(for: info.sourceData.chainId)
         let destinationChain = chainRegistry.getChain(for: info.destinationData.chainId)
 
-        presenter?.didReceive(
+        ahmPresenter?.didReceive(
             info: info,
             sourceChain: sourceChain,
             destinationChain: destinationChain
         )
     }
 
-    func performMainAction() {
+    override func performMainAction() {
         settingsManager.ahmInfoShownChains.add(info.sourceData.chainId)
         presenter?.didCompleteMainAction()
-    }
-
-    func performSkipAction() {
-        presenter?.didCompleteSkipAction()
     }
 }

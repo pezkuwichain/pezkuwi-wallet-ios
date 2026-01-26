@@ -23,6 +23,13 @@ final class InfoPopupViewLayout: SCSingleActionLayoutView {
         view.alignment = .top
     }
 
+    let infoStackView: UIStackView = .create { view in
+        view.axis = .vertical
+        view.spacing = Constants.stackViewSpacing
+        view.distribution = .fill
+        view.alignment = .leading
+    }
+
     let additionalInfoLabel: UILabel = .create { label in
         label.apply(style: .footnoteSecondary)
         label.numberOfLines = 0
@@ -36,8 +43,7 @@ final class InfoPopupViewLayout: SCSingleActionLayoutView {
         genericActionView
     }
 
-    private var subtitleSpacingConstraint: NSLayoutConstraint?
-    private var additionalInfoSpacingConstraint: NSLayoutConstraint?
+    private var separatorView: UIView?
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -58,7 +64,12 @@ final class InfoPopupViewLayout: SCSingleActionLayoutView {
 
         addArrangedSubview(titleLabel, spacingAfter: Constants.titleToSubtitle)
         addArrangedSubview(subtitleLabel, spacingAfter: Constants.subtitleToFeatures)
-        addArrangedSubview(featuresStackView, spacingAfter: Constants.featuresToInfo)
+        addArrangedSubview(featuresStackView, spacingAfter: Constants.featuresToSeparator)
+
+        separatorView = createSeparator()
+        addArrangedSubview(separatorView!, spacingAfter: Constants.separatorToInfo)
+
+        addArrangedSubview(infoStackView, spacingAfter: Constants.infoToAdditional)
         addArrangedSubview(additionalInfoLabel)
 
         setupActionButtonsLayout()
@@ -99,6 +110,16 @@ private extension InfoPopupViewLayout {
         }
     }
 
+    func createSeparator() -> UIView {
+        let separator = UIView.createSeparator()
+
+        separator.snp.makeConstraints { make in
+            make.height.equalTo(Constants.separatorHeight)
+        }
+
+        return separator
+    }
+
     func addFeatureView(_ feature: InfoPopupViewModel.Feature) {
         let featureView: GenericPairValueView<UIView, UILabel> = .create { view in
             view.makeHorizontal()
@@ -128,8 +149,32 @@ private extension InfoPopupViewLayout {
         featuresStackView.addArrangedSubview(featureView)
     }
 
-    func clearFeatures() {
+    func addInfoItemView(_ infoItem: InfoPopupViewModel.InfoItem) {
+        let infoView: IconDetailsView = .create { view in
+            view.detailsLabel.apply(style: .footnoteSecondary)
+            view.detailsLabel.numberOfLines = 0
+            view.spacing = Constants.infoIconToText
+            view.iconWidth = Constants.iconWidth
+        }
+
+        let icon: UIImage? = switch infoItem.icon {
+        case .history:
+            R.image.iconHistoryGray18()
+        case .migration:
+            R.image.iconStarGray18()
+        case let .custom(image):
+            image
+        }
+
+        infoView.imageView.image = icon
+        infoView.detailsLabel.text = infoItem.text
+
+        infoStackView.addArrangedSubview(infoView)
+    }
+
+    func clearStacks() {
         featuresStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        infoStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 }
 
@@ -146,8 +191,13 @@ extension InfoPopupViewLayout {
             subtitleLabel.isHidden = true
         }
 
-        clearFeatures()
+        clearStacks()
         viewModel.features.forEach { addFeatureView($0) }
+        viewModel.infoItems.forEach { addInfoItemView($0) }
+
+        let hasInfoItems = !viewModel.infoItems.isEmpty
+        separatorView?.isHidden = !hasInfoItems
+        infoStackView.isHidden = !hasInfoItems
 
         if let additionalInfo = viewModel.additionalInfo {
             additionalInfoLabel.text = additionalInfo
@@ -182,11 +232,16 @@ private extension InfoPopupViewLayout {
         static let bannerToTitle: CGFloat = 16
         static let titleToSubtitle: CGFloat = 4
         static let subtitleToFeatures: CGFloat = 17
-        static let featuresToInfo: CGFloat = 13
+        static let featuresToSeparator: CGFloat = 13
+        static let separatorToInfo: CGFloat = 10
+        static let infoToAdditional: CGFloat = 10
         static let stackViewSpacing: CGFloat = 10
         static let featureIconToText: CGFloat = 16
+        static let infoIconToText: CGFloat = 16
         static let bannerInitialHeight: CGFloat = 0
+        static let separatorHeight: CGFloat = 1
         static let emojiLabelHeight: CGFloat = 24
+        static let iconWidth: CGFloat = 18
         static let buttonHeight: CGFloat = 52
         static let buttonsSpacing: CGFloat = 12
     }

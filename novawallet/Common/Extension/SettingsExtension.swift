@@ -34,6 +34,7 @@ enum SettingsKey: String {
     case ahmAssetDetailsAlertClosedChains
     case ahmStakingAlertClosedChains
     case privacyModeSettings
+    case appStoreMigrationShown
 }
 
 extension SettingsManagerProtocol {
@@ -423,6 +424,16 @@ extension SettingsManagerProtocol {
                 value: newValue,
                 for: SettingsKey.ahmStakingAlertClosedChains.rawValue
             )
+        }
+    }
+
+    var appStoreMigrationShown: Bool {
+        get {
+            bool(for: SettingsKey.appStoreMigrationShown.rawValue) ?? false
+        }
+
+        set {
+            set(value: newValue, for: SettingsKey.appStoreMigrationShown.rawValue)
         }
     }
 }

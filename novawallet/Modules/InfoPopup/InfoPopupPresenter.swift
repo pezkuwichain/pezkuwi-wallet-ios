@@ -1,49 +1,45 @@
 import Foundation
 import Foundation_iOS
 
-final class InfoPopupPresenter: BannersModuleInputOwnerProtocol {
+class InfoPopupPresenter: BannersModuleInputOwnerProtocol {
     weak var view: InfoPopupViewProtocol?
     weak var bannersModule: BannersModuleInputProtocol?
 
-    private let wireframe: InfoPopupWireframeProtocol
-    private let interactor: InfoPopupInteractorInputProtocol
-    private let localizationManager: LocalizationManagerProtocol
+    let wireframe: InfoPopupWireframeProtocol
+    let interactor: InfoPopupInteractorInputProtocol
+    let localizationManager: LocalizationManagerProtocol
 
-    private var content: InfoPopupContent?
-    private var mainAction: InfoPopupAction?
-    private var skipAction: InfoPopupAction?
+    var mainAction: InfoPopupAction?
+    var skipAction: InfoPopupAction?
+    var learnMoreURL: URL?
 
     init(
         interactor: InfoPopupInteractorInputProtocol,
         wireframe: InfoPopupWireframeProtocol,
         mainAction: InfoPopupAction?,
         skipAction: InfoPopupAction?,
+        learnMoreURL: URL?,
         localizationManager: LocalizationManagerProtocol
     ) {
         self.interactor = interactor
         self.wireframe = wireframe
         self.mainAction = mainAction
         self.skipAction = skipAction
+        self.learnMoreURL = learnMoreURL
         self.localizationManager = localizationManager
     }
 
-    private func provideViewModel() {
-        guard let content else { return }
+    func createViewModel(
+        bannerState _: BannersState,
+        locale _: Locale
+    ) -> InfoPopupViewModel {
+        fatalError("Subclasses must override createViewModel")
+    }
 
-        let viewModel = InfoPopupViewModel(
+    func provideViewModel() {
+        let viewModel = createViewModel(
             bannerState: bannersModule?.bannersState ?? .unavailable,
-            title: content.title,
-            subtitle: content.subtitle,
-            features: content.features.map {
-                InfoPopupViewModel.Feature(emoji: $0.emoji, text: $0.text)
-            },
-            additionalInfo: content.additionalInfo,
-            mainActionTitle: content.mainActionTitle,
-            skipActionTitle: content.skipActionTitle,
-            learnMoreTitle: content.learnMoreURL != nil
-                ? R.string(preferredLanguages: localizationManager.selectedLocale.rLanguages)
-                .localizable.commonLearnMore()
-                : nil
+            locale: localizationManager.selectedLocale
         )
 
         view?.didReceive(viewModel: viewModel)
@@ -70,10 +66,10 @@ extension InfoPopupPresenter: InfoPopupPresenterProtocol {
     }
 
     func actionLearnMore() {
-        guard let view, let url = content?.learnMoreURL else { return }
+        guard let view, let learnMoreURL else { return }
 
         wireframe.showWeb(
-            url: url,
+            url: learnMoreURL,
             from: view,
             style: .automatic
         )
@@ -83,8 +79,7 @@ extension InfoPopupPresenter: InfoPopupPresenterProtocol {
 // MARK: - InfoPopupInteractorOutputProtocol
 
 extension InfoPopupPresenter: InfoPopupInteractorOutputProtocol {
-    func didReceive(content: InfoPopupContent) {
-        self.content = content
+    func didSetup() {
         provideViewModel()
     }
 

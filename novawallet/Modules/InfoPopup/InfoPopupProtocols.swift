@@ -18,7 +18,7 @@ protocol InfoPopupInteractorInputProtocol: AnyObject {
 }
 
 protocol InfoPopupInteractorOutputProtocol: AnyObject {
-    func didReceive(content: InfoPopupContent)
+    func didSetup()
     func didCompleteMainAction()
     func didCompleteSkipAction()
     func didReceive(error: Error)
