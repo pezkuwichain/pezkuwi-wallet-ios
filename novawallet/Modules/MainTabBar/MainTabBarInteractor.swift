@@ -27,6 +27,7 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
     let onLaunchQueue = OnLaunchActionsQueue(
         possibleActions: [
             OnLaunchAction.PushNotificationsSetup(),
+            OnLaunchAction.ASMInfoSetup(),
             OnLaunchAction.AHMInfoSetup(),
             OnLaunchAction.MultisigNotificationsPromo()
         ]
@@ -134,6 +135,12 @@ private extension MainTabBarInteractor {
         }
     }
 
+    func showAsmInfoOrNextAction() {
+        securedLayer.scheduleExecutionIfAuthorized { [weak self] in
+            self?.showAsmInfoOrNext { self?.onLaunchQueue.runNext() }
+        }
+    }
+
     func setupNotificationPromoObserver() {
         notificationsPromoService.add(
             observer: self,
@@ -170,6 +177,29 @@ private extension MainTabBarInteractor {
                     return
                 }
                 self?.presenter?.didRequestAHMInfoOpen(with: info)
+            case let .failure(error):
+                self?.logger.error("Error fetching AHM info: \(error)")
+            }
+
+            nextOnLaunchClosure?()
+        }
+    }
+
+    func showAsmInfoOrNext(nextOnLaunchClosure: (() -> Void)? = nil) {
+        let wrapper = asmInfoRepository.fetchWrapper()
+
+        execute(
+            wrapper: wrapper,
+            inOperationQueue: operationQueue,
+            runningCallbackIn: .main
+        ) { [weak self] result in
+            switch result {
+            case let .success(info):
+                guard let info else {
+                    nextOnLaunchClosure?()
+                    return
+                }
+                self?.presenter?.didRequestASMInfoOpen(with: info)
             case let .failure(error):
                 self?.logger.error("Error fetching AHM info: \(error)")
             }
@@ -361,6 +391,10 @@ extension MainTabBarInteractor: OnLaunchActionsQueueDelegate {
 
     func onLaunchProcessAHMInfoSetup(_: OnLaunchAction.AHMInfoSetup) {
         showAhmInfoOrNextAction()
+    }
+
+    func onLaunchProcessASMInfoSetup(_: OnLaunchAction.ASMInfoSetup) {
+        showAsmInfoOrNextAction()
     }
 }
 
