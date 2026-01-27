@@ -8,7 +8,7 @@ final class AssetDetailsPresenter: RampFlowManaging, AssetPriceChartInputOwnerPr
     weak var assetPriceChartModule: AssetPriceChartModuleInputProtocol?
 
     let wireframe: AssetDetailsWireframeProtocol
-    let ahmViewModelFactory: AHMInfoViewModelFactoryProtocol
+    let ahmViewModelFactory: AHMInfoAssetViewModelFactoryProtocol
     let viewModelFactory: AssetDetailsViewModelFactoryProtocol
     let interactor: AssetDetailsInteractorInputProtocol
     let chainAsset: ChainAsset
@@ -29,7 +29,7 @@ final class AssetDetailsPresenter: RampFlowManaging, AssetPriceChartInputOwnerPr
         localizableManager: LocalizationManagerProtocol,
         chainAsset: ChainAsset,
         selectedAccount: MetaAccountModel,
-        ahmViewModelFactory: AHMInfoViewModelFactoryProtocol,
+        ahmViewModelFactory: AHMInfoAssetViewModelFactoryProtocol,
         viewModelFactory: AssetDetailsViewModelFactoryProtocol,
         wireframe: AssetDetailsWireframeProtocol,
         logger: LoggerProtocol?

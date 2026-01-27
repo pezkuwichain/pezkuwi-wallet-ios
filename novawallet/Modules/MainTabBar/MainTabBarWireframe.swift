@@ -293,7 +293,7 @@ extension MainTabBarWireframe: MainTabBarWireframeProtocol {
         with info: [AHMRemoteData]
     ) {
         let ahmInfoControllers = info
-            .compactMap { AHMInfoViewFactory.createView(info: $0) }
+            .compactMap { AHMInfoPopupViewFactory.createView(info: $0) }
             .map {
                 let navigationController = NovaNavigationController(rootViewController: $0.controller)
 

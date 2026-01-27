@@ -9,7 +9,7 @@ final class StakingMainPresenter {
 
     let childPresenterFactory: StakingMainPresenterFactoryProtocol
     let viewModelFactory: StakingMainViewModelFactoryProtocol
-    let ahmViewModelFactory: AHMInfoViewModelFactoryProtocol
+    let ahmViewModelFactory: AHMInfoStakingViewModelFactoryProtocol
     let stakingOption: Multistaking.ChainAssetOption
     let localizationManager: LocalizationManagerProtocol
     let logger: LoggerProtocol?
@@ -24,7 +24,7 @@ final class StakingMainPresenter {
         stakingOption: Multistaking.ChainAssetOption,
         childPresenterFactory: StakingMainPresenterFactoryProtocol,
         viewModelFactory: StakingMainViewModelFactoryProtocol,
-        ahmViewModelFactory: AHMInfoViewModelFactoryProtocol,
+        ahmViewModelFactory: AHMInfoStakingViewModelFactoryProtocol,
         localizationManager: LocalizationManagerProtocol,
         logger: LoggerProtocol?
     ) {
