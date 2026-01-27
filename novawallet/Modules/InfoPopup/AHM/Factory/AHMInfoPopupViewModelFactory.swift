@@ -133,21 +133,21 @@ private extension AHMInfoPopupViewModelFactory {
             )
         )
 
-        // Pay fees in any token
-        features.append(
-            InfoPopupViewModel.Feature(
-                emoji: "🧾",
-                text: R.string(preferredLanguages: locale.rLanguages)
-                    .localizable.ahmInfoFeaturePayFees()
-            )
-        )
-
         // Unified access
         features.append(
             InfoPopupViewModel.Feature(
                 emoji: "🗂️",
                 text: R.string(preferredLanguages: locale.rLanguages)
                     .localizable.ahmInfoFeatureUnified(sourceAsset.symbol)
+            )
+        )
+
+        // Pay fees in any token
+        features.append(
+            InfoPopupViewModel.Feature(
+                emoji: "🧾",
+                text: R.string(preferredLanguages: locale.rLanguages)
+                    .localizable.ahmInfoFeaturePayFees()
             )
         )
 

@@ -72,7 +72,7 @@ final class InfoPopupViewLayout: SCSingleActionLayoutView {
         addArrangedSubview(infoStackView, spacingAfter: Constants.infoToAdditional)
         addArrangedSubview(additionalInfoLabel)
 
-        setupActionButtonsLayout()
+        setupSkipButton()
     }
 
     override func setupStyle() {
@@ -85,29 +85,16 @@ final class InfoPopupViewLayout: SCSingleActionLayoutView {
 // MARK: - Private
 
 private extension InfoPopupViewLayout {
-    func setupActionButtonsLayout() {
-        let buttonsContainer = UIView()
-
-        buttonsContainer.addSubview(mainActionButton)
-        buttonsContainer.addSubview(skipButton)
-
-        mainActionButton.snp.remakeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
-            make.height.equalTo(Constants.buttonHeight)
-        }
+    func setupSkipButton() {
+        addSubview(skipButton)
 
         skipButton.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(mainActionButton.snp.bottom).offset(Constants.buttonsSpacing)
-            make.height.equalTo(Constants.buttonHeight)
-        }
-
-        addSubview(buttonsContainer)
-
-        buttonsContainer.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(UIConstants.actionBottomInset)
+            make.bottom.equalTo(mainActionButton.snp.top).offset(-Constants.buttonsSpacing)
+            make.height.equalTo(UIConstants.actionHeight)
         }
+
+        skipButton.isHidden = true
     }
 
     func createSeparator() -> UIView {
@@ -176,6 +163,22 @@ private extension InfoPopupViewLayout {
         featuresStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         infoStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
+
+    func updateSkipButtonVisibility(hasSkipButton: Bool) {
+        skipButton.isHidden = !hasSkipButton
+
+        if hasSkipButton {
+            containerView.snp.remakeConstraints { make in
+                make.top.leading.trailing.equalToSuperview()
+                make.bottom.equalTo(skipButton.snp.top).offset(-8.0)
+            }
+        } else {
+            containerView.snp.remakeConstraints { make in
+                make.top.leading.trailing.equalToSuperview()
+                make.bottom.equalTo(mainActionButton.snp.top).offset(-8.0)
+            }
+        }
+    }
 }
 
 // MARK: - Internal
@@ -210,9 +213,9 @@ extension InfoPopupViewLayout {
 
         if let skipTitle = viewModel.skipActionTitle {
             skipButton.imageWithTitleView?.title = skipTitle
-            skipButton.isHidden = false
+            updateSkipButtonVisibility(hasSkipButton: true)
         } else {
-            skipButton.isHidden = true
+            updateSkipButtonVisibility(hasSkipButton: false)
         }
     }
 
@@ -242,7 +245,6 @@ private extension InfoPopupViewLayout {
         static let separatorHeight: CGFloat = 1
         static let emojiLabelHeight: CGFloat = 24
         static let iconWidth: CGFloat = 18
-        static let buttonHeight: CGFloat = 52
         static let buttonsSpacing: CGFloat = 12
     }
 }

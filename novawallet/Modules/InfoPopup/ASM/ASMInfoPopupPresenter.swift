@@ -28,7 +28,7 @@ final class ASMInfoPopupPresenter: InfoPopupPresenter {
     override func createViewModel(
         bannerState: BannersState,
         locale: Locale
-    ) -> InfoPopupViewModel {
+    ) -> InfoPopupViewModel? {
         viewModelFactory.createViewModel(
             bannerState: bannerState,
             locale: locale

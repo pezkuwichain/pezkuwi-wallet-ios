@@ -28,13 +28,16 @@ final class AHMInfoPopupPresenter: InfoPopupPresenter {
         interactor.ahmPresenter = self
     }
 
-    override func createViewModel(bannerState: BannersState, locale: Locale) -> InfoPopupViewModel {
+    override func createViewModel(
+        bannerState: BannersState,
+        locale: Locale
+    ) -> InfoPopupViewModel? {
         guard
             let info,
             let sourceChain,
             let destinationChain
         else {
-            return .empty(with: bannerState)
+            return nil
         }
 
         return viewModelFactory.createViewModel(

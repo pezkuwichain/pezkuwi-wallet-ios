@@ -32,15 +32,17 @@ class InfoPopupPresenter: BannersModuleInputOwnerProtocol {
     func createViewModel(
         bannerState _: BannersState,
         locale _: Locale
-    ) -> InfoPopupViewModel {
+    ) -> InfoPopupViewModel? {
         fatalError("Subclasses must override createViewModel")
     }
 
     func provideViewModel() {
-        let viewModel = createViewModel(
+        guard let viewModel = createViewModel(
             bannerState: bannersModule?.bannersState ?? .unavailable,
             locale: localizationManager.selectedLocale
-        )
+        ) else {
+            return
+        }
 
         view?.didReceive(viewModel: viewModel)
     }
@@ -124,9 +126,9 @@ extension InfoPopupPresenter: BannersModuleOutputProtocol {
 
 extension InfoPopupPresenter: Localizable {
     func applyLocalization() {
-        if let view = view, view.isSetup {
-            provideViewModel()
-            bannersModule?.updateLocale(localizationManager.selectedLocale)
-        }
+        guard let view, view.isSetup else { return }
+
+        provideViewModel()
+        bannersModule?.updateLocale(localizationManager.selectedLocale)
     }
 }
