@@ -7,7 +7,48 @@ protocol ASMInfoPopupViewModelFactoryProtocol {
     ) -> InfoPopupViewModel
 }
 
-final class ASMInfoPopupViewModelFactory: ASMInfoPopupViewModelFactoryProtocol {
+final class ASMInfoPopupViewModelFactory {}
+
+private extension ASMInfoPopupViewModelFactory {
+    func createFeatures(locale: Locale) -> [InfoPopupViewModel.Feature] {
+        let languages = locale.rLanguages
+
+        return [
+            InfoPopupViewModel.Feature(
+                emoji: "🤩",
+                text: R.string(preferredLanguages: languages)
+                    .localizable.asmInfoFeatureUi()
+            ),
+            InfoPopupViewModel.Feature(
+                emoji: "🧊",
+                text: R.string(preferredLanguages: languages)
+                    .localizable.asmInfoFeatureLiquidGlass()
+            ),
+            InfoPopupViewModel.Feature(
+                emoji: "🛡️",
+                text: R.string(preferredLanguages: languages)
+                    .localizable.asmInfoFeatureSecurity()
+            ),
+            InfoPopupViewModel.Feature(
+                emoji: "✨",
+                text: R.string(preferredLanguages: languages)
+                    .localizable.asmInfoFeatureMore()
+            )
+        ]
+    }
+
+    func createInfoItems(locale: Locale) -> [InfoPopupViewModel.InfoItem] {
+        [
+            InfoPopupViewModel.InfoItem(
+                icon: .migration,
+                text: R.string(preferredLanguages: locale.rLanguages)
+                    .localizable.asmInfoAdditionalInfo()
+            )
+        ]
+    }
+}
+
+extension ASMInfoPopupViewModelFactory: ASMInfoPopupViewModelFactoryProtocol {
     func createViewModel(
         bannerState: BannersState,
         locale: Locale
@@ -39,38 +80,11 @@ final class ASMInfoPopupViewModelFactory: ASMInfoPopupViewModelFactoryProtocol {
             title: title,
             subtitle: subtitle,
             features: features,
-            infoItems: [],
-            additionalInfo: additionalInfo,
+            infoItems: createInfoItems(locale: locale),
+            additionalInfo: nil,
             mainActionTitle: mainActionTitle,
             skipActionTitle: skipActionTitle,
             learnMoreTitle: learnMoreTitle
         )
-    }
-
-    private func createFeatures(locale: Locale) -> [InfoPopupViewModel.Feature] {
-        let languages = locale.rLanguages
-
-        return [
-            InfoPopupViewModel.Feature(
-                emoji: "👛",
-                text: R.string(preferredLanguages: languages)
-                    .localizable.asmInfoFeatureUi()
-            ),
-            InfoPopupViewModel.Feature(
-                emoji: "🧩",
-                text: R.string(preferredLanguages: languages)
-                    .localizable.asmInfoFeatureLiquidGlass()
-            ),
-            InfoPopupViewModel.Feature(
-                emoji: "🛡️",
-                text: R.string(preferredLanguages: languages)
-                    .localizable.asmInfoFeatureSecurity()
-            ),
-            InfoPopupViewModel.Feature(
-                emoji: "✨",
-                text: R.string(preferredLanguages: languages)
-                    .localizable.asmInfoFeatureMore()
-            )
-        ]
     }
 }

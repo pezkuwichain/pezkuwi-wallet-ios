@@ -36,7 +36,10 @@ final class InfoPopupViewLayout: SCSingleActionLayoutView {
     }
 
     let skipButton: TriangularedButton = .create { button in
-        button.applySecondaryDefaultStyle()
+        button.applyAccessoryStyle()
+        button.triangularedView?.strokeWidth = .zero
+        button.imageWithTitleView?.titleColor = R.color.colorButtonTextAccent()!
+        button.imageWithTitleView?.titleFont = .semiBoldSubheadline
     }
 
     var mainActionButton: TriangularedButton {
@@ -90,7 +93,7 @@ private extension InfoPopupViewLayout {
 
         skipButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
-            make.bottom.equalTo(mainActionButton.snp.top).offset(-Constants.buttonsSpacing)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(UIConstants.actionBottomInset)
             make.height.equalTo(UIConstants.actionHeight)
         }
 
@@ -165,17 +168,21 @@ private extension InfoPopupViewLayout {
     }
 
     func updateSkipButtonVisibility(hasSkipButton: Bool) {
+        guard hasSkipButton != !skipButton.isHidden else { return }
+
         skipButton.isHidden = !hasSkipButton
 
         if hasSkipButton {
-            containerView.snp.remakeConstraints { make in
-                make.top.leading.trailing.equalToSuperview()
-                make.bottom.equalTo(skipButton.snp.top).offset(-8.0)
+            genericActionView.snp.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+                make.bottom.equalTo(skipButton.snp.top).inset(-Constants.buttonsSpacing)
+                make.height.equalTo(UIConstants.actionHeight)
             }
         } else {
-            containerView.snp.remakeConstraints { make in
-                make.top.leading.trailing.equalToSuperview()
-                make.bottom.equalTo(mainActionButton.snp.top).offset(-8.0)
+            genericActionView.snp.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+                make.bottom.equalTo(safeAreaLayoutGuide).inset(UIConstants.actionBottomInset)
+                make.height.equalTo(UIConstants.actionHeight)
             }
         }
     }
@@ -245,6 +252,6 @@ private extension InfoPopupViewLayout {
         static let separatorHeight: CGFloat = 1
         static let emojiLabelHeight: CGFloat = 24
         static let iconWidth: CGFloat = 18
-        static let buttonsSpacing: CGFloat = 12
+        static let buttonsSpacing: CGFloat = 8.0
     }
 }
