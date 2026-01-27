@@ -17,6 +17,7 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
     // TODO: - Bring back with updated config url
 //    let inAppUpdatesService: SyncServiceProtocol
 
+    let asmInfoRepository: ASMInfoRepositoryProtocol
     let notificationsPromoService: MultisigNotificationsPromoServiceProtocol
     let pushScreenOpenService: PushNotificationOpenScreenFacadeProtocol
     let cloudBackupMediator: CloudBackupSyncMediating
@@ -44,6 +45,7 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
         secretImportService: SecretImportServiceProtocol,
         walletMigrationService: WalletMigrationServiceProtocol,
         screenOpenService: ScreenOpenServiceProtocol,
+        asmInfoRepository: ASMInfoRepositoryProtocol,
         notificationsPromoService: MultisigNotificationsPromoServiceProtocol,
         pushScreenOpenService: PushNotificationOpenScreenFacadeProtocol,
         cloudBackupMediator: CloudBackupSyncMediating,
@@ -59,6 +61,7 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
         self.secretImportService = secretImportService
         self.walletMigrationService = walletMigrationService
         self.screenOpenService = screenOpenService
+        self.asmInfoRepository = asmInfoRepository
         self.notificationsPromoService = notificationsPromoService
         self.pushScreenOpenService = pushScreenOpenService
         self.cloudBackupMediator = cloudBackupMediator
