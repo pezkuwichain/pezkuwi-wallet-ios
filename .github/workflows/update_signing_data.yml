@@ -22,7 +22,6 @@ jobs:
           scw_secret_key: ${{ secrets.SCW_SECRET_KEY }}
           scw_default_project_id: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
           scw_default_organization_id: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
-          xcode-version: 26.2.0
 
       - name: Update signing data
         run: |
