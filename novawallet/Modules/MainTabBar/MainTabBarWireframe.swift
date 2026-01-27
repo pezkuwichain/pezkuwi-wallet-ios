@@ -198,7 +198,7 @@ private extension MainTabBarWireframe {
         in view: MainTabBarViewProtocol?,
         with info: AHMRemoteData
     ) {
-        guard let ahmInfoView = AHMInfoViewFactory.createView(info: info) else {
+        guard let ahmInfoView = AHMInfoPopupViewFactory.createView(info: info) else {
             return
         }
 
