@@ -14,8 +14,7 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
     let preSyncServiceCoodrinator: PreSyncServiceCoordinatorProtocol
     let serviceCoordinator: ServiceCoordinatorProtocol
     let securedLayer: SecurityLayerServiceProtocol
-    // TODO: - Bring back with updated config url
-//    let inAppUpdatesService: SyncServiceProtocol
+    let inAppUpdatesService: SyncServiceProtocol
 
     let notificationsPromoService: MultisigNotificationsPromoServiceProtocol
     let pushScreenOpenService: PushNotificationOpenScreenFacadeProtocol
@@ -48,8 +47,7 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
         pushScreenOpenService: PushNotificationOpenScreenFacadeProtocol,
         cloudBackupMediator: CloudBackupSyncMediating,
         securedLayer: SecurityLayerServiceProtocol,
-        // TODO: - Bring back with updated config url
-//        inAppUpdatesService: SyncServiceProtocol,
+        inAppUpdatesService: SyncServiceProtocol,
         settingsManager: SettingsManagerProtocol,
         operationQueue: OperationQueue,
         logger: LoggerProtocol
@@ -65,14 +63,12 @@ final class MainTabBarInteractor: AnyProviderAutoCleaning {
         self.preSyncServiceCoodrinator = preSyncServiceCoodrinator
         self.serviceCoordinator = serviceCoordinator
         self.securedLayer = securedLayer
-        // TODO: - Bring back with updated config url
-//        self.inAppUpdatesService = inAppUpdatesService
+        self.inAppUpdatesService = inAppUpdatesService
         self.settingsManager = settingsManager
         self.operationQueue = operationQueue
         self.logger = logger
 
-        // TODO: - Bring back with updated config url
-//        self.inAppUpdatesService.setup()
+        self.inAppUpdatesService.setup()
 
         startServices()
     }
@@ -92,8 +88,7 @@ private extension MainTabBarInteractor {
             switch result {
             case .success:
                 self?.serviceCoordinator.setup()
-                // TODO: - Bring back with updated config url
-//                self?.inAppUpdatesService.syncUp()
+                self?.inAppUpdatesService.syncUp()
                 self?.applicationHandler.delegate = self
             case .failure:
                 self?.logger.error("Failed on setup pre sync services")
@@ -104,8 +99,7 @@ private extension MainTabBarInteractor {
     func stopServices() {
         preSyncServiceCoodrinator.throttle()
         serviceCoordinator.throttle()
-        // TODO: - Bring back with updated config url
-//        inAppUpdatesService.stopSyncUp()
+        inAppUpdatesService.stopSyncUp()
     }
 
     func suggestSecretImportIfNeeded() {
