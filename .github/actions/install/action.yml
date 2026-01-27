@@ -4,9 +4,7 @@ inputs:
   xcode-version:
     description: "The Xcode version to install"
     required: true
-    # TODO: update to latest version when all code improvements are complete
-    #default: "26.2.0"
-    default: "16.4"
+    default: "26.2.0"
   minimal_mode:
     description: "Skip Mint, SPM and Google service plist setup (for signing-only workflows)"
     required: false
