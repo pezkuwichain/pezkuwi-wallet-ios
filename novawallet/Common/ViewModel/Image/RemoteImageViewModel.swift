@@ -103,7 +103,7 @@ final class SVGImageProcessor: ImageProcessor {
     let serializer: RemoteImageSerializer
 
     init() {
-        identifier = "io.novasamatech.novawallet.kf.svg.processor"
+        identifier = "io.novafoundation.novawallet.kf.svg.processor"
         serializer = RemoteImageSerializer.shared
     }
 
