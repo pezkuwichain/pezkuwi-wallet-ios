@@ -105,7 +105,7 @@ class NovaNavigationController: UINavigationController, UINavigationControllerDe
 
     private func updateNavigationBarState(in viewController: UIViewController) {
         let isHidden = viewController is HiddableBarWhenPushed
-        setNavigationBarHidden(isHidden, animated: true)
+        navigationBar.isHidden = isHidden
 
         if let navigationDependable = viewController as? NavigationDependable {
             navigationDependable.navigationControlling = self
@@ -114,7 +114,13 @@ class NovaNavigationController: UINavigationController, UINavigationControllerDe
 
     private func setupBackButtonItem(for viewController: UIViewController) {
         let backButtonItem = viewController.navigationItem.backBarButtonItem ?? UIBarButtonItem()
-        backButtonItem.title = " "
+
+        if #available(iOS 26.0, *) {
+            backButtonItem.title = nil
+        } else {
+            backButtonItem.title = " "
+        }
+
         viewController.navigationItem.backBarButtonItem = backButtonItem
     }
 
