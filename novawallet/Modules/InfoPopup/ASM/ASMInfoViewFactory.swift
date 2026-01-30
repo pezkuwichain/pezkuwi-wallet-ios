@@ -13,14 +13,12 @@ struct ASMInfoPopupViewFactory {
         let wireframe = InfoPopupWireframe()
         let viewModelFactory = ASMInfoPopupViewModelFactory()
 
-        let newAppDeeplink = "itms-apps://itunes.apple.com/app/id\(info.newAppId)"
-
         let presenter = ASMInfoPopupPresenter(
             interactor: interactor,
             wireframe: wireframe,
             viewModelFactory: viewModelFactory,
             learnMoreURL: info.wikiURL,
-            mainAction: .deepLink(newAppDeeplink),
+            mainAction: .url(info.destinationLinkData.universalLink),
             skipAction: .custom {},
             localizationManager: localizationManager
         )
