@@ -93,12 +93,4 @@ extension CreateWatchOnlyViewLayout {
         label.textColor = R.color.colorTextSecondary()
         return label
     }
-
-    static func createHintLabel() -> UILabel {
-        let label = UILabel()
-        label.font = .caption1
-        label.textColor = R.color.colorTextSecondary()
-        label.numberOfLines = 0
-        return label
-    }
 }
