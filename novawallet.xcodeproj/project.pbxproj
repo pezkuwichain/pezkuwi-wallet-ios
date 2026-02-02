@@ -2105,6 +2105,17 @@
 		2D9836B02F2938D600B184D4 /* ASMRemoteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9836AF2F2938D600B184D4 /* ASMRemoteData.swift */; };
 		2D9836BB2F29391600B184D4 /* ASMInfoFetchOperationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9836BA2F29391600B184D4 /* ASMInfoFetchOperationFactory.swift */; };
 		2D9836C02F2939D100B184D4 /* ASMInfoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9836BF2F2939D100B184D4 /* ASMInfoRepository.swift */; };
+		2D9837452F3095FD00B184D4 /* AppMigrationMessageParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98373D2F3095FD00B184D4 /* AppMigrationMessageParser.swift */; };
+		2D9837462F3095FD00B184D4 /* AppMigrationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98373B2F3095FD00B184D4 /* AppMigrationFactory.swift */; };
+		2D9837472F3095FD00B184D4 /* AppMigrationRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837412F3095FD00B184D4 /* AppMigrationRemoteConfig.swift */; };
+		2D9837482F3095FD00B184D4 /* AppMigrationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98373E2F3095FD00B184D4 /* AppMigrationModels.swift */; };
+		2D9837492F3095FD00B184D4 /* AppMigrationChannelError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837392F3095FD00B184D4 /* AppMigrationChannelError.swift */; };
+		2D98374A2F3095FD00B184D4 /* AppMigrationOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98373F2F3095FD00B184D4 /* AppMigrationOrigin.swift */; };
+		2D98374B2F3095FD00B184D4 /* AppMigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837422F3095FD00B184D4 /* AppMigrationService.swift */; };
+		2D98374C2F3095FD00B184D4 /* AppMigrationQueryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837402F3095FD00B184D4 /* AppMigrationQueryFactory.swift */; };
+		2D98374D2F3095FD00B184D4 /* AppMigrationLinkNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98373C2F3095FD00B184D4 /* AppMigrationLinkNavigator.swift */; };
+		2D98374E2F3095FD00B184D4 /* AppMigrationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98373A2F3095FD00B184D4 /* AppMigrationDestination.swift */; };
+		2D98374F2F3095FD00B184D4 /* SecureSessionManager+AppMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837432F3095FD00B184D4 /* SecureSessionManager+AppMigration.swift */; };
 		2DA3AE8F2E5DB03300689F65 /* XcmDynamicModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D1B1D2DA3BE0A0008057B /* XcmDynamicModelFactory.swift */; };
 		2DA3AE902E5DB04200689F65 /* XcmUni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C42D9E957400F79C02 /* XcmUni.swift */; };
 		2DA3AE912E5DB06200689F65 /* XcmUni+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C62D9E95EC00F79C02 /* XcmUni+Location.swift */; };
@@ -8700,6 +8711,17 @@
 		2D9836AF2F2938D600B184D4 /* ASMRemoteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMRemoteData.swift; sourceTree = "<group>"; };
 		2D9836BA2F29391600B184D4 /* ASMInfoFetchOperationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMInfoFetchOperationFactory.swift; sourceTree = "<group>"; };
 		2D9836BF2F2939D100B184D4 /* ASMInfoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASMInfoRepository.swift; sourceTree = "<group>"; };
+		2D9837392F3095FD00B184D4 /* AppMigrationChannelError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationChannelError.swift; sourceTree = "<group>"; };
+		2D98373A2F3095FD00B184D4 /* AppMigrationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationDestination.swift; sourceTree = "<group>"; };
+		2D98373B2F3095FD00B184D4 /* AppMigrationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationFactory.swift; sourceTree = "<group>"; };
+		2D98373C2F3095FD00B184D4 /* AppMigrationLinkNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationLinkNavigator.swift; sourceTree = "<group>"; };
+		2D98373D2F3095FD00B184D4 /* AppMigrationMessageParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationMessageParser.swift; sourceTree = "<group>"; };
+		2D98373E2F3095FD00B184D4 /* AppMigrationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationModels.swift; sourceTree = "<group>"; };
+		2D98373F2F3095FD00B184D4 /* AppMigrationOrigin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationOrigin.swift; sourceTree = "<group>"; };
+		2D9837402F3095FD00B184D4 /* AppMigrationQueryFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationQueryFactory.swift; sourceTree = "<group>"; };
+		2D9837412F3095FD00B184D4 /* AppMigrationRemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationRemoteConfig.swift; sourceTree = "<group>"; };
+		2D9837422F3095FD00B184D4 /* AppMigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationService.swift; sourceTree = "<group>"; };
+		2D9837432F3095FD00B184D4 /* SecureSessionManager+AppMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecureSessionManager+AppMigration.swift"; sourceTree = "<group>"; };
 		2DA3AE9A2E5DE6C300689F65 /* RemovedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA3AE9C2E5E203D00689F65 /* UpdatedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA4D5362EB21DC4006FCCC0 /* GiftSetupIssuesViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftSetupIssuesViewModelFactory.swift; sourceTree = "<group>"; };
@@ -18336,6 +18358,24 @@
 			path = AppStoreMigrationInfo;
 			sourceTree = "<group>";
 		};
+		2D9837442F3095FD00B184D4 /* AppMigration */ = {
+			isa = PBXGroup;
+			children = (
+				2D9837392F3095FD00B184D4 /* AppMigrationChannelError.swift */,
+				2D98373A2F3095FD00B184D4 /* AppMigrationDestination.swift */,
+				2D98373B2F3095FD00B184D4 /* AppMigrationFactory.swift */,
+				2D98373C2F3095FD00B184D4 /* AppMigrationLinkNavigator.swift */,
+				2D98373D2F3095FD00B184D4 /* AppMigrationMessageParser.swift */,
+				2D98373E2F3095FD00B184D4 /* AppMigrationModels.swift */,
+				2D98373F2F3095FD00B184D4 /* AppMigrationOrigin.swift */,
+				2D9837402F3095FD00B184D4 /* AppMigrationQueryFactory.swift */,
+				2D9837412F3095FD00B184D4 /* AppMigrationRemoteConfig.swift */,
+				2D9837422F3095FD00B184D4 /* AppMigrationService.swift */,
+				2D9837432F3095FD00B184D4 /* SecureSessionManager+AppMigration.swift */,
+			);
+			path = AppMigration;
+			sourceTree = "<group>";
+		};
 		2DA4D5302EB21DB1006FCCC0 /* Factory */ = {
 			isa = PBXGroup;
 			children = (
@@ -23951,6 +23991,7 @@
 		849013D124A92686008F705E /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				2D9837442F3095FD00B184D4 /* AppMigration */,
 				2DA4D5CB2EB368D4006FCCC0 /* TransferCommands */,
 				2DC002CB2E84116900D49A42 /* PrivacyMode */,
 				2DF95D1B2D771914001D8785 /* HapticPlayer */,
@@ -36113,6 +36154,17 @@
 				4A24646D497B26E51926BA52 /* StakingRebagConfirmViewFactory.swift in Sources */,
 				0C59E8DA2AA6085B001E11F3 /* ExternalAssetBalanceLocalSubscriptionFactory.swift in Sources */,
 				F5AADF461ED043EAF04A50DE /* ReferendumsFiltersProtocols.swift in Sources */,
+				2D9837452F3095FD00B184D4 /* AppMigrationMessageParser.swift in Sources */,
+				2D9837462F3095FD00B184D4 /* AppMigrationFactory.swift in Sources */,
+				2D9837472F3095FD00B184D4 /* AppMigrationRemoteConfig.swift in Sources */,
+				2D9837482F3095FD00B184D4 /* AppMigrationModels.swift in Sources */,
+				2D9837492F3095FD00B184D4 /* AppMigrationChannelError.swift in Sources */,
+				2D98374A2F3095FD00B184D4 /* AppMigrationOrigin.swift in Sources */,
+				2D98374B2F3095FD00B184D4 /* AppMigrationService.swift in Sources */,
+				2D98374C2F3095FD00B184D4 /* AppMigrationQueryFactory.swift in Sources */,
+				2D98374D2F3095FD00B184D4 /* AppMigrationLinkNavigator.swift in Sources */,
+				2D98374E2F3095FD00B184D4 /* AppMigrationDestination.swift in Sources */,
+				2D98374F2F3095FD00B184D4 /* SecureSessionManager+AppMigration.swift in Sources */,
 				A44CA3E6BB506841948AB2D1 /* ReferendumsFiltersWireframe.swift in Sources */,
 				0CE94FF82D050EE300E31D0C /* AssetExchangeOperationPrototypeFactory.swift in Sources */,
 				0C8FDBC42CB101E700775D7F /* MercuryoCardHookFactory+ResponseIntercept.swift in Sources */,
