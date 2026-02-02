@@ -11,6 +11,8 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
 
     var evmFieldEmpty: Bool { (rootView.evmAddressInputView.textField.text ?? "").isEmpty }
 
+    var termsAccepted: Bool = false
+
     init(presenter: CreateWatchOnlyPresenterProtocol, localizationManager: LocalizationManagerProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -29,24 +31,19 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupLocalization()
         setupHandlers()
-
         presenter.setup()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        if keyboardHandler == nil {
-            setupKeyboardHandler()
-        }
+        guard keyboardHandler == nil else { return }
+        setupKeyboardHandler()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
         clearKeyboardHandler()
     }
 }
@@ -86,7 +83,6 @@ private extension CreateWatchOnlyViewController {
         rootView.evmAddressInputView.locale = selectedLocale
 
         updateActionButtonState()
-
         setupTermsLocalization()
     }
 
@@ -162,29 +158,16 @@ private extension CreateWatchOnlyViewController {
     }
 
     func updateActionButtonState() {
-        if !rootView.walletNameInputView.completed {
-            rootView.genericActionView.applyDisabledStyle()
-            rootView.genericActionView.isUserInteractionEnabled = false
-
-            rootView.genericActionView.imageWithTitleView?.title = R.string(
-                preferredLanguages: selectedLocale.rLanguages
-            ).localizable
-                .createWatchOnlyMissingNickname()
-            rootView.genericActionView.invalidateLayout()
-
+        guard rootView.walletNameInputView.completed else {
+            setDisabledButton { $0.createWatchOnlyMissingNickname() }
             return
         }
-
-        if !rootView.substrateAddressInputView.completed {
-            rootView.genericActionView.applyDisabledStyle()
-            rootView.genericActionView.isUserInteractionEnabled = false
-
-            rootView.genericActionView.imageWithTitleView?.title = R.string(
-                preferredLanguages: selectedLocale.rLanguages
-            ).localizable
-                .createWatchOnlyMissingSubstrate()
-            rootView.genericActionView.invalidateLayout()
-
+        guard rootView.walletNameInputView.completed else {
+            setDisabledButton { $0.createWatchOnlyMissingSubstrate() }
+            return
+        }
+        guard termsAccepted else {
+            setDisabledButton { $0.watchOnlyAcceptTermsButtonTitle() }
             return
         }
 
@@ -194,6 +177,17 @@ private extension CreateWatchOnlyViewController {
         rootView.genericActionView.imageWithTitleView?.title = R.string(
             preferredLanguages: selectedLocale.rLanguages
         ).localizable.commonContinue()
+        rootView.genericActionView.invalidateLayout()
+    }
+
+    func setDisabledButton(titleClosure: (_R.string.localizable) -> String) {
+        rootView.genericActionView.applyDisabledStyle()
+        rootView.genericActionView.isUserInteractionEnabled = false
+
+        rootView.genericActionView.imageWithTitleView?.title = titleClosure(
+            R.string(preferredLanguages: selectedLocale.rLanguages).localizable
+        )
+
         rootView.genericActionView.invalidateLayout()
     }
 
@@ -380,10 +374,16 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
         updateActionButtonState()
     }
 
-    func didReceiveTerms(approved: Bool) {
-        rootView.termsControl.rowContentView.imageView.image = approved
+    func didReceiveTerms(accepted: Bool) {
+        guard termsAccepted != accepted else { return }
+
+        termsAccepted = accepted
+
+        rootView.termsControl.rowContentView.imageView.image = accepted
             ? R.image.iconCheckbox()
             : R.image.iconCheckboxEmpty()
+
+        updateActionButtonState()
     }
 }
 

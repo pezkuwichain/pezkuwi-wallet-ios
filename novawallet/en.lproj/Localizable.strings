@@ -2031,3 +2031,4 @@ Do you want to continue?";
 "watch.only.evm.address.title" = "Ethereum or any other EVM-compatible address";
 "watch.only.terms" = "I understand I cannot access funds from a watch-only wallet.\n%@";
 "watch.only.terms.warning" = "Anyone asking for payment to unlock the funds is a scammer.";
+"watch.only.accept.terms.button.title" = "Accept terms";

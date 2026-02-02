@@ -6,7 +6,7 @@ protocol CreateWatchOnlyViewProtocol: ControllerBackedProtocol, Localizable {
     func didReceiveSubstrateAddressInput(viewModel: InputViewModelProtocol)
     func didReceiveEVMAddressState(viewModel: AccountFieldStateViewModel)
     func didReceiveEVMAddressInput(viewModel: InputViewModelProtocol)
-    func didReceiveTerms(approved: Bool)
+    func didReceiveTerms(accepted: Bool)
 }
 
 protocol CreateWatchOnlyPresenterProtocol: AnyObject {

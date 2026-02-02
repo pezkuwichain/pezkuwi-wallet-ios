@@ -13,7 +13,7 @@ final class CreateWatchOnlyPresenter {
     private var partialNickname: String?
     private var demoWalletPreset: WatchOnlyWallet?
 
-    private var termsApproved: Bool = false
+    private var termsAccepted: Bool = false
 
     private(set) lazy var iconGenerator = PolkadotIconGenerator()
 
@@ -190,9 +190,9 @@ extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
     }
 
     func toggleTermsCheckbox() {
-        termsApproved.toggle()
+        termsAccepted.toggle()
 
-        view?.didReceiveTerms(approved: termsApproved)
+        view?.didReceiveTerms(accepted: termsAccepted)
     }
 }
 
