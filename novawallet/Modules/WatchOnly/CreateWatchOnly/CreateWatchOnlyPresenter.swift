@@ -89,10 +89,13 @@ private extension CreateWatchOnlyPresenter {
         }
     }
 
-    func provideSubstrateInputViewModel() {
+    func provideSubstrateInputViewModel(enabled: Bool) {
         let value = partialSubstrateAddress ?? ""
 
-        let inputViewModel = InputViewModel.createAccountInputViewModel(for: value)
+        let inputViewModel = InputViewModel.createAccountInputViewModel(
+            for: value,
+            enabled: enabled
+        )
 
         view?.didReceiveSubstrateAddressInput(viewModel: inputViewModel)
     }
@@ -110,28 +113,35 @@ private extension CreateWatchOnlyPresenter {
         }
     }
 
-    func provideEVMInputViewModel() {
+    func provideEVMInputViewModel(enabled: Bool) {
         let value = partialEvmAddress ?? ""
 
-        let inputViewModel = InputViewModel.createAccountInputViewModel(for: value, required: false)
+        let inputViewModel = InputViewModel.createAccountInputViewModel(
+            for: value,
+            required: false,
+            enabled: enabled
+        )
 
         view?.didReceiveEVMAddressInput(viewModel: inputViewModel)
     }
 
-    func provideWalletNicknameViewModel() {
+    func provideWalletNicknameViewModel(enabled: Bool) {
         let value = partialNickname ?? ""
 
-        let inputViewModel = InputViewModel.createNicknameInputViewModel(for: value)
+        let inputViewModel = InputViewModel.createNicknameInputViewModel(
+            for: value,
+            enabled: enabled
+        )
 
         view?.didReceiveNickname(viewModel: inputViewModel)
     }
 
-    func provideFieldsViewModels() {
-        provideWalletNicknameViewModel()
+    func provideFieldsViewModels(enabled: Bool = true) {
+        provideWalletNicknameViewModel(enabled: enabled)
         provideSubstrateAddressStateViewModel()
-        provideSubstrateInputViewModel()
+        provideSubstrateInputViewModel(enabled: enabled)
         provideEVMAddressStateViewModel()
-        provideEVMInputViewModel()
+        provideEVMInputViewModel(enabled: enabled)
     }
 }
 
@@ -191,15 +201,17 @@ extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
             partialNickname = ""
             partialSubstrateAddress = ""
             partialEvmAddress = ""
+
+            provideFieldsViewModels(enabled: true)
         case .demo:
             guard let demoWalletPreset else { return }
 
             partialNickname = demoWalletPreset.name
             partialSubstrateAddress = demoWalletPreset.substrateAddress
             partialEvmAddress = demoWalletPreset.evmAddress
-        }
 
-        provideFieldsViewModels()
+            provideFieldsViewModels(enabled: false)
+        }
     }
 
     func toggleTermsCheckbox() {
@@ -240,12 +252,12 @@ extension CreateWatchOnlyPresenter: AddressScanDelegate {
             partialSubstrateAddress = address
 
             provideSubstrateAddressStateViewModel()
-            provideSubstrateInputViewModel()
+            provideSubstrateInputViewModel(enabled: true)
         } else {
             partialEvmAddress = address
 
             provideEVMAddressStateViewModel()
-            provideEVMInputViewModel()
+            provideEVMInputViewModel(enabled: true)
         }
     }
 }

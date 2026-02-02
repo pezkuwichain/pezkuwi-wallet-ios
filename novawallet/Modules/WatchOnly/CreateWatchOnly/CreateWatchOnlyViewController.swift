@@ -351,6 +351,12 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
     func didReceiveNickname(viewModel: InputViewModelProtocol) {
         rootView.walletNameInputView.bind(inputViewModel: viewModel)
 
+        if viewModel.inputHandler.enabled {
+            rootView.walletNameInputView.applyDefaultState()
+        } else {
+            rootView.walletNameInputView.applyLockedState()
+        }
+
         updateActionButtonState()
     }
 
@@ -361,6 +367,12 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
     func didReceiveSubstrateAddressInput(viewModel: InputViewModelProtocol) {
         rootView.substrateAddressInputView.bind(inputViewModel: viewModel)
 
+        if viewModel.inputHandler.enabled {
+            rootView.substrateAddressInputView.applyDefaultState()
+        } else {
+            rootView.substrateAddressInputView.applyLockedState()
+        }
+
         updateActionButtonState()
     }
 
@@ -370,6 +382,12 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
 
     func didReceiveEVMAddressInput(viewModel: InputViewModelProtocol) {
         rootView.evmAddressInputView.bind(inputViewModel: viewModel)
+
+        if viewModel.inputHandler.enabled {
+            rootView.evmAddressInputView.applyDefaultState()
+        } else {
+            rootView.evmAddressInputView.applyLockedState()
+        }
 
         updateActionButtonState()
     }
