@@ -51,17 +51,20 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
     }
 
     private func setupLocalization() {
-        let languages = selectedLocale.rLanguages
+        let localizedStrings = R.string(preferredLanguages: selectedLocale.rLanguages).localizable
 
-        rootView.titleLabel.text = R.string(preferredLanguages: languages).localizable.welcomeWatchOnlyTitle()
-        rootView.detailsLabel.text = R.string(preferredLanguages: languages).localizable.createWatchOnlyDetails()
-        rootView.presetsTitleLabel.text = R.string(preferredLanguages: languages).localizable.commonWalletPresets()
+        rootView.titleLabel.text = localizedStrings.welcomeWatchOnlyTitle()
+        rootView.detailsLabel.text = localizedStrings.createWatchOnlyDetails()
 
-        let walletNickname = R.string(preferredLanguages: languages).localizable.walletUsernameSetupChooseTitle()
-        rootView.walletNameTitleLabel.text = walletNickname
+        rootView.presetSegmentControl.titles = [
+            localizedStrings.welcomeWatchOnlyCustom(),
+            localizedStrings.welcomeWatchOnlyDemo()
+        ]
+
+        rootView.walletNameTitleLabel.text = localizedStrings.walletUsernameSetupChooseTitle_v2_2_0()
 
         let placeholder = NSAttributedString(
-            string: walletNickname,
+            string: localizedStrings.watchOnlyWallet(),
             attributes: [
                 .foregroundColor: R.color.colorHintText()!,
                 .font: UIFont.regularSubheadline
@@ -69,33 +72,20 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
         )
 
         rootView.walletNameInputView.textField.attributedPlaceholder = placeholder
-        rootView.walletNameHintLabel.text = R.string(
-            preferredLanguages: languages
-        ).localizable.walletNicknameCreateCaption_v2_2_0()
 
-        rootView.substrateAddressTitleLabel.text = R.string(
-            preferredLanguages: languages
-        ).localizable.commonSubstrateAddressTitle()
+        rootView.substrateAddressTitleLabel.text = localizedStrings.watchOnlySubstrateAddressTitle()
 
         rootView.substrateAddressInputView.locale = selectedLocale
 
-        rootView.substrateAddressHintLabel.text = R.string(
-            preferredLanguages: languages
-        ).localizable.commonSubstrateAddressHint()
-
-        rootView.evmAddressTitleLabel.text = R.string(
-            preferredLanguages: languages
-        ).localizable.commonEvmAddressOptionalTitle()
+        rootView.evmAddressTitleLabel.text = localizedStrings.watchOnlyEvmAddressTitle()
 
         rootView.evmAddressInputView.locale = selectedLocale
-
-        rootView.evmAddressHintLabel.text = R.string(preferredLanguages: languages).localizable.commonEvmAddressHint()
 
         updateActionButtonState()
     }
 
     private func setupHandlers() {
-        rootView.actionButton.addTarget(self, action: #selector(actionContinue), for: .touchUpInside)
+        rootView.genericActionView.addTarget(self, action: #selector(actionContinue), for: .touchUpInside)
 
         rootView.walletNameInputView.delegate = self
 
@@ -132,42 +122,48 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
             action: #selector(actionEVMAddressScan),
             for: .touchUpInside
         )
+
+        rootView.presetSegmentControl.addTarget(
+            self,
+            action: #selector(actionPreset),
+            for: .valueChanged
+        )
     }
 
     private func updateActionButtonState() {
         if !rootView.walletNameInputView.completed {
-            rootView.actionButton.applyDisabledStyle()
-            rootView.actionButton.isUserInteractionEnabled = false
+            rootView.genericActionView.applyDisabledStyle()
+            rootView.genericActionView.isUserInteractionEnabled = false
 
-            rootView.actionButton.imageWithTitleView?.title = R.string(
+            rootView.genericActionView.imageWithTitleView?.title = R.string(
                 preferredLanguages: selectedLocale.rLanguages
             ).localizable
                 .createWatchOnlyMissingNickname()
-            rootView.actionButton.invalidateLayout()
+            rootView.genericActionView.invalidateLayout()
 
             return
         }
 
         if !rootView.substrateAddressInputView.completed {
-            rootView.actionButton.applyDisabledStyle()
-            rootView.actionButton.isUserInteractionEnabled = false
+            rootView.genericActionView.applyDisabledStyle()
+            rootView.genericActionView.isUserInteractionEnabled = false
 
-            rootView.actionButton.imageWithTitleView?.title = R.string(
+            rootView.genericActionView.imageWithTitleView?.title = R.string(
                 preferredLanguages: selectedLocale.rLanguages
             ).localizable
                 .createWatchOnlyMissingSubstrate()
-            rootView.actionButton.invalidateLayout()
+            rootView.genericActionView.invalidateLayout()
 
             return
         }
 
-        rootView.actionButton.applyEnabledStyle()
-        rootView.actionButton.isUserInteractionEnabled = true
+        rootView.genericActionView.applyEnabledStyle()
+        rootView.genericActionView.isUserInteractionEnabled = true
 
-        rootView.actionButton.imageWithTitleView?.title = R.string(
+        rootView.genericActionView.imageWithTitleView?.title = R.string(
             preferredLanguages: selectedLocale.rLanguages
         ).localizable.commonContinue()
-        rootView.actionButton.invalidateLayout()
+        rootView.genericActionView.invalidateLayout()
     }
 
     private func updateReturnButton(for selectedInputView: UIView) {
@@ -279,12 +275,10 @@ extension CreateWatchOnlyViewController: KeyboardAdoptable {
         }
     }
 
-    @objc private func actionPreset(_ sender: RoundedButton) {
-        guard let index = rootView.presetsContainerView.stackView.arrangedSubviews.firstIndex(of: sender) else {
-            return
-        }
+    @objc private func actionPreset(_: RoundedButton) {
+        let index = rootView.presetSegmentControl.selectedSegmentIndex
 
-        presenter.selectPreset(at: index)
+        presenter.selectMode(for: index)
     }
 }
 
@@ -339,15 +333,6 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
         rootView.evmAddressInputView.bind(inputViewModel: viewModel)
 
         updateActionButtonState()
-    }
-
-    func didReceivePreset(titles: [String]) {
-        rootView.clearPresets()
-
-        titles.forEach { title in
-            let button = rootView.addPresetButton(with: title)
-            button.addTarget(self, action: #selector(actionPreset), for: .touchUpInside)
-        }
     }
 }
 

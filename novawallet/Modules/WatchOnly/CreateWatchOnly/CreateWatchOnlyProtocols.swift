@@ -6,7 +6,6 @@ protocol CreateWatchOnlyViewProtocol: ControllerBackedProtocol, Localizable {
     func didReceiveSubstrateAddressInput(viewModel: InputViewModelProtocol)
     func didReceiveEVMAddressState(viewModel: AccountFieldStateViewModel)
     func didReceiveEVMAddressInput(viewModel: InputViewModelProtocol)
-    func didReceivePreset(titles: [String])
 }
 
 protocol CreateWatchOnlyPresenterProtocol: AnyObject {
@@ -17,7 +16,7 @@ protocol CreateWatchOnlyPresenterProtocol: AnyObject {
     func updateWalletNickname(_ partialNickname: String)
     func updateSubstrateAddress(_ partialAddress: String)
     func updateEVMAddress(_ partialAddress: String)
-    func selectPreset(at index: Int)
+    func selectMode(for modeIndex: Int)
 }
 
 protocol CreateWatchOnlyInteractorInputProtocol: AnyObject {
@@ -26,7 +25,7 @@ protocol CreateWatchOnlyInteractorInputProtocol: AnyObject {
 }
 
 protocol CreateWatchOnlyInteractorOutputProtocol: AnyObject {
-    func didReceivePreset(wallets: [WatchOnlyWallet])
+    func didReceiveDemoPreset(wallet: WatchOnlyWallet)
     func didCreateWallet()
     func didFailWalletCreation(with error: Error)
 }

@@ -30,7 +30,10 @@ final class CreateWatchOnlyInteractor {
         wrapper.targetOperation.completionBlock = { [weak self] in
             DispatchQueue.main.async {
                 let wallets = try? wrapper.targetOperation.extractNoCancellableResultData()
-                self?.presenter?.didReceivePreset(wallets: wallets ?? [])
+
+                guard let wallet = wallets?.first else { return }
+
+                self?.presenter?.didReceiveDemoPreset(wallet: wallet)
             }
         }
 

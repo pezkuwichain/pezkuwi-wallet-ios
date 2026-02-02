@@ -11,7 +11,7 @@ final class CreateWatchOnlyPresenter {
     private var partialSubstrateAddress: AccountAddress?
     private var partialEvmAddress: AccountAddress?
     private var partialNickname: String?
-    private var presets: [WatchOnlyWallet] = []
+    private var demoWalletPreset: WatchOnlyWallet?
 
     private(set) lazy var iconGenerator = PolkadotIconGenerator()
 
@@ -83,11 +83,6 @@ final class CreateWatchOnlyPresenter {
         view?.didReceiveNickname(viewModel: inputViewModel)
     }
 
-    private func providePresetViewModel() {
-        let viewModels = presets.map(\.name)
-        view?.didReceivePreset(titles: viewModels)
-    }
-
     private func provideFieldsViewModels() {
         provideWalletNicknameViewModel()
         provideSubstrateAddressStateViewModel()
@@ -100,7 +95,6 @@ final class CreateWatchOnlyPresenter {
 extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
     func setup() {
         provideFieldsViewModels()
-        providePresetViewModel()
 
         interactor.setup()
     }
@@ -174,21 +168,29 @@ extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
         provideEVMAddressStateViewModel()
     }
 
-    func selectPreset(at index: Int) {
-        let preset = presets[index]
-        partialNickname = preset.name
-        partialSubstrateAddress = preset.substrateAddress
-        partialEvmAddress = preset.evmAddress
+    func selectMode(for modeIndex: Int) {
+        guard let mode = Mode(rawValue: modeIndex) else { return }
+
+        switch mode {
+        case .custom:
+            partialNickname = ""
+            partialSubstrateAddress = ""
+            partialEvmAddress = ""
+        case .demo:
+            guard let demoWalletPreset else { return }
+
+            partialNickname = demoWalletPreset.name
+            partialSubstrateAddress = demoWalletPreset.substrateAddress
+            partialEvmAddress = demoWalletPreset.evmAddress
+        }
 
         provideFieldsViewModels()
     }
 }
 
 extension CreateWatchOnlyPresenter: CreateWatchOnlyInteractorOutputProtocol {
-    func didReceivePreset(wallets: [WatchOnlyWallet]) {
-        presets = wallets
-
-        providePresetViewModel()
+    func didReceiveDemoPreset(wallet: WatchOnlyWallet) {
+        demoWalletPreset = wallet
     }
 
     func didCreateWallet() {
@@ -220,5 +222,12 @@ extension CreateWatchOnlyPresenter: AddressScanDelegate {
             provideEVMAddressStateViewModel()
             provideEVMInputViewModel()
         }
+    }
+}
+
+private extension CreateWatchOnlyPresenter {
+    enum Mode: Int {
+        case custom = 0
+        case demo
     }
 }
