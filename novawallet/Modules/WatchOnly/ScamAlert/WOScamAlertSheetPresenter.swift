@@ -71,6 +71,10 @@ private extension WOScamAlertSheetPresenter {
 // MARK: - WOScamAlertSheetPresenterProtocol
 
 extension WOScamAlertSheetPresenter: WOScamAlertSheetPresenterProtocol {
+    func openSupportEmail() {
+        wireframe.openEmail()
+    }
+
     func setup() {
         provideViewModel()
         startTimer()

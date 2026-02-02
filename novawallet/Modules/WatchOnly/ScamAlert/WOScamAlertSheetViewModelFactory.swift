@@ -16,7 +16,7 @@ protocol WOScamAlertSheetViewModelFactoryProtocol {
 final class WOScamAlertSheetViewModelFactory: WOScamAlertSheetViewModelFactoryProtocol {
     private let supportEmail: String
 
-    init(supportEmail: String = ApplicationConfig.shared.supportEmail) {
+    init(supportEmail: String) {
         self.supportEmail = supportEmail
     }
 

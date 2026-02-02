@@ -6,11 +6,13 @@ struct WOScamAlertSheetViewFactory {
         delegate: WOScamAlertSheetDelegate,
         countdownDuration: Int = 8
     ) -> WOScamAlertSheetViewProtocol? {
-        let wireframe = WOScamAlertSheetWireframe()
+        let appConfig = ApplicationConfig.shared
+
+        let wireframe = WOScamAlertSheetWireframe(supportEmail: appConfig.supportEmail)
         wireframe.delegate = delegate
 
         let localizationManager = LocalizationManager.shared
-        let viewModelFactory = WOScamAlertSheetViewModelFactory()
+        let viewModelFactory = WOScamAlertSheetViewModelFactory(supportEmail: appConfig.supportEmail)
 
         let presenter = WOScamAlertSheetPresenter(
             wireframe: wireframe,

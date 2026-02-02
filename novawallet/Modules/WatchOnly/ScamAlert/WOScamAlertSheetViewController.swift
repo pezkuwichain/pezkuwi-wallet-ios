@@ -52,14 +52,7 @@ private extension WOScamAlertSheetViewController {
             for: .touchUpInside
         )
         rootView.onSupportTapped = { [weak self] in
-            self?.openSupportEmail()
-        }
-    }
-
-    func openSupportEmail() {
-        let supportEmail = ApplicationConfig.shared.supportEmail
-        if let url = URL(string: "mailto:\(supportEmail)") {
-            UIApplication.shared.open(url)
+            self?.presenter.openSupportEmail()
         }
     }
 
