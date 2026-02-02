@@ -830,7 +830,7 @@
 "no.key.title" = "Oops! Key is missing";
 "no.key.message" = "Your wallet is watch-only, meaning that you cannot do any operations with it";
 "welcome.watch.only.title" = "Add watch-only wallet";
-"create.watch.only.missing.nickname" = "Enter wallet nickname...";
+//"create.watch.only.missing.nickname" = "Enter wallet nickname...";
 "common.substrate.address.title" = "Substrate Address";
 //"common.substrate.address.hint" = "Polkadot, Kusama, Karura, KILT and 50+ networks";
 "common.evm.address" = "EVM address";
@@ -2037,3 +2037,4 @@ Do you want to continue?";
 "watch.only.scam.alert.message.format" = "%@\nThis is a scam. No one can share, grant access to, or unlock a watch-only wallet for you.";
 "watch.only.scam.alert.contact.format" = "If someone asked you to add a wallet,\ncontact us %@";
 "watch.only.scam.alert.confirm" = "I understood";
+"create.watch.only.missing.wallet.name" = "Enter a wallet name...";

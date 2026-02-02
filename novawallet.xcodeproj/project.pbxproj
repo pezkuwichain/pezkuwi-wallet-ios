@@ -2091,6 +2091,7 @@
 		2D9837A52F310CE000B184D4 /* WOScamAlertSheetWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379F2F310CE000B184D4 /* WOScamAlertSheetWireframe.swift */; };
 		2D9837A62F310CE000B184D4 /* WOScamAlertSheetPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379A2F310CE000B184D4 /* WOScamAlertSheetPresenter.swift */; };
 		2D9837BC2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837BB2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift */; };
+		2D9837EB2F313F5900B184D4 /* CreateWatchOnlyViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837EA2F313F5900B184D4 /* CreateWatchOnlyViewController+Keyboard.swift */; };
 		2DA3AE8F2E5DB03300689F65 /* XcmDynamicModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D1B1D2DA3BE0A0008057B /* XcmDynamicModelFactory.swift */; };
 		2DA3AE902E5DB04200689F65 /* XcmUni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C42D9E957400F79C02 /* XcmUni.swift */; };
 		2DA3AE912E5DB06200689F65 /* XcmUni+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C62D9E95EC00F79C02 /* XcmUni+Location.swift */; };
@@ -8678,6 +8679,7 @@
 		2D98379E2F310CE000B184D4 /* WOScamAlertSheetViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetViewLayout.swift; sourceTree = "<group>"; };
 		2D98379F2F310CE000B184D4 /* WOScamAlertSheetWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetWireframe.swift; sourceTree = "<group>"; };
 		2D9837BB2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetViewModelFactory.swift; sourceTree = "<group>"; };
+		2D9837EA2F313F5900B184D4 /* CreateWatchOnlyViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateWatchOnlyViewController+Keyboard.swift"; sourceTree = "<group>"; };
 		2DA3AE9A2E5DE6C300689F65 /* RemovedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA3AE9C2E5E203D00689F65 /* UpdatedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA4D5362EB21DC4006FCCC0 /* GiftSetupIssuesViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftSetupIssuesViewModelFactory.swift; sourceTree = "<group>"; };
@@ -18240,7 +18242,6 @@
 		2D9837982F310CD000B184D4 /* ScamAlert */ = {
 			isa = PBXGroup;
 			children = (
-				2D9837992F310CE000B184D4 /* TimerButton.swift */,
 				2D9837BB2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift */,
 				2D98379A2F310CE000B184D4 /* WOScamAlertSheetPresenter.swift */,
 				2D98379B2F310CE000B184D4 /* WOScamAlertSheetProtocols.swift */,
@@ -19706,6 +19707,7 @@
 				4E3749525FED4CA4CD0DCDF5 /* CreateWatchOnlyPresenter.swift */,
 				0D9C85AB0C9D53B522DCF3C5 /* CreateWatchOnlyInteractor.swift */,
 				39907750D40A8DD7FE1288C8 /* CreateWatchOnlyViewController.swift */,
+				2D9837EA2F313F5900B184D4 /* CreateWatchOnlyViewController+Keyboard.swift */,
 				DA9DD724F02DA0A174D875A8 /* CreateWatchOnlyViewLayout.swift */,
 				F69908EEEDB9A392FF756E65 /* CreateWatchOnlyViewFactory.swift */,
 				847999B32888BFEC00D1BAD2 /* BaseCreateWatchOnlyWireframe.swift */,
@@ -24558,6 +24560,7 @@
 				842D1E7724D063E500C30A7A /* TriangularedView */,
 				2DE8AEE42EB52B6F0098C761 /* MultilineAmountView */,
 				8467FD4024ED3C72005D486C /* AlignableContentControl.swift */,
+				2D9837992F310CE000B184D4 /* TimerButton.swift */,
 				2D039DE72BFCA83600A928E5 /* BindableGestureRecognizer.swift */,
 				84C5ADE928147BC2006D7388 /* InlineAlertView.swift */,
 				843910DA253F90C400E3C217 /* NovaWindow.swift */,
@@ -34603,6 +34606,7 @@
 				84AE7AB327D399CF00495267 /* StackNetworkCell.swift in Sources */,
 				0C71D3F62DF0E9AD0042134B /* MoonbeamEvmPallet.swift in Sources */,
 				77799AF22A7CFB8D00B7E564 /* PoolAccountViewModel.swift in Sources */,
+				2D9837EB2F313F5900B184D4 /* CreateWatchOnlyViewController+Keyboard.swift in Sources */,
 				AEA0C8C32681186500F9666F /* ChangeTargetsCustomValidatorListWireframe.swift in Sources */,
 				8472072E277C203A00F593DD /* UICollectionView+Reuse.swift in Sources */,
 				883DB180297A546800EFB7D8 /* GovernanceDelegateActionControl.swift in Sources */,
