@@ -49,8 +49,12 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
 
         clearKeyboardHandler()
     }
+}
 
-    private func setupLocalization() {
+// MARK: - Private
+
+private extension CreateWatchOnlyViewController {
+    func setupLocalization() {
         let localizedStrings = R.string(preferredLanguages: selectedLocale.rLanguages).localizable
 
         rootView.titleLabel.text = localizedStrings.welcomeWatchOnlyTitle()
@@ -82,9 +86,30 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
         rootView.evmAddressInputView.locale = selectedLocale
 
         updateActionButtonState()
+
+        setupTermsLocalization()
     }
 
-    private func setupHandlers() {
+    func setupTermsLocalization() {
+        let localizedStrings = R.string(preferredLanguages: selectedLocale.rLanguages).localizable
+
+        rootView.termsView.rowContentView.detailsLabel.attributedText = .coloredFontItems(
+            [
+                localizedStrings.watchOnlyTermsWarning()
+            ],
+            formattingClosure: { items in
+                localizedStrings.watchOnlyTerms(items[0])
+            },
+            color: R.color.colorTextNegative()!,
+            font: .regularSubheadline,
+            defaultAttributes: [
+                .font: UIFont.regularSubheadline,
+                .foregroundColor: R.color.colorTextPrimary()!
+            ]
+        )
+    }
+
+    func setupHandlers() {
         rootView.genericActionView.addTarget(self, action: #selector(actionContinue), for: .touchUpInside)
 
         rootView.walletNameInputView.delegate = self
@@ -130,7 +155,7 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
         )
     }
 
-    private func updateActionButtonState() {
+    func updateActionButtonState() {
         if !rootView.walletNameInputView.completed {
             rootView.genericActionView.applyDisabledStyle()
             rootView.genericActionView.isUserInteractionEnabled = false
@@ -166,7 +191,7 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
         rootView.genericActionView.invalidateLayout()
     }
 
-    private func updateReturnButton(for selectedInputView: UIView) {
+    func updateReturnButton(for selectedInputView: UIView) {
         if selectedInputView === rootView.walletNameInputView {
             if rootView.substrateAddressInputView.completed, !evmFieldEmpty {
                 rootView.walletNameInputView.textField.returnKeyType = .done
@@ -184,7 +209,7 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
         }
     }
 
-    private func completeInputOn(field: UIView) {
+    func completeInputOn(field: UIView) {
         if field === rootView.walletNameInputView {
             rootView.walletNameInputView.textField.resignFirstResponder()
 
@@ -208,37 +233,47 @@ final class CreateWatchOnlyViewController: UIViewController, ViewHolder {
         }
     }
 
-    @objc private func actionNicknameChanged() {
+    // MARK: - Actions
+
+    @objc func actionNicknameChanged() {
         let partialNickName = rootView.walletNameInputView.textField.text ?? ""
         presenter.updateWalletNickname(partialNickName)
 
         updateActionButtonState()
     }
 
-    @objc private func actionSubstrateAddressChanged() {
+    @objc func actionSubstrateAddressChanged() {
         let partialAddress = rootView.substrateAddressInputView.textField.text ?? ""
         presenter.updateSubstrateAddress(partialAddress)
 
         updateActionButtonState()
     }
 
-    @objc private func actionSubstrateAddressScan() {
+    @objc func actionSubstrateAddressScan() {
         presenter.performSubstrateScan()
     }
 
-    @objc private func actionEVMAddressChanged() {
+    @objc func actionEVMAddressChanged() {
         let partialAddress = rootView.evmAddressInputView.textField.text ?? ""
         presenter.updateEVMAddress(partialAddress)
     }
 
-    @objc private func actionEVMAddressScan() {
+    @objc func actionEVMAddressScan() {
         presenter.performEVMScan()
     }
 
-    @objc private func actionContinue() {
+    @objc func actionContinue() {
         presenter.performContinue()
     }
+
+    @objc func actionPreset(_: RoundedButton) {
+        let index = rootView.presetSegmentControl.selectedSegmentIndex
+
+        presenter.selectMode(for: index)
+    }
 }
+
+// MARK: - KeyboardAdoptable
 
 extension CreateWatchOnlyViewController: KeyboardAdoptable {
     func updateWhileKeyboardFrameChanging(_ frame: CGRect) {
@@ -274,13 +309,9 @@ extension CreateWatchOnlyViewController: KeyboardAdoptable {
             }
         }
     }
-
-    @objc private func actionPreset(_: RoundedButton) {
-        let index = rootView.presetSegmentControl.selectedSegmentIndex
-
-        presenter.selectMode(for: index)
-    }
 }
+
+// MARK: - TextInputViewDelegate
 
 extension CreateWatchOnlyViewController: TextInputViewDelegate {
     func textInputViewShouldReturn(_ inputView: TextInputView) -> Bool {
@@ -292,6 +323,8 @@ extension CreateWatchOnlyViewController: TextInputViewDelegate {
         updateReturnButton(for: inputView)
     }
 }
+
+// MARK: - AccountInputViewDelegate
 
 extension CreateWatchOnlyViewController: AccountInputViewDelegate {
     func accountInputViewDidEndEditing(_: AccountInputView) {}
@@ -307,6 +340,8 @@ extension CreateWatchOnlyViewController: AccountInputViewDelegate {
 
     func accountInputViewDidPaste(_: AccountInputView) {}
 }
+
+// MARK: - CreateWatchOnlyViewProtocol
 
 extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
     func didReceiveNickname(viewModel: InputViewModelProtocol) {
@@ -336,10 +371,11 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
     }
 }
 
+// MARK: - Localizable
+
 extension CreateWatchOnlyViewController: Localizable {
     func applyLocalization() {
-        if isViewLoaded {
-            setupLocalization()
-        }
+        guard isViewLoaded else { return }
+        setupLocalization()
     }
 }

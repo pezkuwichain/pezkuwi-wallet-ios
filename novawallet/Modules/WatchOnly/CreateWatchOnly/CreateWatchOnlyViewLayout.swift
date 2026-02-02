@@ -41,8 +41,22 @@ final class CreateWatchOnlyViewLayout: SCSingleActionLayoutView {
         view.localizablePlaceholder = .init(closure: { _ in Constants.evmFieldPlaceholder })
     }
 
+    let termsView: RowView<IconDetailsView> = .create { view in
+        view.rowContentView.iconWidth = Constants.termsCheckboxIconWidth
+        view.rowContentView.spacing = Constants.termsContentSpacing
+        view.rowContentView.stackView.alignment = .top
+        view.roundedBackgroundView.apply(style: .roundedLightCell)
+
+        view.rowContentView.imageView.image = R.image.iconCheckboxEmpty()
+        view.rowContentView.detailsLabel.numberOfLines = 0
+
+        view.contentInsets = Constants.temsContainerInsets
+    }
+
     override func setupLayout() {
         super.setupLayout()
+
+        layoutTermsView()
 
         addArrangedSubview(titleLabel, spacingAfter: Constants.fieldTitleOffset)
         addArrangedSubview(detailsLabel, spacingAfter: Constants.fieldOffset)
@@ -65,9 +79,27 @@ final class CreateWatchOnlyViewLayout: SCSingleActionLayoutView {
 
     override func setupStyle() {
         super.setupStyle()
-        
+
         backgroundColor = R.color.colorSecondaryScreenBackground()
         genericActionView.applyDefaultStyle()
+    }
+}
+
+// MARK: - Private
+
+private extension CreateWatchOnlyViewLayout {
+    func layoutTermsView() {
+        addSubview(termsView)
+
+        termsView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+            make.bottom.equalTo(genericActionView.snp.top).inset(-UIConstants.actionBottomInset)
+        }
+
+        containerView.snp.remakeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(termsView.snp.top).offset(-Constants.fieldOffset)
+        }
     }
 }
 
@@ -79,6 +111,9 @@ private extension CreateWatchOnlyViewLayout {
         static let fieldTitleOffset: CGFloat = 8.0
         static let fieldOffset: CGFloat = 16.0
         static let segmentControlCornerRadius: CGFloat = 12.0
+        static let termsCheckboxIconWidth: CGFloat = 24.0
+        static let termsContentSpacing: CGFloat = 14.0
+        static let temsContainerInsets: UIEdgeInsets = .init(inset: 12)
         static let substrateFieldPlaceholder = "1..."
         static let evmFieldPlaceholder = "0x..."
     }
@@ -88,9 +123,9 @@ private extension CreateWatchOnlyViewLayout {
 
 extension CreateWatchOnlyViewLayout {
     static func createSectionTitleLabel() -> UILabel {
-        let label = UILabel()
-        label.font = .regularFootnote
-        label.textColor = R.color.colorTextSecondary()
-        return label
+        .create { view in
+            view.font = .regularFootnote
+            view.textColor = R.color.colorTextSecondary()
+        }
     }
 }
