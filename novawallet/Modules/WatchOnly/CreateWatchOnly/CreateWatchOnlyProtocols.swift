@@ -6,6 +6,7 @@ protocol CreateWatchOnlyViewProtocol: ControllerBackedProtocol, Localizable {
     func didReceiveSubstrateAddressInput(viewModel: InputViewModelProtocol)
     func didReceiveEVMAddressState(viewModel: AccountFieldStateViewModel)
     func didReceiveEVMAddressInput(viewModel: InputViewModelProtocol)
+    func didReceiveTerms(approved: Bool)
 }
 
 protocol CreateWatchOnlyPresenterProtocol: AnyObject {
@@ -17,6 +18,7 @@ protocol CreateWatchOnlyPresenterProtocol: AnyObject {
     func updateSubstrateAddress(_ partialAddress: String)
     func updateEVMAddress(_ partialAddress: String)
     func selectMode(for modeIndex: Int)
+    func toggleTermsCheckbox()
 }
 
 protocol CreateWatchOnlyInteractorInputProtocol: AnyObject {

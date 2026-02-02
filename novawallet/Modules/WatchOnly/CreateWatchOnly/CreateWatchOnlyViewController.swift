@@ -93,7 +93,7 @@ private extension CreateWatchOnlyViewController {
     func setupTermsLocalization() {
         let localizedStrings = R.string(preferredLanguages: selectedLocale.rLanguages).localizable
 
-        rootView.termsView.rowContentView.detailsLabel.attributedText = .coloredFontItems(
+        rootView.termsControl.rowContentView.detailsLabel.attributedText = .coloredFontItems(
             [
                 localizedStrings.watchOnlyTermsWarning()
             ],
@@ -152,6 +152,12 @@ private extension CreateWatchOnlyViewController {
             self,
             action: #selector(actionPreset),
             for: .valueChanged
+        )
+
+        rootView.termsControl.addTarget(
+            self,
+            action: #selector(actionTermsTap),
+            for: .touchUpInside
         )
     }
 
@@ -271,6 +277,10 @@ private extension CreateWatchOnlyViewController {
 
         presenter.selectMode(for: index)
     }
+
+    @objc func actionTermsTap() {
+        presenter.toggleTermsCheckbox()
+    }
 }
 
 // MARK: - KeyboardAdoptable
@@ -368,6 +378,12 @@ extension CreateWatchOnlyViewController: CreateWatchOnlyViewProtocol {
         rootView.evmAddressInputView.bind(inputViewModel: viewModel)
 
         updateActionButtonState()
+    }
+
+    func didReceiveTerms(approved: Bool) {
+        rootView.termsControl.rowContentView.imageView.image = approved
+            ? R.image.iconCheckbox()
+            : R.image.iconCheckboxEmpty()
     }
 }
 

@@ -41,7 +41,7 @@ final class CreateWatchOnlyViewLayout: SCSingleActionLayoutView {
         view.localizablePlaceholder = .init(closure: { _ in Constants.evmFieldPlaceholder })
     }
 
-    let termsView: RowView<IconDetailsView> = .create { view in
+    let termsControl: RowView<IconDetailsView> = .create { view in
         view.rowContentView.iconWidth = Constants.termsCheckboxIconWidth
         view.rowContentView.spacing = Constants.termsContentSpacing
         view.rowContentView.stackView.alignment = .top
@@ -89,16 +89,16 @@ final class CreateWatchOnlyViewLayout: SCSingleActionLayoutView {
 
 private extension CreateWatchOnlyViewLayout {
     func layoutTermsView() {
-        addSubview(termsView)
+        addSubview(termsControl)
 
-        termsView.snp.makeConstraints { make in
+        termsControl.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
             make.bottom.equalTo(genericActionView.snp.top).inset(-UIConstants.actionBottomInset)
         }
 
         containerView.snp.remakeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(termsView.snp.top).offset(-Constants.fieldOffset)
+            make.bottom.equalTo(termsControl.snp.top).offset(-Constants.fieldOffset)
         }
     }
 }
