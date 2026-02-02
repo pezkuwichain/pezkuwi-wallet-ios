@@ -26,82 +26,12 @@ final class CreateWatchOnlyPresenter {
         self.wireframe = wireframe
         self.logger = logger
     }
-
-    private func getSubstrateAccountId() -> AccountId? {
-        try? partialSubstrateAddress?.toSubstrateAccountId()
-    }
-
-    private func getEVMAccountId() -> AccountId? {
-        try? partialEvmAddress?.toEthereumAccountId()
-    }
-
-    private func provideSubstrateAddressStateViewModel() {
-        if
-            let accountId = getSubstrateAccountId(),
-            let icon = try? iconGenerator.generateFromAccountId(accountId) {
-            let iconViewModel = DrawableIconViewModel(icon: icon)
-            let viewModel = AccountFieldStateViewModel(icon: iconViewModel)
-            view?.didReceiveSubstrateAddressState(viewModel: viewModel)
-        } else {
-            let viewModel = AccountFieldStateViewModel(icon: nil)
-            view?.didReceiveSubstrateAddressState(viewModel: viewModel)
-        }
-    }
-
-    private func provideSubstrateInputViewModel() {
-        let value = partialSubstrateAddress ?? ""
-
-        let inputViewModel = InputViewModel.createAccountInputViewModel(for: value)
-
-        view?.didReceiveSubstrateAddressInput(viewModel: inputViewModel)
-    }
-
-    private func provideEVMAddressStateViewModel() {
-        if
-            let accountId = getEVMAccountId(),
-            let icon = try? iconGenerator.generateFromAccountId(accountId) {
-            let iconViewModel = DrawableIconViewModel(icon: icon)
-            let viewModel = AccountFieldStateViewModel(icon: iconViewModel)
-            view?.didReceiveEVMAddressState(viewModel: viewModel)
-        } else {
-            let viewModel = AccountFieldStateViewModel(icon: nil)
-            view?.didReceiveEVMAddressState(viewModel: viewModel)
-        }
-    }
-
-    private func provideEVMInputViewModel() {
-        let value = partialEvmAddress ?? ""
-
-        let inputViewModel = InputViewModel.createAccountInputViewModel(for: value, required: false)
-
-        view?.didReceiveEVMAddressInput(viewModel: inputViewModel)
-    }
-
-    private func provideWalletNicknameViewModel() {
-        let value = partialNickname ?? ""
-
-        let inputViewModel = InputViewModel.createNicknameInputViewModel(for: value)
-
-        view?.didReceiveNickname(viewModel: inputViewModel)
-    }
-
-    private func provideFieldsViewModels() {
-        provideWalletNicknameViewModel()
-        provideSubstrateAddressStateViewModel()
-        provideSubstrateInputViewModel()
-        provideEVMAddressStateViewModel()
-        provideEVMInputViewModel()
-    }
 }
 
-extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
-    func setup() {
-        provideFieldsViewModels()
+// MARK: - Private
 
-        interactor.setup()
-    }
-
-    func performContinue() {
+private extension CreateWatchOnlyPresenter {
+    func performWalletCreation() {
         guard let name = partialNickname else {
             return
         }
@@ -136,6 +66,89 @@ extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
 
         let wallet = WatchOnlyWallet(name: name, substrateAddress: substrateAddress, evmAddress: evmAddress)
         interactor.save(wallet: wallet)
+    }
+
+    func getSubstrateAccountId() -> AccountId? {
+        try? partialSubstrateAddress?.toSubstrateAccountId()
+    }
+
+    func getEVMAccountId() -> AccountId? {
+        try? partialEvmAddress?.toEthereumAccountId()
+    }
+
+    func provideSubstrateAddressStateViewModel() {
+        if
+            let accountId = getSubstrateAccountId(),
+            let icon = try? iconGenerator.generateFromAccountId(accountId) {
+            let iconViewModel = DrawableIconViewModel(icon: icon)
+            let viewModel = AccountFieldStateViewModel(icon: iconViewModel)
+            view?.didReceiveSubstrateAddressState(viewModel: viewModel)
+        } else {
+            let viewModel = AccountFieldStateViewModel(icon: nil)
+            view?.didReceiveSubstrateAddressState(viewModel: viewModel)
+        }
+    }
+
+    func provideSubstrateInputViewModel() {
+        let value = partialSubstrateAddress ?? ""
+
+        let inputViewModel = InputViewModel.createAccountInputViewModel(for: value)
+
+        view?.didReceiveSubstrateAddressInput(viewModel: inputViewModel)
+    }
+
+    func provideEVMAddressStateViewModel() {
+        if
+            let accountId = getEVMAccountId(),
+            let icon = try? iconGenerator.generateFromAccountId(accountId) {
+            let iconViewModel = DrawableIconViewModel(icon: icon)
+            let viewModel = AccountFieldStateViewModel(icon: iconViewModel)
+            view?.didReceiveEVMAddressState(viewModel: viewModel)
+        } else {
+            let viewModel = AccountFieldStateViewModel(icon: nil)
+            view?.didReceiveEVMAddressState(viewModel: viewModel)
+        }
+    }
+
+    func provideEVMInputViewModel() {
+        let value = partialEvmAddress ?? ""
+
+        let inputViewModel = InputViewModel.createAccountInputViewModel(for: value, required: false)
+
+        view?.didReceiveEVMAddressInput(viewModel: inputViewModel)
+    }
+
+    func provideWalletNicknameViewModel() {
+        let value = partialNickname ?? ""
+
+        let inputViewModel = InputViewModel.createNicknameInputViewModel(for: value)
+
+        view?.didReceiveNickname(viewModel: inputViewModel)
+    }
+
+    func provideFieldsViewModels() {
+        provideWalletNicknameViewModel()
+        provideSubstrateAddressStateViewModel()
+        provideSubstrateInputViewModel()
+        provideEVMAddressStateViewModel()
+        provideEVMInputViewModel()
+    }
+}
+
+// MARK: - CreateWatchOnlyPresenterProtocol
+
+extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
+    func setup() {
+        provideFieldsViewModels()
+
+        interactor.setup()
+    }
+
+    func performContinue() {
+        wireframe.showScamAlert(
+            from: view,
+            delegate: self
+        )
     }
 
     func performSubstrateScan() {
@@ -196,6 +209,8 @@ extension CreateWatchOnlyPresenter: CreateWatchOnlyPresenterProtocol {
     }
 }
 
+// MARK: - CreateWatchOnlyInteractorOutputProtocol
+
 extension CreateWatchOnlyPresenter: CreateWatchOnlyInteractorOutputProtocol {
     func didReceiveDemoPreset(wallet: WatchOnlyWallet) {
         demoWalletPreset = wallet
@@ -210,6 +225,8 @@ extension CreateWatchOnlyPresenter: CreateWatchOnlyInteractorOutputProtocol {
         logger.error("Did receiver error: \(error)")
     }
 }
+
+// MARK: - AddressScanDelegate
 
 extension CreateWatchOnlyPresenter: AddressScanDelegate {
     func addressScanDidReceiveRecepient(address: AccountAddress, context: AnyObject?) {
@@ -230,6 +247,16 @@ extension CreateWatchOnlyPresenter: AddressScanDelegate {
             provideEVMAddressStateViewModel()
             provideEVMInputViewModel()
         }
+    }
+}
+
+// MARK: - WOScamAlertSheetDelegate
+
+extension CreateWatchOnlyPresenter: WOScamAlertSheetDelegate {
+    func woScamAlertSheetDidCancel() {}
+
+    func woScamAlertSheetDidConfirm() {
+        performWalletCreation()
     }
 }
 

@@ -1,4 +1,5 @@
 import Foundation_iOS
+import UIKit_iOS
 
 protocol CreateWatchOnlyViewProtocol: ControllerBackedProtocol, Localizable {
     func didReceiveNickname(viewModel: InputViewModelProtocol)
@@ -36,4 +37,27 @@ protocol BaseCreateWatchOnlyWireframeProtocol: AddressScanPresentable {}
 
 protocol CreateWatchOnlyWireframeProtocol: BaseCreateWatchOnlyWireframeProtocol, AlertPresentable, ErrorPresentable {
     func proceed(from view: CreateWatchOnlyViewProtocol?)
+    func showScamAlert(
+        from view: CreateWatchOnlyViewProtocol?,
+        delegate: WOScamAlertSheetDelegate
+    )
+}
+
+extension CreateWatchOnlyWireframeProtocol {
+    func showScamAlert(
+        from view: CreateWatchOnlyViewProtocol?,
+        delegate: WOScamAlertSheetDelegate
+    ) {
+        guard let alertView = WOScamAlertSheetViewFactory.createView(delegate: delegate) else {
+            return
+        }
+
+        let factory = ModalSheetPresentationFactory(
+            configuration: ModalSheetPresentationConfiguration.nova
+        )
+        alertView.controller.modalTransitioningFactory = factory
+        alertView.controller.modalPresentationStyle = .custom
+
+        view?.controller.present(alertView.controller, animated: true, completion: nil)
+    }
 }

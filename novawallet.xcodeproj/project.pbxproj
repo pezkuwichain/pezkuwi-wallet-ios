@@ -2083,6 +2083,14 @@
 		2D96D8702DF04FF700159E91 /* DelegatedAccountsUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D96D8652DF04FF700159E91 /* DelegatedAccountsUpdateViewController.swift */; };
 		2D96D8712DF04FF700159E91 /* DelegatedAccountsUpdateInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D96D8622DF04FF700159E91 /* DelegatedAccountsUpdateInteractor.swift */; };
 		2D9835F42F28139F00B184D4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 2D9835F32F28139F00B184D4 /* AppIcon.icon */; };
+		2D9837A02F310CE000B184D4 /* WOScamAlertSheetProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379B2F310CE000B184D4 /* WOScamAlertSheetProtocols.swift */; };
+		2D9837A12F310CE000B184D4 /* WOScamAlertSheetViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379E2F310CE000B184D4 /* WOScamAlertSheetViewLayout.swift */; };
+		2D9837A22F310CE000B184D4 /* WOScamAlertSheetViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379D2F310CE000B184D4 /* WOScamAlertSheetViewFactory.swift */; };
+		2D9837A32F310CE000B184D4 /* TimerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837992F310CE000B184D4 /* TimerButton.swift */; };
+		2D9837A42F310CE000B184D4 /* WOScamAlertSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379C2F310CE000B184D4 /* WOScamAlertSheetViewController.swift */; };
+		2D9837A52F310CE000B184D4 /* WOScamAlertSheetWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379F2F310CE000B184D4 /* WOScamAlertSheetWireframe.swift */; };
+		2D9837A62F310CE000B184D4 /* WOScamAlertSheetPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D98379A2F310CE000B184D4 /* WOScamAlertSheetPresenter.swift */; };
+		2D9837BC2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9837BB2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift */; };
 		2DA3AE8F2E5DB03300689F65 /* XcmDynamicModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3D1B1D2DA3BE0A0008057B /* XcmDynamicModelFactory.swift */; };
 		2DA3AE902E5DB04200689F65 /* XcmUni.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C42D9E957400F79C02 /* XcmUni.swift */; };
 		2DA3AE912E5DB06200689F65 /* XcmUni+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED71C62D9E95EC00F79C02 /* XcmUni+Location.swift */; };
@@ -8662,6 +8670,14 @@
 		2D96D8672DF04FF700159E91 /* DelegatedAccountsUpdateViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedAccountsUpdateViewLayout.swift; sourceTree = "<group>"; };
 		2D96D8682DF04FF700159E91 /* DelegatedAccountsUpdateWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegatedAccountsUpdateWireframe.swift; sourceTree = "<group>"; };
 		2D9835F32F28139F00B184D4 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		2D9837992F310CE000B184D4 /* TimerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerButton.swift; sourceTree = "<group>"; };
+		2D98379A2F310CE000B184D4 /* WOScamAlertSheetPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetPresenter.swift; sourceTree = "<group>"; };
+		2D98379B2F310CE000B184D4 /* WOScamAlertSheetProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetProtocols.swift; sourceTree = "<group>"; };
+		2D98379C2F310CE000B184D4 /* WOScamAlertSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetViewController.swift; sourceTree = "<group>"; };
+		2D98379D2F310CE000B184D4 /* WOScamAlertSheetViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetViewFactory.swift; sourceTree = "<group>"; };
+		2D98379E2F310CE000B184D4 /* WOScamAlertSheetViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetViewLayout.swift; sourceTree = "<group>"; };
+		2D98379F2F310CE000B184D4 /* WOScamAlertSheetWireframe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetWireframe.swift; sourceTree = "<group>"; };
+		2D9837BB2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WOScamAlertSheetViewModelFactory.swift; sourceTree = "<group>"; };
 		2DA3AE9A2E5DE6C300689F65 /* RemovedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA3AE9C2E5E203D00689F65 /* UpdatedWalletNotificationsCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedWalletNotificationsCleaner.swift; sourceTree = "<group>"; };
 		2DA4D5362EB21DC4006FCCC0 /* GiftSetupIssuesViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftSetupIssuesViewModelFactory.swift; sourceTree = "<group>"; };
@@ -18221,6 +18237,21 @@
 			path = DelegatedAccountsUpdate;
 			sourceTree = "<group>";
 		};
+		2D9837982F310CD000B184D4 /* ScamAlert */ = {
+			isa = PBXGroup;
+			children = (
+				2D9837992F310CE000B184D4 /* TimerButton.swift */,
+				2D9837BB2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift */,
+				2D98379A2F310CE000B184D4 /* WOScamAlertSheetPresenter.swift */,
+				2D98379B2F310CE000B184D4 /* WOScamAlertSheetProtocols.swift */,
+				2D98379C2F310CE000B184D4 /* WOScamAlertSheetViewController.swift */,
+				2D98379D2F310CE000B184D4 /* WOScamAlertSheetViewFactory.swift */,
+				2D98379E2F310CE000B184D4 /* WOScamAlertSheetViewLayout.swift */,
+				2D98379F2F310CE000B184D4 /* WOScamAlertSheetWireframe.swift */,
+			);
+			path = ScamAlert;
+			sourceTree = "<group>";
+		};
 		2DA4D5302EB21DB1006FCCC0 /* Factory */ = {
 			isa = PBXGroup;
 			children = (
@@ -21660,6 +21691,7 @@
 		84307C772897F06700CA3977 /* WatchOnly */ = {
 			isa = PBXGroup;
 			children = (
+				2D9837982F310CD000B184D4 /* ScamAlert */,
 				5CBE3DF281FF54D5DAF9B66B /* CreateWatchOnly */,
 				C67688CBF31B183F11CE7226 /* ChangeWatchOnly */,
 			);
@@ -33398,6 +33430,7 @@
 				0C37AFD32B598D8C00009ECA /* DelegatedSignConfirmationInteractor.swift in Sources */,
 				842B2FCF2947352A002829B6 /* UITextField+Attributes.swift in Sources */,
 				2D8684602C0086A500A663D2 /* ManualBackupKeyListViewModelFactory.swift in Sources */,
+				2D9837BC2F3128C000B184D4 /* WOScamAlertSheetViewModelFactory.swift in Sources */,
 				0C8AF7BA2B3806B700005AC9 /* ChainModel+Pdc20.swift in Sources */,
 				0C1BE1A62A47FC240010933C /* MultistakingSyncServiceFactory.swift in Sources */,
 				0C0F6D812D3A743C00943A7C /* StartStakingInfoMythosProtocols.swift in Sources */,
@@ -36430,6 +36463,13 @@
 				59F89408D66E20CE7E556D35 /* BackupAttentionWireframe.swift in Sources */,
 				33A1043748224F10548AACB0 /* BackupAttentionPresenter.swift in Sources */,
 				40E5A7D9511B8760A2CCEB06 /* BackupAttentionViewController.swift in Sources */,
+				2D9837A02F310CE000B184D4 /* WOScamAlertSheetProtocols.swift in Sources */,
+				2D9837A12F310CE000B184D4 /* WOScamAlertSheetViewLayout.swift in Sources */,
+				2D9837A22F310CE000B184D4 /* WOScamAlertSheetViewFactory.swift in Sources */,
+				2D9837A32F310CE000B184D4 /* TimerButton.swift in Sources */,
+				2D9837A42F310CE000B184D4 /* WOScamAlertSheetViewController.swift in Sources */,
+				2D9837A52F310CE000B184D4 /* WOScamAlertSheetWireframe.swift in Sources */,
+				2D9837A62F310CE000B184D4 /* WOScamAlertSheetPresenter.swift in Sources */,
 				403472F848E2D71B296980DC /* BackupAttentionViewLayout.swift in Sources */,
 				AC24319E26F417DF02F45ABA /* BackupAttentionViewFactory.swift in Sources */,
 				2D0A82EC2CB47E4E0043B330 /* PayCardSheetViewFactory.swift in Sources */,
