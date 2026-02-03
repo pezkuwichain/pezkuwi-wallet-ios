@@ -20,31 +20,31 @@ final class InlinableAlertView: GenericBorderedView<
     private var closeButton: TriangularedButton {
         contentView.fView.sView.fView.sView
     }
-    
+
     private let learnMoreButton = UIButton()
-    
+
     private var actionButton: TriangularedButton {
         contentView.sView
     }
-    
+
     private var infoIconView: UIImageView {
         contentView.fView.fView
     }
-    
+
     private var titleLabel: UILabel {
         contentView.fView.sView.fView.fView
     }
-    
+
     private var messageLabel: UILabel {
         contentView.fView.sView.sView.valueTop
     }
-    
+
     private var learnMoreButtonContainer: UIView {
         contentView.fView.sView.sView.valueBottom
     }
-    
+
     private var viewModel: Model?
-    
+
     var fillColor: UIColor = R.color.colorInfoBlockBackground()! {
         didSet { backgroundView.fillColor = fillColor }
     }

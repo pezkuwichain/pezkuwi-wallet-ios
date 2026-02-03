@@ -85,7 +85,7 @@ private extension AssetListCollectionViewDataSource {
             horizontalInset: UIConstants.horizontalInset
         )
         alertCell.view.fillColor = R.color.colorBlockBackground()!
-        
+
         alertCell.view.bind(alertViewModel)
 
         alertCell.view.learnMoreAction = { [weak self] alertType in
