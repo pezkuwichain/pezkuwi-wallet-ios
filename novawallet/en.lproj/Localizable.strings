@@ -837,7 +837,8 @@
 //"common.evm.address.optional.title" = "EVM address (Optional)";
 //"common.evm.address.hint" = "Moonbeam, Moonriver and other networks";
 "common.wallet.presets" = "Preset wallets";
-"create.watch.only.details" = "Track wallet activity without a private key.\nYou won’t be able to perform any transactions.";
+"create.watch.only.details" = "Track any wallet by its address";
+//"create.watch.only.details" = "Track wallet activity without a private key.\nYou won’t be able to perform any transactions.";
 "create.watch.only.missing.substrate" = "Enter substrate address...";
 "common.invalid.substrate.address" = "Invalid substrate address";
 "common.invalid.evm.address" = "Invalid evm address";
