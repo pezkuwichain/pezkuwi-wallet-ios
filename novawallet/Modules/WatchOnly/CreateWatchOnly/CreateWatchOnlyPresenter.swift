@@ -36,9 +36,8 @@ private extension CreateWatchOnlyPresenter {
             return
         }
 
-        guard
-            getSubstrateAccountId() != nil,
-            let substrateAddress = partialSubstrateAddress else {
+        let substrateAddressEmpty = (partialSubstrateAddress ?? "").isEmpty
+        if !substrateAddressEmpty, getSubstrateAccountId() == nil {
             let languages = view?.selectedLocale.rLanguages ?? []
             wireframe.present(
                 message: R.string(preferredLanguages: languages).localizable.commonInvalidSubstrateAddress(),
@@ -49,6 +48,8 @@ private extension CreateWatchOnlyPresenter {
 
             return
         }
+
+        let substrateAddress = !substrateAddressEmpty ? partialSubstrateAddress : nil
 
         let evmAddressEmpty = (partialEvmAddress ?? "").isEmpty
         if !evmAddressEmpty, getEVMAccountId() == nil {
@@ -94,6 +95,7 @@ private extension CreateWatchOnlyPresenter {
 
         let inputViewModel = InputViewModel.createAccountInputViewModel(
             for: value,
+            required: false,
             enabled: enabled
         )
 
