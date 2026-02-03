@@ -78,7 +78,7 @@ private extension AssetDetailsPresenter {
         view.didReceive(balance: balanceModel)
         view.didReceive(availableOperations: availableOperations)
 
-        let ahmAlertModel: AHMAlertView.Model? = if let ahmInfo {
+        let ahmAlertModel: InlinableAlertView.Model? = if let ahmInfo {
             ahmViewModelFactory.createAssetDetailsAlertViewModel(
                 info: ahmInfo,
                 locale: selectedLocale

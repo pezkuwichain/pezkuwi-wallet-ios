@@ -194,7 +194,7 @@ extension AssetDetailsViewController: AssetDetailsViewProtocol {
         }
     }
 
-    func didReceive(ahmAlert: AHMAlertView.Model?) {
+    func didReceive(ahmAlert: InlinableAlertView.Model?) {
         rootView.setAHMAlert(with: ahmAlert)
     }
 }

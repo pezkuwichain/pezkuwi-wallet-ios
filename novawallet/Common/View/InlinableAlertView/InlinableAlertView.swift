@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import UIKit_iOS
 
-final class AHMAlertView: GenericBorderedView<
+final class InlinableAlertView: GenericBorderedView<
     GenericPairValueView<
         GenericPairValueView<
             UIImageView,
@@ -53,7 +53,7 @@ final class AHMAlertView: GenericBorderedView<
 
 // MARK: - Private
 
-private extension AHMAlertView {
+private extension InlinableAlertView {
     func setupLayout() {
         contentView.fView.makeHorizontal()
         contentView.fView.stackView.alignment = .top
@@ -93,7 +93,6 @@ private extension AHMAlertView {
         backgroundView.cornerRadius = Constants.cornerRadius
         backgroundView.fillColor = R.color.colorInfoBlockBackground()!
 
-        infoIconView.image = R.image.iconInfoAccent()
         infoIconView.contentMode = .scaleAspectFit
 
         closeButton.contentInsets.top = .zero
@@ -118,8 +117,10 @@ private extension AHMAlertView {
 
 // MARK: - Internal
 
-extension AHMAlertView {
+extension InlinableAlertView {
     func bind(_ viewModel: Model) {
+        infoIconView.image = viewModel.icon
+
         titleLabel.text = viewModel.title
 
         let contentInsets = if viewModel.actionTitle != nil {
@@ -153,18 +154,19 @@ extension AHMAlertView {
 
 // MARK: - View Model
 
-extension AHMAlertView {
+extension InlinableAlertView {
     struct Model {
         let title: String
         let message: String?
         let learnMore: LearnMoreViewModel
         let actionTitle: String?
+        let icon: UIImage?
     }
 }
 
 // MARK: - Constants
 
-private extension AHMAlertView {
+private extension InlinableAlertView {
     enum Constants {
         static let contentToButton: CGFloat = 8
         static let infoToContent: CGFloat = 12

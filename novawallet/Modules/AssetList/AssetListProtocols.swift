@@ -10,6 +10,7 @@ protocol AssetListCollectionManagerProtocol {
     var delegate: AssetListCollectionManagerDelegate? { get set }
 
     func setupCollectionView()
+    func updateAlertViewModel(with model: InlinableAlertView.Model?)
     func updateGroupsViewModel(with model: AssetListViewModel)
     func updateHeaderViewModel(with model: AssetListHeaderViewModel?)
     func updateOrganizerViewModel(with model: AssetListOrganizerViewModel?)
@@ -69,6 +70,7 @@ protocol AssetListCollectionViewLayoutDelegate: AnyObject {
 protocol AssetListViewProtocol: ControllerBackedProtocol {
     func didReceiveFullUpdate(viewModel: AssetListFullUpdateViewModel)
     func didReceiveHeader(viewModel: AssetListHeaderViewModel)
+    func didReceiveAlert(viewModel: InlinableAlertView.Model?)
     func didReceiveGroups(viewModel: AssetListViewModel)
     func didReceiveOrganizer(viewModel: AssetListOrganizerViewModel?)
     func didReceiveBanners(available: Bool)

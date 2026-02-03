@@ -49,7 +49,7 @@ private extension StakingMainPresenter {
     }
 
     func provideAHMAlertModel() {
-        let ahmAlertModel: AHMAlertView.Model? = if let ahmInfo {
+        let ahmAlertModel: InlinableAlertView.Model? = if let ahmInfo {
             ahmViewModelFactory.createStakingDetailsAlertViewModel(
                 info: ahmInfo,
                 locale: localizationManager.selectedLocale

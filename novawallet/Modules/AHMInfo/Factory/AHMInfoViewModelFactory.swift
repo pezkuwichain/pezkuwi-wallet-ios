@@ -14,12 +14,12 @@ protocol AHMInfoViewModelFactoryProtocol {
     func createAssetDetailsAlertViewModel(
         info: AHMFullInfo,
         locale: Locale
-    ) -> AHMAlertView.Model
+    ) -> InlinableAlertView.Model
 
     func createStakingDetailsAlertViewModel(
         info: AHMFullInfo,
         locale: Locale
-    ) -> AHMAlertView.Model
+    ) -> InlinableAlertView.Model
 }
 
 final class AHMInfoViewModelFactory {
@@ -250,7 +250,7 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
     func createAssetDetailsAlertViewModel(
         info: AHMFullInfo,
         locale: Locale
-    ) -> AHMAlertView.Model {
+    ) -> InlinableAlertView.Model {
         let languages = locale.rLanguages
 
         let date = Date(timeIntervalSince1970: TimeInterval(info.info.timestamp))
@@ -285,18 +285,19 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
             info.destinationChain.name
         )
 
-        return AHMAlertView.Model(
+        return InlinableAlertView.Model(
             title: title,
             message: message,
             learnMore: learnMoreModel,
-            actionTitle: actionTitle
+            actionTitle: actionTitle,
+            icon: R.image.iconInfoAccent()
         )
     }
 
     func createStakingDetailsAlertViewModel(
         info: AHMFullInfo,
         locale: Locale
-    ) -> AHMAlertView.Model {
+    ) -> InlinableAlertView.Model {
         let sourceChainAsset = ChainAsset(
             chain: info.sourceChain,
             asset: info.asset
@@ -324,11 +325,12 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
             ).localizable.commonLearnMore()
         )
 
-        return AHMAlertView.Model(
+        return InlinableAlertView.Model(
             title: title,
             message: nil,
             learnMore: learnMoreModel,
-            actionTitle: nil
+            actionTitle: nil,
+            icon: R.image.iconInfoAccent()
         )
     }
 }

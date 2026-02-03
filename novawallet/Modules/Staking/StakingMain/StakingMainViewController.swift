@@ -276,7 +276,7 @@ extension StakingMainViewController: StakingMainViewProtocol {
         rootView.rewardView?.filterView.control.deactivate(animated: true)
     }
 
-    func didReceiveAHMAlert(viewModel: AHMAlertView.Model?) {
+    func didReceiveAHMAlert(viewModel: InlinableAlertView.Model?) {
         rootView.setAHMAlert(with: viewModel)
     }
 }

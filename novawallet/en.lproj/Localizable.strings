@@ -2038,3 +2038,4 @@ Do you want to continue?";
 "watch.only.scam.alert.contact.format" = "If someone asked you to add a wallet,\ncontact us %@";
 "watch.only.scam.alert.confirm" = "I understood";
 "create.watch.only.missing.wallet.name" = "Enter a wallet name...";
+"inlinable.alert.wo.message" = "Beware of scammers. No one can unlock a watch-only wallet or its funds";
