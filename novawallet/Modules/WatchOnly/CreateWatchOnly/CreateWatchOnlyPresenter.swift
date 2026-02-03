@@ -95,7 +95,6 @@ private extension CreateWatchOnlyPresenter {
 
         let inputViewModel = InputViewModel.createAccountInputViewModel(
             for: value,
-            required: false,
             enabled: enabled
         )
 
@@ -120,7 +119,6 @@ private extension CreateWatchOnlyPresenter {
 
         let inputViewModel = InputViewModel.createAccountInputViewModel(
             for: value,
-            required: false,
             enabled: enabled
         )
 

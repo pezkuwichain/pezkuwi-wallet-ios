@@ -162,8 +162,8 @@ private extension CreateWatchOnlyViewController {
             setDisabledButton { $0.createWatchOnlyMissingWalletName() }
             return
         }
-        guard rootView.substrateAddressInputView.completed else {
-            setDisabledButton { $0.createWatchOnlyMissingSubstrate() }
+        guard rootView.substrateAddressInputView.completed || rootView.evmAddressInputView.completed else {
+            setDisabledButton { $0.createWatchOnlyMissingAnyAddress() }
             return
         }
         guard termsAccepted else {
@@ -256,6 +256,8 @@ private extension CreateWatchOnlyViewController {
     @objc func actionEVMAddressChanged() {
         let partialAddress = rootView.evmAddressInputView.textField.text ?? ""
         presenter.updateEVMAddress(partialAddress)
+
+        updateActionButtonState()
     }
 
     @objc func actionEVMAddressScan() {
