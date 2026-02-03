@@ -290,7 +290,8 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
             message: message,
             learnMore: learnMoreModel,
             actionTitle: actionTitle,
-            icon: R.image.iconInfoAccent()
+            icon: R.image.iconInfoAccent(),
+            showCloseButton: true
         )
     }
 
@@ -330,7 +331,8 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
             message: nil,
             learnMore: learnMoreModel,
             actionTitle: nil,
-            icon: R.image.iconInfoAccent()
+            icon: R.image.iconInfoAccent(),
+            showCloseButton: true
         )
     }
 }

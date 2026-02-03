@@ -120,6 +120,7 @@ private extension InlinableAlertView {
 extension InlinableAlertView {
     func bind(_ viewModel: Model) {
         infoIconView.image = viewModel.icon
+        closeButton.isHidden = !viewModel.showCloseButton
 
         titleLabel.text = viewModel.title
 
@@ -161,6 +162,7 @@ extension InlinableAlertView {
         let learnMore: LearnMoreViewModel
         let actionTitle: String?
         let icon: UIImage?
+        let showCloseButton: Bool
     }
 }
 

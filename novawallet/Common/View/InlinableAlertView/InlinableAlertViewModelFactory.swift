@@ -24,7 +24,8 @@ extension InlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol
             message: nil,
             learnMore: learnMoreModel,
             actionTitle: nil,
-            icon: R.image.iconInfoAccent()
+            icon: R.image.iconWarningFilled(),
+            showCloseButton: false
         )
     }
 }
