@@ -206,6 +206,10 @@ extension AssetListViewController: AssetListViewProtocol {
 // MARK: AssetListCollectionManagerDelegate
 
 extension AssetListViewController: AssetListCollectionManagerDelegate {
+    func actionAlertLearnMore(_ alertType: InlinableAlertView.Model.AlertType) {
+        presenter.presentLearnMore(alertType)
+    }
+
     func selectOrganizerItem(at index: Int) {
         presenter.selectOrganizerItem(at: index)
     }

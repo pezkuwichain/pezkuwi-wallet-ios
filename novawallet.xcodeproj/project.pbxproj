@@ -1840,6 +1840,7 @@
 		2D4DD6582F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */; };
 		2D4DD6602F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */; };
 		2D4DD66D2F31F659001B2C1D /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */; };
+		2D4DD6A82F3218F2001B2C1D /* InlinableAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD6A72F3218F2001B2C1D /* InlinableAlertViewModel.swift */; };
 		2D4F55012CCA60E900B65B76 /* AssetsSearchCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F55002CCA60E900B65B76 /* AssetsSearchCollectionManager.swift */; };
 		2D4F55032CCA60F300B65B76 /* AssetsSearchCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F55022CCA60F300B65B76 /* AssetsSearchCollectionViewDataSource.swift */; };
 		2D4F55052CCA611200B65B76 /* AssetsSearchCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F55042CCA611200B65B76 /* AssetsSearchCollectionViewDelegate.swift */; };
@@ -8438,6 +8439,7 @@
 		2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertViewModelFactory.swift; sourceTree = "<group>"; };
 		2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertCollectionViewCell.swift; sourceTree = "<group>"; };
 		2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
+		2D4DD6A72F3218F2001B2C1D /* InlinableAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertViewModel.swift; sourceTree = "<group>"; };
 		2D4F55002CCA60E900B65B76 /* AssetsSearchCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSearchCollectionManager.swift; sourceTree = "<group>"; };
 		2D4F55022CCA60F300B65B76 /* AssetsSearchCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSearchCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		2D4F55042CCA611200B65B76 /* AssetsSearchCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSearchCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -18695,6 +18697,7 @@
 				2DC002F12E8B9F8800D49A42 /* InlinableAlertView.swift */,
 				2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */,
 				2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */,
+				2D4DD6A72F3218F2001B2C1D /* InlinableAlertViewModel.swift */,
 			);
 			path = InlinableAlertView;
 			sourceTree = "<group>";
@@ -34314,6 +34317,7 @@
 				0C71D3FC2DF182720042134B /* EvmBalanceUpdateBlock.swift in Sources */,
 				847A25CA28D85204006AC9F5 /* ReferendumInfo.swift in Sources */,
 				5869563D0EA593FBD02C169C /* StakingPayoutConfirmationProtocols.swift in Sources */,
+				2D4DD6A82F3218F2001B2C1D /* InlinableAlertViewModel.swift in Sources */,
 				846B749828B4BA0500C39B93 /* LedgerAccountsStore.swift in Sources */,
 				844ADE7728CA7F7100EE29F7 /* ParaStkYieldBoostSetupPresenter+ViewUpdate.swift in Sources */,
 				0C0F6D722D39698700943A7C /* MythosStakingPallet+Freezes.swift in Sources */,

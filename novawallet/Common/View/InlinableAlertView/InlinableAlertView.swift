@@ -17,13 +17,13 @@ final class InlinableAlertView: GenericBorderedView<
         TriangularedButton
     >
 > {
-    var closeButton: TriangularedButton {
+    private var closeButton: TriangularedButton {
         contentView.fView.sView.fView.sView
     }
 
-    var learnMoreButton = UIButton()
+    private let learnMoreButton = UIButton()
 
-    var actionButton: TriangularedButton {
+    private var actionButton: TriangularedButton {
         contentView.sView
     }
 
@@ -43,11 +43,18 @@ final class InlinableAlertView: GenericBorderedView<
         contentView.fView.sView.sView.valueBottom
     }
 
+    private var viewModel: Model?
+
+    var mainAction: ((Model.AlertType) -> Void)?
+    var closeAction: ((Model.AlertType) -> Void)?
+    var learnMoreAction: ((Model.AlertType) -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupLayout()
         setupStyle()
+        setupHandlers()
     }
 }
 
@@ -113,12 +120,52 @@ private extension InlinableAlertView {
 
         actionButton.applySecondaryEnabledAccentStyle()
     }
+
+    // MARK: - Actions
+
+    func setupHandlers() {
+        closeButton.addTarget(
+            self,
+            action: #selector(actionClose),
+            for: .touchUpInside
+        )
+        learnMoreButton.addTarget(
+            self,
+            action: #selector(actionLearnMore),
+            for: .touchUpInside
+        )
+        actionButton.addTarget(
+            self,
+            action: #selector(actionMain),
+            for: .touchUpInside
+        )
+    }
+
+    @objc func actionClose() {
+        guard let viewModel else { return }
+
+        closeAction?(viewModel.type)
+    }
+
+    @objc func actionLearnMore() {
+        guard let viewModel else { return }
+
+        learnMoreAction?(viewModel.type)
+    }
+
+    @objc func actionMain() {
+        guard let viewModel else { return }
+
+        mainAction?(viewModel.type)
+    }
 }
 
 // MARK: - Internal
 
 extension InlinableAlertView {
     func bind(_ viewModel: Model) {
+        self.viewModel = viewModel
+
         infoIconView.image = viewModel.icon
         closeButton.isHidden = !viewModel.showCloseButton
 
@@ -150,19 +197,6 @@ extension InlinableAlertView {
             learnMoreText: viewModel.learnMore.title,
             style: .caption1Secondary
         )
-    }
-}
-
-// MARK: - View Model
-
-extension InlinableAlertView {
-    struct Model {
-        let title: String
-        let message: String?
-        let learnMore: LearnMoreViewModel
-        let actionTitle: String?
-        let icon: UIImage?
-        let showCloseButton: Bool
     }
 }
 

@@ -20,6 +20,7 @@ extension InlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol
         )
 
         return InlinableAlertView.Model(
+            type: .watchOnlyAssetList,
             title: title,
             message: nil,
             learnMore: learnMoreModel,

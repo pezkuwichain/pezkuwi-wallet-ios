@@ -43,6 +43,7 @@ protocol AssetListCollectionViewActionsDelegate: AnyObject {
     func actionChangeAssetListStyle()
     func actionCardOpen()
     func actionTogglePrivacy()
+    func actionAlertLearnMore(_ alertType: InlinableAlertView.Model.AlertType)
 }
 
 protocol AssetListCollectionSelectionDelegate: AnyObject {
@@ -98,6 +99,7 @@ protocol AssetListPresenterProtocol: AnyObject {
     func presentWalletConnect()
     func toggleAssetListStyle()
     func togglePrivacyMode()
+    func presentLearnMore(_ alertType: InlinableAlertView.Model.AlertType)
 }
 
 // MARK: Interactor
@@ -136,7 +138,8 @@ protocol AssetListWireframeProtocol: AnyObject,
     RampActionsPresentable,
     RampPresentable,
     MessageSheetPresentable,
-    FeatureSupportChecking
+    FeatureSupportChecking,
+    WebPresentable
 {
     func showAssetDetails(from view: AssetListViewProtocol?, chainAsset: ChainAsset)
     func showTokensManage(from view: AssetListViewProtocol?)
@@ -185,6 +188,11 @@ protocol AssetListWireframeProtocol: AnyObject,
     func dropModalFlow(
         from view: AssetListViewProtocol?,
         completion: @escaping () -> Void
+    )
+
+    func showLearnMore(
+        from view: ControllerBackedProtocol?,
+        for alertType: InlinableAlertView.Model.AlertType
     )
 }
 

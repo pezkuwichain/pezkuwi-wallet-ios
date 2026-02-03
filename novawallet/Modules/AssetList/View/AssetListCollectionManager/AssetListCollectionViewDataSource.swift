@@ -86,6 +86,10 @@ private extension AssetListCollectionViewDataSource {
         )
         alertCell.view.bind(alertViewModel)
 
+        alertCell.view.learnMoreAction = { [weak self] alertType in
+            self?.actionsDelegate?.actionAlertLearnMore(alertType)
+        }
+
         return alertCell
     }
 

@@ -25,9 +25,14 @@ protocol AHMInfoViewModelFactoryProtocol {
 final class AHMInfoViewModelFactory {
     private let assetFormatterFactory: AssetBalanceFormatterFactoryProtocol
     private let dateFormatter = DateFormatter.fullDate
+    private let applicationConfig: ApplicationConfigProtocol
 
-    init(assetFormatterFactory: AssetBalanceFormatterFactoryProtocol = AssetBalanceFormatterFactory()) {
+    init(
+        assetFormatterFactory: AssetBalanceFormatterFactoryProtocol = AssetBalanceFormatterFactory(),
+        applicationConfig: ApplicationConfigProtocol = ApplicationConfig.shared
+    ) {
         self.assetFormatterFactory = assetFormatterFactory
+        self.applicationConfig = applicationConfig
     }
 }
 
@@ -286,6 +291,7 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
         )
 
         return InlinableAlertView.Model(
+            type: .ahmAssetDetails,
             title: title,
             message: message,
             learnMore: learnMoreModel,
@@ -327,6 +333,7 @@ extension AHMInfoViewModelFactory: AHMInfoViewModelFactoryProtocol {
         )
 
         return InlinableAlertView.Model(
+            type: .ahmStakingDetails,
             title: title,
             message: nil,
             learnMore: learnMoreModel,

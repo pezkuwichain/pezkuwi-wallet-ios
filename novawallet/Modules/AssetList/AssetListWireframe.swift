@@ -3,17 +3,20 @@ import UIKit
 import UIKit_iOS
 
 final class AssetListWireframe: AssetListWireframeProtocol {
+    let applicationConfig: ApplicationConfigProtocol
     let assetListModelObservable: AssetListModelObservable
     let dAppMediator: DAppInteractionMediating
     let walletNotificationService: WalletNotificationServiceProtocol
     let delegatedAccountSyncService: DelegatedAccountSyncServiceProtocol
 
     init(
+        applicationConfig: ApplicationConfigProtocol = ApplicationConfig.shared,
         assetListModelObservable: AssetListModelObservable,
         dAppMediator: DAppInteractionMediating,
         walletNotificationService: WalletNotificationServiceProtocol,
         delegatedAccountSyncService: DelegatedAccountSyncServiceProtocol
     ) {
+        self.applicationConfig = applicationConfig
         self.assetListModelObservable = assetListModelObservable
         self.dAppMediator = dAppMediator
         self.walletNotificationService = walletNotificationService
@@ -316,6 +319,27 @@ final class AssetListWireframe: AssetListWireframeProtocol {
         view?.controller.presentedViewController?.dismiss(
             animated: true,
             completion: completion
+        )
+    }
+
+    func showLearnMore(
+        from view: ControllerBackedProtocol?,
+        for alertType: InlinableAlertView.Model.AlertType
+    ) {
+        var url: URL?
+
+        switch alertType {
+        case .watchOnlyAssetList:
+            url = applicationConfig.watchOnlyURL
+        default: break
+        }
+
+        guard let url, let view else { return }
+
+        showWeb(
+            url: url,
+            from: view,
+            style: .automatic
         )
     }
 }

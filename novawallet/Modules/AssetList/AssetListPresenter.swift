@@ -514,6 +514,13 @@ private extension AssetListPresenter {
 // MARK: AssetListPresenterProtocol
 
 extension AssetListPresenter: AssetListPresenterProtocol {
+    func presentLearnMore(_ alertType: InlinableAlertView.Model.AlertType) {
+        wireframe.showLearnMore(
+            from: view,
+            for: alertType
+        )
+    }
+
     func selectOrganizerItem(at index: Int) {
         guard
             let organizerViewModel,
