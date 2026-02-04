@@ -164,7 +164,18 @@ final class AssetListTotalBalanceView: UIView {
         swapButton.isEnabled = viewModel.hasSwaps
         giftButton.isEnabled = viewModel.hasGifts
 
+        setupTotalBalanceTitle(for: viewModel.walletSwitch.type)
         setupPrivacyModeToggle(enabled: viewModel.privacyModelEnabled)
+    }
+
+    func setupTotalBalanceTitle(for walletType: WalletsListSectionViewModel.SectionType) {
+        let localizedStrings = R.string(preferredLanguages: locale.rLanguages).localizable
+
+        if walletType == .watchOnly {
+            titleLabel.text = localizedStrings.assetListWatchOnlyBalance()
+        } else {
+            titleLabel.text = localizedStrings.walletTotalBalance()
+        }
     }
 
     private func setupPrivacyModeToggle(enabled: Bool) {

@@ -31,7 +31,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         options: [.curveLinear]
     )
 
-    lazy var ahmAlertView: AHMAlertView = .create { view in
+    lazy var ahmAlertView: InlinableAlertView = .create { view in
         view.isHidden = true
     }
 
@@ -275,7 +275,7 @@ extension AssetDetailsViewLayout {
         containerView.stackView.layoutMargins.bottom = inset + Constants.bottomOffset
     }
 
-    func setAHMAlert(with model: AHMAlertView.Model?) {
+    func setAHMAlert(with model: InlinableAlertView.Model?) {
         if let model {
             guard ahmAlertView.superview == nil else {
                 ahmAlertView.bind(model)

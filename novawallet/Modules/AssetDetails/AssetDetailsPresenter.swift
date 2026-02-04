@@ -8,7 +8,7 @@ final class AssetDetailsPresenter: RampFlowManaging, AssetPriceChartInputOwnerPr
     weak var assetPriceChartModule: AssetPriceChartModuleInputProtocol?
 
     let wireframe: AssetDetailsWireframeProtocol
-    let ahmViewModelFactory: AHMInfoAssetViewModelFactoryProtocol
+    let inlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol
     let viewModelFactory: AssetDetailsViewModelFactoryProtocol
     let interactor: AssetDetailsInteractorInputProtocol
     let chainAsset: ChainAsset
@@ -29,7 +29,7 @@ final class AssetDetailsPresenter: RampFlowManaging, AssetPriceChartInputOwnerPr
         localizableManager: LocalizationManagerProtocol,
         chainAsset: ChainAsset,
         selectedAccount: MetaAccountModel,
-        ahmViewModelFactory: AHMInfoAssetViewModelFactoryProtocol,
+        inlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol,
         viewModelFactory: AssetDetailsViewModelFactoryProtocol,
         wireframe: AssetDetailsWireframeProtocol,
         logger: LoggerProtocol?
@@ -38,7 +38,7 @@ final class AssetDetailsPresenter: RampFlowManaging, AssetPriceChartInputOwnerPr
         self.wireframe = wireframe
         self.chainAsset = chainAsset
         self.selectedAccount = selectedAccount
-        self.ahmViewModelFactory = ahmViewModelFactory
+        self.inlinableAlertViewModelFactory = inlinableAlertViewModelFactory
         self.viewModelFactory = viewModelFactory
         self.logger = logger
         localizationManager = localizableManager
@@ -78,8 +78,8 @@ private extension AssetDetailsPresenter {
         view.didReceive(balance: balanceModel)
         view.didReceive(availableOperations: availableOperations)
 
-        let ahmAlertModel: AHMAlertView.Model? = if let ahmInfo {
-            ahmViewModelFactory.createAssetDetailsAlertViewModel(
+        let ahmAlertModel: InlinableAlertView.Model? = if let ahmInfo {
+            inlinableAlertViewModelFactory.createAssetDetailsAlertViewModel(
                 info: ahmInfo,
                 locale: selectedLocale
             )

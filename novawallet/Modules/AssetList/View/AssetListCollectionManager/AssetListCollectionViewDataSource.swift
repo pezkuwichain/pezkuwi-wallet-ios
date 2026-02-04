@@ -4,6 +4,7 @@ final class AssetListCollectionViewDataSource: NSObject {
     weak var view: ControllerBackedProtocol?
     let bannersViewProvider: BannersViewProviderProtocol
 
+    var alertViewModel: InlinableAlertView.Model?
     var groupsViewModel: AssetListViewModel
     var headerViewModel: AssetListHeaderViewModel?
     var organizerViewModel: AssetListOrganizerViewModel?
@@ -17,6 +18,7 @@ final class AssetListCollectionViewDataSource: NSObject {
     init(
         view: ControllerBackedProtocol,
         bannersViewProvider: BannersViewProviderProtocol,
+        alertViewModel: InlinableAlertView.Model?,
         groupsViewModel: AssetListViewModel,
         selectedLocale: Locale,
         actionsDelegate: AssetListCollectionViewActionsDelegate? = nil,
@@ -24,6 +26,7 @@ final class AssetListCollectionViewDataSource: NSObject {
     ) {
         self.view = view
         self.bannersViewProvider = bannersViewProvider
+        self.alertViewModel = alertViewModel
         self.groupsViewModel = groupsViewModel
         self.selectedLocale = selectedLocale
         self.actionsDelegate = actionsDelegate
@@ -59,6 +62,37 @@ private extension AssetListCollectionViewDataSource {
         ))
 
         return accountCell
+    }
+
+    func provideAlertCell(
+        _ collectionView: UICollectionView,
+        indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let alertViewModel else {
+            return collectionView.dequeueReusableCellWithType(
+                EmptyCollectionCell.self,
+                for: indexPath
+            )!
+        }
+
+        let alertCell = collectionView.dequeueReusableCellWithType(
+            InlinableAlertCollectionViewCell.self,
+            for: indexPath
+        )!
+
+        alertCell.contentInsets = .init(
+            verticalInset: .zero,
+            horizontalInset: UIConstants.horizontalInset
+        )
+        alertCell.view.fillColor = R.color.colorBlockBackground()!
+
+        alertCell.view.bind(alertViewModel)
+
+        alertCell.view.learnMoreAction = { [weak self] alertType in
+            self?.actionsDelegate?.actionAlertLearnMore(alertType)
+        }
+
+        return alertCell
     }
 
     func provideTotalBalanceCell(
@@ -166,7 +200,10 @@ private extension AssetListCollectionViewDataSource {
         guard let groupIndex = AssetListFlowLayout.SectionType.assetsGroupIndexFromSection(
             indexPath.section
         ) else {
-            return UICollectionViewCell()
+            return collectionView.dequeueReusableCellWithType(
+                EmptyCollectionCell.self,
+                for: indexPath
+            )!
         }
 
         return switch groupsViewModel.listState.groups[groupIndex] {
@@ -265,7 +302,10 @@ private extension AssetListCollectionViewDataSource {
         let itemIndex = indexPath.item
 
         guard let organizerViewModel, organizerViewModel.items.count > itemIndex else {
-            return UICollectionViewCell()
+            return collectionView.dequeueReusableCellWithType(
+                EmptyCollectionCell.self,
+                for: indexPath
+            )!
         }
 
         let addsSeparator = organizerViewModel.items.count > 1 &&
@@ -442,15 +482,20 @@ extension AssetListCollectionViewDataSource: UICollectionViewDataSource {
     ) -> Int {
         switch AssetListFlowLayout.SectionType(section: section) {
         case .summary:
-            headerViewModel != nil ? 2 : 0
+            var itemsCount = 0
+
+            if alertViewModel != nil { itemsCount += 1 }
+            if headerViewModel != nil { itemsCount += 2 }
+
+            return itemsCount
         case .organizer:
-            organizerViewModel?.items.count ?? 0
+            return organizerViewModel?.items.count ?? 0
         case .banners:
-            bannersAvailable == true ? 1 : 0
+            return bannersAvailable == true ? 1 : 0
         case .settings:
-            groupsViewModel.listState.isEmpty ? 2 : 1
+            return groupsViewModel.listState.isEmpty ? 2 : 1
         case .assetGroup:
-            numberOfItemsForAssetGroup(section)
+            return numberOfItemsForAssetGroup(section)
         }
     }
 
@@ -458,9 +503,11 @@ extension AssetListCollectionViewDataSource: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        switch AssetListFlowLayout.CellType(indexPath: indexPath) {
+        switch AssetListFlowLayout.CellType(indexPath: indexPath, in: collectionView) {
         case .account:
             provideAccountCell(collectionView, indexPath: indexPath)
+        case .alert:
+            provideAlertCell(collectionView, indexPath: indexPath)
         case .totalBalance:
             provideTotalBalanceCell(collectionView, indexPath: indexPath)
         case .organizerItem:

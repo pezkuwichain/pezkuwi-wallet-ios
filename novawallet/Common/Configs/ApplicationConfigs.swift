@@ -51,6 +51,7 @@ protocol ApplicationConfigProtocol {
     var wikiURL: URL { get }
     var whiteAppearanceIconsPath: String { get }
     var coloredAppearanceIconsPath: String { get }
+    var watchOnlyURL: URL { get }
 }
 
 extension ApplicationConfigProtocol {
@@ -375,6 +376,10 @@ extension ApplicationConfig: ApplicationConfigProtocol {
 
     var assetHubMigrationConfigsPath: String {
         "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/migrations/asset_hub/"
+    }
+
+    var watchOnlyURL: URL {
+        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/watch-only-wallets/scam-warning")!
     }
 
     var appstoreMigrationConfigPath: String {
