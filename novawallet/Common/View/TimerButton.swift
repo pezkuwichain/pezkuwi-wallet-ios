@@ -80,7 +80,7 @@ private extension TimerButton {
             backgroundLayer.backgroundColor = R.color.colorButtonBackgroundInactive()?.cgColor
             progressLayer.isHidden = false
         } else {
-            titleLabel.textColor = .white
+            titleLabel.textColor = R.color.colorTextPrimary()
             backgroundLayer.backgroundColor = activeColor.cgColor
             progressLayer.isHidden = true
         }
