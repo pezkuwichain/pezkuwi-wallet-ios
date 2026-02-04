@@ -90,21 +90,16 @@ private extension AssetDetailsViewController {
             action: #selector(didTapLocks),
             for: .touchUpInside
         )
-        rootView.ahmAlertView.actionButton.addTarget(
-            self,
-            action: #selector(didTapAHMAlertAction),
-            for: .touchUpInside
-        )
-        rootView.ahmAlertView.closeButton.addTarget(
-            self,
-            action: #selector(didTapAHMAlertClose),
-            for: .touchUpInside
-        )
-        rootView.ahmAlertView.learnMoreButton.addTarget(
-            self,
-            action: #selector(didTapAHMAlertLearnMore),
-            for: .touchUpInside
-        )
+
+        rootView.ahmAlertView.closeAction = { [weak self] _ in
+            self?.presenter.handleAHMAlertClose()
+        }
+        rootView.ahmAlertView.learnMoreAction = { [weak self] _ in
+            self?.presenter.handleAHMAlertLearnMore()
+        }
+        rootView.ahmAlertView.mainAction = { [weak self] _ in
+            self?.presenter.handleAHMAlertAction()
+        }
     }
 
     func configureBuySellAction(for availableOperations: AssetDetailsOperation) {
@@ -151,18 +146,6 @@ private extension AssetDetailsViewController {
     @objc func didTapLocks() {
         presenter.handleLocks()
     }
-
-    @objc func didTapAHMAlertClose() {
-        presenter.handleAHMAlertClose()
-    }
-
-    @objc func didTapAHMAlertAction() {
-        presenter.handleAHMAlertAction()
-    }
-
-    @objc func didTapAHMAlertLearnMore() {
-        presenter.handleAHMAlertLearnMore()
-    }
 }
 
 extension AssetDetailsViewController: AssetDetailsViewProtocol {
@@ -194,7 +177,7 @@ extension AssetDetailsViewController: AssetDetailsViewProtocol {
         }
     }
 
-    func didReceive(ahmAlert: AHMAlertView.Model?) {
+    func didReceive(ahmAlert: InlinableAlertView.Model?) {
         rootView.setAHMAlert(with: ahmAlert)
     }
 }

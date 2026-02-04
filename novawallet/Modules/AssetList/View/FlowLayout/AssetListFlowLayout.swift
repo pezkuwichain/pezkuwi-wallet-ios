@@ -10,10 +10,12 @@ class AssetListFlowLayout: UICollectionViewFlowLayout {
 
     private var totalBalanceHeight: CGFloat = AssetListMeasurement.totalBalanceHeight
     private var totalBalanceInsets: UIEdgeInsets = AssetListMeasurement.summaryInsets
+    private var alertHeight: CGFloat = .zero
 
     private var bannersHeight: CGFloat = AssetListMeasurement.bannerHeight
     private var bannersInsets: UIEdgeInsets = .zero
     private var organizerInsets: UIEdgeInsets = .zero
+    private var alertInsets: UIEdgeInsets = .zero
 
     private let attributesFactory = AssetDecorationAttributesFactory()
 
@@ -160,8 +162,14 @@ private extension AssetListFlowLayout {
         let hasSummarySection = collectionView.numberOfItems(inSection: SectionType.summary.index) > 0
 
         if hasSummarySection {
-            initialY = AssetListMeasurement.accountHeight + SectionType.summary.cellSpacing +
-                totalBalanceHeight
+            let alertHeightWithSpacing = alertHeight > 0
+                ? alertHeight + SectionType.summary.cellSpacing
+                : .zero
+
+            initialY = AssetListMeasurement.accountHeight
+                + SectionType.summary.cellSpacing
+                + alertHeightWithSpacing
+                + totalBalanceHeight
         }
 
         initialY += totalBalanceInsets.top + totalBalanceInsets.bottom
@@ -292,6 +300,18 @@ extension AssetListFlowLayout {
         updateTotalBalanceHeight(totalBalanceHeight)
     }
 
+    func setAlertActive(_ isActive: Bool) {
+        let newInsets = isActive ? AssetListMeasurement.alertInsets : .zero
+
+        guard alertInsets != newInsets else {
+            return
+        }
+
+        alertInsets = newInsets
+        alertHeight = isActive ? AssetListMeasurement.alertHeight : .zero
+        updateTotalBalanceHeight(totalBalanceHeight)
+    }
+
     func cellHeight(
         for type: CellType,
         at indexPath: IndexPath
@@ -299,6 +319,8 @@ extension AssetListFlowLayout {
         switch type {
         case .account:
             AssetListMeasurement.accountHeight
+        case .alert:
+            alertHeight
         case .totalBalance:
             totalBalanceHeight
         case .organizerItem:

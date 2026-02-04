@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 // MARK: Types
 
@@ -64,6 +65,7 @@ extension AssetListFlowLayout {
 
     enum CellType {
         case account
+        case alert
         case totalBalance
         case organizerItem(itemIndex: Int)
         case banner
@@ -71,10 +73,14 @@ extension AssetListFlowLayout {
         case asset(sectionIndex: Int, itemIndex: Int)
         case emptyState
 
-        init(indexPath: IndexPath) {
+        init(indexPath: IndexPath, in collectionView: UICollectionView) {
             switch indexPath.section {
+            case 0 where indexPath.row == 0:
+                self = .account
+            case 0 where indexPath.row == 1 && collectionView.numberOfItems(inSection: 0) > 2:
+                self = .alert
             case 0:
-                self = indexPath.row == 0 ? .account : .totalBalance
+                self = .totalBalance
             case 1:
                 self = .organizerItem(itemIndex: indexPath.row)
             case 2:
@@ -88,20 +94,14 @@ extension AssetListFlowLayout {
 
         var indexPath: IndexPath {
             switch self {
-            case .account:
-                return IndexPath(item: 0, section: 0)
-            case .totalBalance:
-                return IndexPath(item: 1, section: 0)
-            case let .organizerItem(itemIndex):
-                return IndexPath(item: itemIndex, section: 1)
-            case .banner:
-                return IndexPath(item: 0, section: 2)
-            case .settings:
-                return IndexPath(item: 0, section: 3)
-            case .emptyState:
-                return IndexPath(item: 1, section: 3)
-            case let .asset(sectionIndex, itemIndex):
-                return IndexPath(item: itemIndex, section: sectionIndex)
+            case .account: IndexPath(item: 0, section: 0)
+            case .alert: IndexPath(item: 1, section: 0)
+            case .totalBalance: IndexPath(item: 2, section: 0)
+            case let .organizerItem(itemIndex): IndexPath(item: itemIndex, section: 1)
+            case .banner: IndexPath(item: 0, section: 2)
+            case .settings: IndexPath(item: 0, section: 3)
+            case .emptyState: IndexPath(item: 1, section: 3)
+            case let .asset(sectionIndex, itemIndex): IndexPath(item: itemIndex, section: sectionIndex)
             }
         }
     }

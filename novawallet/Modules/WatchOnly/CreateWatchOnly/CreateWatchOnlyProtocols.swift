@@ -1,4 +1,5 @@
 import Foundation_iOS
+import UIKit_iOS
 
 protocol CreateWatchOnlyViewProtocol: ControllerBackedProtocol, Localizable {
     func didReceiveNickname(viewModel: InputViewModelProtocol)
@@ -6,7 +7,7 @@ protocol CreateWatchOnlyViewProtocol: ControllerBackedProtocol, Localizable {
     func didReceiveSubstrateAddressInput(viewModel: InputViewModelProtocol)
     func didReceiveEVMAddressState(viewModel: AccountFieldStateViewModel)
     func didReceiveEVMAddressInput(viewModel: InputViewModelProtocol)
-    func didReceivePreset(titles: [String])
+    func didReceiveTerms(accepted: Bool)
 }
 
 protocol CreateWatchOnlyPresenterProtocol: AnyObject {
@@ -17,7 +18,8 @@ protocol CreateWatchOnlyPresenterProtocol: AnyObject {
     func updateWalletNickname(_ partialNickname: String)
     func updateSubstrateAddress(_ partialAddress: String)
     func updateEVMAddress(_ partialAddress: String)
-    func selectPreset(at index: Int)
+    func selectMode(for modeIndex: Int)
+    func toggleTermsCheckbox()
 }
 
 protocol CreateWatchOnlyInteractorInputProtocol: AnyObject {
@@ -26,7 +28,7 @@ protocol CreateWatchOnlyInteractorInputProtocol: AnyObject {
 }
 
 protocol CreateWatchOnlyInteractorOutputProtocol: AnyObject {
-    func didReceivePreset(wallets: [WatchOnlyWallet])
+    func didReceiveDemoPreset(wallet: WatchOnlyWallet)
     func didCreateWallet()
     func didFailWalletCreation(with error: Error)
 }
@@ -35,4 +37,27 @@ protocol BaseCreateWatchOnlyWireframeProtocol: AddressScanPresentable {}
 
 protocol CreateWatchOnlyWireframeProtocol: BaseCreateWatchOnlyWireframeProtocol, AlertPresentable, ErrorPresentable {
     func proceed(from view: CreateWatchOnlyViewProtocol?)
+    func showScamAlert(
+        from view: CreateWatchOnlyViewProtocol?,
+        delegate: WOScamAlertSheetDelegate
+    )
+}
+
+extension CreateWatchOnlyWireframeProtocol {
+    func showScamAlert(
+        from view: CreateWatchOnlyViewProtocol?,
+        delegate: WOScamAlertSheetDelegate
+    ) {
+        guard let alertView = WOScamAlertSheetViewFactory.createView(delegate: delegate) else {
+            return
+        }
+
+        let factory = ModalSheetPresentationFactory(
+            configuration: ModalSheetPresentationConfiguration.nova
+        )
+        alertView.controller.modalTransitioningFactory = factory
+        alertView.controller.modalPresentationStyle = .custom
+
+        view?.controller.present(alertView.controller, animated: true, completion: nil)
+    }
 }

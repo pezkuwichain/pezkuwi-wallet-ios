@@ -87,27 +87,13 @@ private extension StakingMainViewController {
             for: .touchUpInside
         )
 
-        rootView.ahmAlertView.closeButton.removeTarget(
-            self,
-            action: #selector(didTapAHMAlertClose),
-            for: .touchUpInside
-        )
-        rootView.ahmAlertView.closeButton.addTarget(
-            self,
-            action: #selector(didTapAHMAlertClose),
-            for: .touchUpInside
-        )
+        rootView.ahmAlertView.closeAction = { [weak self] _ in
+            self?.presenter.handleAHMAlertClose()
+        }
 
-        rootView.ahmAlertView.learnMoreButton.removeTarget(
-            self,
-            action: #selector(didTapAHMAlertLearnMore),
-            for: .touchUpInside
-        )
-        rootView.ahmAlertView.learnMoreButton.addTarget(
-            self,
-            action: #selector(didTapAHMAlertLearnMore),
-            for: .touchUpInside
-        )
+        rootView.ahmAlertView.learnMoreAction = { [weak self] _ in
+            self?.presenter.handleAHMAlertLearnMore()
+        }
     }
 
     func setupLocalization() {
@@ -162,14 +148,6 @@ private extension StakingMainViewController {
 
     @objc func claimRewardsAction() {
         presenter.performClaimRewards()
-    }
-
-    @objc func didTapAHMAlertClose() {
-        presenter.handleAHMAlertClose()
-    }
-
-    @objc func didTapAHMAlertLearnMore() {
-        presenter.handleAHMAlertLearnMore()
     }
 }
 
@@ -276,7 +254,7 @@ extension StakingMainViewController: StakingMainViewProtocol {
         rootView.rewardView?.filterView.control.deactivate(animated: true)
     }
 
-    func didReceiveAHMAlert(viewModel: AHMAlertView.Model?) {
+    func didReceiveAHMAlert(viewModel: InlinableAlertView.Model?) {
         rootView.setAHMAlert(with: viewModel)
     }
 }

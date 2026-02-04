@@ -13,7 +13,7 @@ protocol WatchOnlyWalletOperationFactoryProtocol {
 final class WatchOnlyWalletOperationFactory: WatchOnlyWalletOperationFactoryProtocol {
     func newWatchOnlyWalletOperation(for request: WatchOnlyWallet) -> BaseOperation<MetaAccountModel> {
         ClosureOperation {
-            let substrateAccountId = try request.substrateAddress.toAccountId()
+            let substrateAccountId = try request.substrateAddress?.toAccountId()
             let evmAddress = try request.evmAddress?.toAccountId()
 
             let substrateCryptoType = MultiassetCryptoType.sr25519.rawValue
