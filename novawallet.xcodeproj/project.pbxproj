@@ -1837,6 +1837,10 @@
 		2D45241F2EC1DEC900CBDD0D /* ClaimableGiftDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D45241E2EC1DEC900CBDD0D /* ClaimableGiftDescription.swift */; };
 		2D45242C2EC1E42000CBDD0D /* SubstrateGiftClaimInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D45242B2EC1E42000CBDD0D /* SubstrateGiftClaimInteractor.swift */; };
 		2D45245B2EC2356200CBDD0D /* GiftClaimSelectedWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D45245A2EC2356200CBDD0D /* GiftClaimSelectedWalletView.swift */; };
+		2D4DD6582F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */; };
+		2D4DD6602F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */; };
+		2D4DD66D2F31F659001B2C1D /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */; };
+		2D4DD6A82F3218F2001B2C1D /* InlinableAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD6A72F3218F2001B2C1D /* InlinableAlertViewModel.swift */; };
 		2D4F55012CCA60E900B65B76 /* AssetsSearchCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F55002CCA60E900B65B76 /* AssetsSearchCollectionManager.swift */; };
 		2D4F55032CCA60F300B65B76 /* AssetsSearchCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F55022CCA60F300B65B76 /* AssetsSearchCollectionViewDataSource.swift */; };
 		2D4F55052CCA611200B65B76 /* AssetsSearchCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4F55042CCA611200B65B76 /* AssetsSearchCollectionViewDelegate.swift */; };
@@ -2221,7 +2225,7 @@
 		2DC002E92E8A6E4500D49A42 /* AHMInfoShownChains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002E82E8A6E4500D49A42 /* AHMInfoShownChains.swift */; };
 		2DC002EA2E8A6E6E00D49A42 /* AHMInfoShownChains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002E82E8A6E4500D49A42 /* AHMInfoShownChains.swift */; };
 		2DC002EF2E8B05CD00D49A42 /* StackIconChainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002EE2E8B05CD00D49A42 /* StackIconChainCell.swift */; };
-		2DC002F22E8B9F8800D49A42 /* AHMAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002F12E8B9F8800D49A42 /* AHMAlertView.swift */; };
+		2DC002F22E8B9F8800D49A42 /* InlinableAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002F12E8B9F8800D49A42 /* InlinableAlertView.swift */; };
 		2DC002F42E8BB65900D49A42 /* AHMFullInfoFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002F32E8BB65900D49A42 /* AHMFullInfoFactory.swift */; };
 		2DC002F62E8BB6BB00D49A42 /* AHMFullInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002F52E8BB6BB00D49A42 /* AHMFullInfo.swift */; };
 		2DC002FA2E8BDC9F00D49A42 /* UIButton+Learn More.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC002F92E8BDC9F00D49A42 /* UIButton+Learn More.swift */; };
@@ -8432,6 +8436,10 @@
 		2D45241E2EC1DEC900CBDD0D /* ClaimableGiftDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimableGiftDescription.swift; sourceTree = "<group>"; };
 		2D45242B2EC1E42000CBDD0D /* SubstrateGiftClaimInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateGiftClaimInteractor.swift; sourceTree = "<group>"; };
 		2D45245A2EC2356200CBDD0D /* GiftClaimSelectedWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftClaimSelectedWalletView.swift; sourceTree = "<group>"; };
+		2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertViewModelFactory.swift; sourceTree = "<group>"; };
+		2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertCollectionViewCell.swift; sourceTree = "<group>"; };
+		2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
+		2D4DD6A72F3218F2001B2C1D /* InlinableAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertViewModel.swift; sourceTree = "<group>"; };
 		2D4F55002CCA60E900B65B76 /* AssetsSearchCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSearchCollectionManager.swift; sourceTree = "<group>"; };
 		2D4F55022CCA60F300B65B76 /* AssetsSearchCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSearchCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		2D4F55042CCA611200B65B76 /* AssetsSearchCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSearchCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -8795,7 +8803,7 @@
 		2DC002E62E8A5A0000D49A42 /* AHMInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoService.swift; sourceTree = "<group>"; };
 		2DC002E82E8A6E4500D49A42 /* AHMInfoShownChains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMInfoShownChains.swift; sourceTree = "<group>"; };
 		2DC002EE2E8B05CD00D49A42 /* StackIconChainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackIconChainCell.swift; sourceTree = "<group>"; };
-		2DC002F12E8B9F8800D49A42 /* AHMAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMAlertView.swift; sourceTree = "<group>"; };
+		2DC002F12E8B9F8800D49A42 /* InlinableAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertView.swift; sourceTree = "<group>"; };
 		2DC002F32E8BB65900D49A42 /* AHMFullInfoFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMFullInfoFactory.swift; sourceTree = "<group>"; };
 		2DC002F52E8BB6BB00D49A42 /* AHMFullInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AHMFullInfo.swift; sourceTree = "<group>"; };
 		2DC002F92E8BDC9F00D49A42 /* UIButton+Learn More.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Learn More.swift"; sourceTree = "<group>"; };
@@ -18683,12 +18691,15 @@
 			path = AssetHubMigrationInfo;
 			sourceTree = "<group>";
 		};
-		2DC002F02E8B9F7000D49A42 /* AHMAlertView */ = {
+		2DC002F02E8B9F7000D49A42 /* InlinableAlertView */ = {
 			isa = PBXGroup;
 			children = (
-				2DC002F12E8B9F8800D49A42 /* AHMAlertView.swift */,
+				2DC002F12E8B9F8800D49A42 /* InlinableAlertView.swift */,
+				2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */,
+				2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */,
+				2D4DD6A72F3218F2001B2C1D /* InlinableAlertViewModel.swift */,
 			);
-			path = AHMAlertView;
+			path = InlinableAlertView;
 			sourceTree = "<group>";
 		};
 		2DC075E12BF249F000868563 /* View */ = {
@@ -24533,7 +24544,7 @@
 		8490149D24AA7F9A008F705E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				2DC002F02E8B9F7000D49A42 /* AHMAlertView */,
+				2DC002F02E8B9F7000D49A42 /* InlinableAlertView */,
 				2DEA7B832E7415C9001F3DF5 /* SecureView */,
 				0CF6928A2C231C89000FC395 /* SharedStatusView */,
 				2D5493322C04C0C000607BF7 /* MnemonicCard */,
@@ -24560,6 +24571,7 @@
 				842D1E7724D063E500C30A7A /* TriangularedView */,
 				2DE8AEE42EB52B6F0098C761 /* MultilineAmountView */,
 				8467FD4024ED3C72005D486C /* AlignableContentControl.swift */,
+				2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */,
 				2D9837992F310CE000B184D4 /* TimerButton.swift */,
 				2D039DE72BFCA83600A928E5 /* BindableGestureRecognizer.swift */,
 				84C5ADE928147BC2006D7388 /* InlineAlertView.swift */,
@@ -32907,6 +32919,7 @@
 				844ADE7B28CB273100EE29F7 /* ParaStkYieldBoostFeeRequest.swift in Sources */,
 				2D62ED382D5E1EEE001EF17D /* BannersViewDataSource.swift in Sources */,
 				847119CD262EF61F00716580 /* PayoutValidatorForValidatorFactory.swift in Sources */,
+				2D4DD66D2F31F659001B2C1D /* EmptyCollectionViewCell.swift in Sources */,
 				F40966E426B29919008CD244 /* Stacks.swift in Sources */,
 				848CCB502833D1D900A1FD00 /* StakingRelaychainStatics.swift in Sources */,
 				2D5D0CCD2D50CCE5000E32F6 /* BannerLocalizedResources.swift in Sources */,
@@ -33714,7 +33727,7 @@
 				0CCDB2E62B7496C9007BC5D6 /* HydraStableswap.swift in Sources */,
 				2DC002F42E8BB65900D49A42 /* AHMFullInfoFactory.swift in Sources */,
 				842EBB372890A7BA00B952D8 /* WalletSelectionWireframe.swift in Sources */,
-				2DC002F22E8B9F8800D49A42 /* AHMAlertView.swift in Sources */,
+				2DC002F22E8B9F8800D49A42 /* InlinableAlertView.swift in Sources */,
 				8436C79F29ACD6D70024B409 /* ElectionProviderMultiPhase+CodingPath.swift in Sources */,
 				2DB18C8F2C36AB1C00A93C75 /* LightChainsFetchFactory.swift in Sources */,
 				0C79C89C2A7BE6A200B171E3 /* DirectStakingRecommendationFactory.swift in Sources */,
@@ -34304,6 +34317,7 @@
 				0C71D3FC2DF182720042134B /* EvmBalanceUpdateBlock.swift in Sources */,
 				847A25CA28D85204006AC9F5 /* ReferendumInfo.swift in Sources */,
 				5869563D0EA593FBD02C169C /* StakingPayoutConfirmationProtocols.swift in Sources */,
+				2D4DD6A82F3218F2001B2C1D /* InlinableAlertViewModel.swift in Sources */,
 				846B749828B4BA0500C39B93 /* LedgerAccountsStore.swift in Sources */,
 				844ADE7728CA7F7100EE29F7 /* ParaStkYieldBoostSetupPresenter+ViewUpdate.swift in Sources */,
 				0C0F6D722D39698700943A7C /* MythosStakingPallet+Freezes.swift in Sources */,
@@ -36187,6 +36201,7 @@
 				60808D290AE02E3A284EC3E9 /* StartStakingConfirmPresenter.swift in Sources */,
 				F7D3092FDF42D9356654D85A /* StartStakingConfirmInteractor.swift in Sources */,
 				A99428A540CDA6B359220477 /* StartStakingConfirmViewController.swift in Sources */,
+				2D4DD6582F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift in Sources */,
 				2D1870EF2EC49D7C005BF56E /* GiftKeystoreTag.swift in Sources */,
 				DB8AD60FE397F764623A566F /* StartStakingConfirmViewLayout.swift in Sources */,
 				772540382AC45D22002B3FD4 /* RampPresentable.swift in Sources */,
@@ -36284,6 +36299,7 @@
 				2DF3C2882EA2301D0099417C /* GiftsOnboardingHeaderView.swift in Sources */,
 				EB280B977471EA442D91395E /* SwapConfirmProtocols.swift in Sources */,
 				232B205831DF28B772515DF2 /* SwapConfirmWireframe.swift in Sources */,
+				2D4DD6602F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift in Sources */,
 				A0FB39F2C6192F57B2FAFC37 /* SwapConfirmPresenter.swift in Sources */,
 				0CB1B2612EC150DC00D92158 /* CrowdloanMetadata.swift in Sources */,
 				8960EC452EA6E7E9105F4762 /* SwapConfirmInteractor.swift in Sources */,

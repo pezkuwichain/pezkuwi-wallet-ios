@@ -86,6 +86,10 @@ private extension AssetListViewController {
         rootView.collectionViewLayout.setOrganizerActive(isActive)
     }
 
+    func setAlertActive(_ isActive: Bool) {
+        rootView.collectionViewLayout.setAlertActive(isActive)
+    }
+
     func refreshOrganizerItems() {
         let numberOfOrganizerItems = rootView.collectionView.numberOfItems(
             inSection: AssetListFlowLayout.SectionType.organizer.index
@@ -97,6 +101,13 @@ private extension AssetListViewController {
                 organizerCell.refresh()
             }
         }
+    }
+
+    func updateAlertViewModel(with model: InlinableAlertView.Model?) {
+        collectionViewManager.updateAlertViewModel(with: model)
+
+        let isAlertActive = model != nil
+        setAlertActive(isAlertActive)
     }
 
     func updateOrganizer(viewModel: AssetListOrganizerViewModel?) {
@@ -122,11 +133,17 @@ private extension AssetListViewController {
 
 extension AssetListViewController: AssetListViewProtocol {
     func didReceiveFullUpdate(viewModel: AssetListFullUpdateViewModel) {
+        updateAlertViewModel(with: viewModel.inlinableAlert)
         updateOrganizer(viewModel: viewModel.organizer)
         updateHeader(viewModel: viewModel.header)
         updateTotalBalanceViewHeight(viewModel: viewModel.header)
 
         didReceiveGroups(viewModel: viewModel.assetGroups)
+    }
+
+    func didReceiveAlert(viewModel: InlinableAlertView.Model?) {
+        updateAlertViewModel(with: viewModel)
+        rootView.collectionView.reloadData()
     }
 
     func didReceiveOrganizer(viewModel: AssetListOrganizerViewModel?) {
@@ -189,6 +206,10 @@ extension AssetListViewController: AssetListViewProtocol {
 // MARK: AssetListCollectionManagerDelegate
 
 extension AssetListViewController: AssetListCollectionManagerDelegate {
+    func actionAlertLearnMore(_ alertType: InlinableAlertView.Model.AlertType) {
+        presenter.presentLearnMore(alertType)
+    }
+
     func selectOrganizerItem(at index: Int) {
         presenter.selectOrganizerItem(at: index)
     }

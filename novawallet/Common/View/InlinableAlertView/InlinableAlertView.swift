@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import UIKit_iOS
 
-final class AHMAlertView: GenericBorderedView<
+final class InlinableAlertView: GenericBorderedView<
     GenericPairValueView<
         GenericPairValueView<
             UIImageView,
@@ -17,13 +17,13 @@ final class AHMAlertView: GenericBorderedView<
         TriangularedButton
     >
 > {
-    var closeButton: TriangularedButton {
+    private var closeButton: TriangularedButton {
         contentView.fView.sView.fView.sView
     }
 
-    var learnMoreButton = UIButton()
+    private let learnMoreButton = UIButton()
 
-    var actionButton: TriangularedButton {
+    private var actionButton: TriangularedButton {
         contentView.sView
     }
 
@@ -43,17 +43,28 @@ final class AHMAlertView: GenericBorderedView<
         contentView.fView.sView.sView.valueBottom
     }
 
+    private var viewModel: Model?
+
+    var fillColor: UIColor = R.color.colorInfoBlockBackground()! {
+        didSet { backgroundView.fillColor = fillColor }
+    }
+
+    var mainAction: ((Model.AlertType) -> Void)?
+    var closeAction: ((Model.AlertType) -> Void)?
+    var learnMoreAction: ((Model.AlertType) -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupLayout()
         setupStyle()
+        setupHandlers()
     }
 }
 
 // MARK: - Private
 
-private extension AHMAlertView {
+private extension InlinableAlertView {
     func setupLayout() {
         contentView.fView.makeHorizontal()
         contentView.fView.stackView.alignment = .top
@@ -91,9 +102,8 @@ private extension AHMAlertView {
 
     func setupStyle() {
         backgroundView.cornerRadius = Constants.cornerRadius
-        backgroundView.fillColor = R.color.colorInfoBlockBackground()!
+        backgroundView.fillColor = fillColor
 
-        infoIconView.image = R.image.iconInfoAccent()
         infoIconView.contentMode = .scaleAspectFit
 
         closeButton.contentInsets.top = .zero
@@ -114,12 +124,55 @@ private extension AHMAlertView {
 
         actionButton.applySecondaryEnabledAccentStyle()
     }
+
+    // MARK: - Actions
+
+    func setupHandlers() {
+        closeButton.addTarget(
+            self,
+            action: #selector(actionClose),
+            for: .touchUpInside
+        )
+        learnMoreButton.addTarget(
+            self,
+            action: #selector(actionLearnMore),
+            for: .touchUpInside
+        )
+        actionButton.addTarget(
+            self,
+            action: #selector(actionMain),
+            for: .touchUpInside
+        )
+    }
+
+    @objc func actionClose() {
+        guard let viewModel else { return }
+
+        closeAction?(viewModel.type)
+    }
+
+    @objc func actionLearnMore() {
+        guard let viewModel else { return }
+
+        learnMoreAction?(viewModel.type)
+    }
+
+    @objc func actionMain() {
+        guard let viewModel else { return }
+
+        mainAction?(viewModel.type)
+    }
 }
 
 // MARK: - Internal
 
-extension AHMAlertView {
+extension InlinableAlertView {
     func bind(_ viewModel: Model) {
+        self.viewModel = viewModel
+
+        infoIconView.image = viewModel.icon
+        closeButton.isHidden = !viewModel.showCloseButton
+
         titleLabel.text = viewModel.title
 
         let contentInsets = if viewModel.actionTitle != nil {
@@ -151,20 +204,9 @@ extension AHMAlertView {
     }
 }
 
-// MARK: - View Model
-
-extension AHMAlertView {
-    struct Model {
-        let title: String
-        let message: String?
-        let learnMore: LearnMoreViewModel
-        let actionTitle: String?
-    }
-}
-
 // MARK: - Constants
 
-private extension AHMAlertView {
+private extension InlinableAlertView {
     enum Constants {
         static let contentToButton: CGFloat = 8
         static let infoToContent: CGFloat = 12

@@ -8,12 +8,14 @@ enum AssetListMeasurement {
     static let totalBalanceWithLocksHeight: CGFloat = totalBalanceHeight
 
     static let settingsHeight: CGFloat = 56.0
+    static let alertHeight: CGFloat = 78.0
     static let organizerItemHeight: CGFloat = 52.0
     static let bannerHeight = 102.0
     static let assetHeight: CGFloat = 56.0
     static let assetHeaderHeight: CGFloat = 45.0
     static let emptyStateCellHeight: CGFloat = 230
     static let decorationInset: CGFloat = 8.0
+    static let alertInsets = UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
     static let promotionInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0.0, right: 0)
     static let summaryInsets = UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
     static let organizerInsets = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
