@@ -42,6 +42,7 @@ class AccountInputView: BackgroundedContentControl {
     }
 
     private(set) var mySelfButton: RoundedButton?
+    private(set) var isLocked: Bool = false
 
     weak var delegate: AccountInputViewDelegate?
 
@@ -171,6 +172,35 @@ class AccountInputView: BackgroundedContentControl {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Locked State
+
+    func applyLockedState() {
+        isLocked = true
+
+        textField.isUserInteractionEnabled = false
+        textField.textColor = R.color.colorTextSecondary()
+
+        roundedBackgroundView?.apply(style: .inputDisabled)
+
+        updateControlsState()
+
+        setNeedsLayout()
+    }
+
+    func applyDefaultState() {
+        isLocked = false
+
+        textField.isUserInteractionEnabled = true
+        textField.textColor = R.color.colorTextPrimary()
+
+        roundedBackgroundView?.apply(style: .strokeOnEditing)
+        roundedBackgroundView?.strokeWidth = textField.isFirstResponder ? 0.5 : 0.0
+
+        updateControlsState()
+
+        setNeedsLayout()
     }
 
     // MARK: Layout
@@ -352,7 +382,12 @@ class AccountInputView: BackgroundedContentControl {
     private func updateControlsState() {
         let oldStates = stackView.arrangedSubviews.map(\.isHidden)
 
-        if hasText {
+        if isLocked {
+            clearButton.isHidden = true
+            pasteButton.isHidden = true
+            scanButton.isHidden = true
+            mySelfButton?.isHidden = true
+        } else if hasText {
             clearButton.isHidden = false
             pasteButton.isHidden = true
             scanButton.isHidden = true
@@ -384,7 +419,7 @@ class AccountInputView: BackgroundedContentControl {
 
         stackView.insertArrangedSubview(button, at: 0)
 
-        mySelfButton?.isHidden = hasText
+        mySelfButton?.isHidden = hasText || isLocked
 
         setupMyselfLocalization()
 
@@ -401,6 +436,7 @@ class AccountInputView: BackgroundedContentControl {
     // MARK: Action
 
     @objc private func actionTouchUpInside() {
+        guard !isLocked else { return }
         textField.becomeFirstResponder()
     }
 
@@ -415,12 +451,16 @@ class AccountInputView: BackgroundedContentControl {
     }
 
     @objc private func actionEditingBeginEnd() {
-        roundedBackgroundView?.strokeWidth = textField.isFirstResponder ? 0.5 : 0.0
+        if !isLocked {
+            roundedBackgroundView?.strokeWidth = textField.isFirstResponder ? 0.5 : 0.0
+        }
 
         updateControlsState()
     }
 
     @objc func actionPaste() {
+        guard !isLocked else { return }
+
         if
             let pasteString = pasteboardService.pasteboard.string,
             let inputViewModel = inputViewModel,
@@ -442,9 +482,7 @@ class AccountInputView: BackgroundedContentControl {
     }
 
     @objc func actionClear() {
-        guard hasText else {
-            return
-        }
+        guard !isLocked, hasText else { return }
 
         textField.text = ""
         inputViewModel?.inputHandler.changeValue(to: "")
@@ -461,8 +499,8 @@ extension AccountInputView: UITextFieldDelegate {
         shouldChangeCharactersIn range: NSRange,
         replacementString string: String
     ) -> Bool {
-        guard let inputViewModel = inputViewModel else {
-            return true
+        guard !isLocked, let inputViewModel = inputViewModel else {
+            return !isLocked
         }
 
         let shouldApply = inputViewModel.inputHandler.didReceiveReplacement(string, for: range)
@@ -475,8 +513,8 @@ extension AccountInputView: UITextFieldDelegate {
     }
 
     func textFieldShouldClear(_: UITextField) -> Bool {
+        guard !isLocked else { return false }
         inputViewModel?.inputHandler.changeValue(to: "")
-
         return true
     }
 
@@ -490,6 +528,7 @@ extension AccountInputView: UITextFieldDelegate {
     }
 
     func textFieldShouldBeginEditing(_: UITextField) -> Bool {
+        guard !isLocked else { return false }
         delegate?.accountInputViewWillStartEditing(self)
         return true
     }
