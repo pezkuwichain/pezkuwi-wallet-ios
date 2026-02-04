@@ -10,6 +10,7 @@ protocol AssetListCollectionManagerProtocol {
     var delegate: AssetListCollectionManagerDelegate? { get set }
 
     func setupCollectionView()
+    func updateAlertViewModel(with model: InlinableAlertView.Model?)
     func updateGroupsViewModel(with model: AssetListViewModel)
     func updateHeaderViewModel(with model: AssetListHeaderViewModel?)
     func updateOrganizerViewModel(with model: AssetListOrganizerViewModel?)
@@ -42,6 +43,7 @@ protocol AssetListCollectionViewActionsDelegate: AnyObject {
     func actionChangeAssetListStyle()
     func actionCardOpen()
     func actionTogglePrivacy()
+    func actionAlertLearnMore(_ alertType: InlinableAlertView.Model.AlertType)
 }
 
 protocol AssetListCollectionSelectionDelegate: AnyObject {
@@ -69,6 +71,7 @@ protocol AssetListCollectionViewLayoutDelegate: AnyObject {
 protocol AssetListViewProtocol: ControllerBackedProtocol {
     func didReceiveFullUpdate(viewModel: AssetListFullUpdateViewModel)
     func didReceiveHeader(viewModel: AssetListHeaderViewModel)
+    func didReceiveAlert(viewModel: InlinableAlertView.Model?)
     func didReceiveGroups(viewModel: AssetListViewModel)
     func didReceiveOrganizer(viewModel: AssetListOrganizerViewModel?)
     func didReceiveBanners(available: Bool)
@@ -96,6 +99,7 @@ protocol AssetListPresenterProtocol: AnyObject {
     func presentWalletConnect()
     func toggleAssetListStyle()
     func togglePrivacyMode()
+    func presentLearnMore(_ alertType: InlinableAlertView.Model.AlertType)
 }
 
 // MARK: Interactor
@@ -134,7 +138,8 @@ protocol AssetListWireframeProtocol: AnyObject,
     RampActionsPresentable,
     RampPresentable,
     MessageSheetPresentable,
-    FeatureSupportChecking
+    FeatureSupportChecking,
+    WebPresentable
 {
     func showAssetDetails(from view: AssetListViewProtocol?, chainAsset: ChainAsset)
     func showTokensManage(from view: AssetListViewProtocol?)
@@ -183,6 +188,11 @@ protocol AssetListWireframeProtocol: AnyObject,
     func dropModalFlow(
         from view: AssetListViewProtocol?,
         completion: @escaping () -> Void
+    )
+
+    func showLearnMore(
+        from view: ControllerBackedProtocol?,
+        for alertType: InlinableAlertView.Model.AlertType
     )
 }
 

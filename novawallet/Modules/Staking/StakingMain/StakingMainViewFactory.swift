@@ -44,7 +44,7 @@ enum StakingMainViewFactory {
             stakingOption: stakingOption,
             childPresenterFactory: childPresenterFactory,
             viewModelFactory: StakingMainViewModelFactory(),
-            ahmViewModelFactory: AHMInfoStakingViewModelFactory(),
+            inlinableAlertViewModelFactory: InlinableAlertViewModelFactory(),
             localizationManager: localizationManager,
             logger: Logger.shared
         )

@@ -44,7 +44,7 @@ final class StakingMainViewLayout: UIView {
         view.isHidden = true
     }
 
-    lazy var ahmAlertView = AHMAlertView()
+    lazy var ahmAlertView = InlinableAlertView()
 
     var rewardContainerView: UIView?
     var rewardView: StakingRewardView?
@@ -405,7 +405,7 @@ extension StakingMainViewLayout {
         rewardView?.bind(viewModel: viewModel)
     }
 
-    func setAHMAlert(with model: AHMAlertView.Model?) {
+    func setAHMAlert(with model: InlinableAlertView.Model?) {
         if let model {
             guard ahmAlertContainerView.superview == nil else {
                 ahmAlertView.bind(model)

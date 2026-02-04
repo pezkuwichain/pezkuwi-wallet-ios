@@ -9,7 +9,7 @@ final class StakingMainPresenter {
 
     let childPresenterFactory: StakingMainPresenterFactoryProtocol
     let viewModelFactory: StakingMainViewModelFactoryProtocol
-    let ahmViewModelFactory: AHMInfoStakingViewModelFactoryProtocol
+    let inlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol
     let stakingOption: Multistaking.ChainAssetOption
     let localizationManager: LocalizationManagerProtocol
     let logger: LoggerProtocol?
@@ -24,7 +24,7 @@ final class StakingMainPresenter {
         stakingOption: Multistaking.ChainAssetOption,
         childPresenterFactory: StakingMainPresenterFactoryProtocol,
         viewModelFactory: StakingMainViewModelFactoryProtocol,
-        ahmViewModelFactory: AHMInfoStakingViewModelFactoryProtocol,
+        inlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol,
         localizationManager: LocalizationManagerProtocol,
         logger: LoggerProtocol?
     ) {
@@ -33,7 +33,7 @@ final class StakingMainPresenter {
         self.stakingOption = stakingOption
         self.childPresenterFactory = childPresenterFactory
         self.viewModelFactory = viewModelFactory
-        self.ahmViewModelFactory = ahmViewModelFactory
+        self.inlinableAlertViewModelFactory = inlinableAlertViewModelFactory
         self.localizationManager = localizationManager
         self.logger = logger
     }
@@ -49,8 +49,8 @@ private extension StakingMainPresenter {
     }
 
     func provideAHMAlertModel() {
-        let ahmAlertModel: AHMAlertView.Model? = if let ahmInfo {
-            ahmViewModelFactory.createStakingDetailsAlertViewModel(
+        let ahmAlertModel: InlinableAlertView.Model? = if let ahmInfo {
+            inlinableAlertViewModelFactory.createStakingDetailsAlertViewModel(
                 info: ahmInfo,
                 locale: localizationManager.selectedLocale
             )
