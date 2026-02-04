@@ -42,6 +42,11 @@ private extension AssetDecorationAttributesFactory {
         let organizerSection = AssetListFlowLayout.SectionType.organizer.index
         let numberOfItems = collectionView.numberOfItems(inSection: organizerSection)
 
+        let alertActive = collectionView.numberOfItems(inSection: 0) == 3
+        let alertHeightWithSpacing = alertActive
+            ? AssetListMeasurement.alertHeight + AssetListFlowLayout.SectionType.summary.cellSpacing
+            : .zero
+
         guard numberOfItems > 0 else {
             return []
         }
@@ -52,9 +57,12 @@ private extension AssetDecorationAttributesFactory {
         )
 
         // Calculate position based on summary section
-        let summaryHeight = AssetListMeasurement.accountHeight + AssetListFlowLayout.SectionType.summary.cellSpacing +
-            AssetListMeasurement.totalBalanceHeight + AssetListMeasurement.summaryInsets.top +
-            AssetListMeasurement.summaryInsets.bottom
+        let summaryHeight = AssetListMeasurement.accountHeight
+            + AssetListFlowLayout.SectionType.summary.cellSpacing
+            + alertHeightWithSpacing
+            + AssetListMeasurement.totalBalanceHeight
+            + AssetListMeasurement.summaryInsets.top
+            + AssetListMeasurement.summaryInsets.bottom
 
         let contentHeight = CGFloat(numberOfItems) * AssetListMeasurement.organizerItemHeight
 

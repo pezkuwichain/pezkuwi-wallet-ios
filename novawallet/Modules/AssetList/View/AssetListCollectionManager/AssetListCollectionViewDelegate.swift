@@ -82,7 +82,7 @@ extension AssetListCollectionViewDelegate: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         guard let groupsLayoutDelegate else { return .zero }
 
-        let cellType = AssetListFlowLayout.CellType(indexPath: indexPath)
+        let cellType = AssetListFlowLayout.CellType(indexPath: indexPath, in: collectionView)
 
         let cellHeight = groupsLayoutDelegate.cellHeight(
             for: cellType,
@@ -114,10 +114,10 @@ extension AssetListCollectionViewDelegate: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        let cellType = AssetListFlowLayout.CellType(indexPath: indexPath)
+        let cellType = AssetListFlowLayout.CellType(indexPath: indexPath, in: collectionView)
 
         switch cellType {
-        case .account, .settings, .emptyState, .totalBalance, .banner:
+        case .account, .settings, .emptyState, .totalBalance, .banner, .alert:
             break
         case let .organizerItem(itemIndex: itemIndex):
             selectionDelegate?.selectOrganizerItem(at: itemIndex)

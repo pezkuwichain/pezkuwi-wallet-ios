@@ -17,6 +17,7 @@ final class AssetListPresenter: RampFlowManaging, BannersModuleInputOwnerProtoco
     let wireframe: AssetListWireframeProtocol
     let interactor: AssetListInteractorInputProtocol
     let viewModelFactory: AssetListViewModelFactoryProtocol
+    let inlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol
 
     private var wallet: MetaAccountModel?
 
@@ -47,6 +48,7 @@ final class AssetListPresenter: RampFlowManaging, BannersModuleInputOwnerProtoco
         interactor: AssetListInteractorInputProtocol,
         wireframe: AssetListWireframeProtocol,
         viewModelFactory: AssetListViewModelFactoryProtocol,
+        inlinableAlertViewModelFactory: InlinableAlertViewModelFactoryProtocol,
         privacyStateManager: PrivacyStateManagerProtocol,
         localizationManager: LocalizationManagerProtocol,
         appearanceFacade: AppearanceFacadeProtocol
@@ -54,6 +56,7 @@ final class AssetListPresenter: RampFlowManaging, BannersModuleInputOwnerProtoco
         self.interactor = interactor
         self.wireframe = wireframe
         self.viewModelFactory = viewModelFactory
+        self.inlinableAlertViewModelFactory = inlinableAlertViewModelFactory
         self.privacyStateManager = privacyStateManager
         self.localizationManager = localizationManager
         self.appearanceFacade = appearanceFacade
@@ -157,6 +160,17 @@ private extension AssetListPresenter {
         guard let viewModel = createHeaderViewModel() else { return }
 
         view?.didReceiveHeader(viewModel: viewModel)
+    }
+
+    func provideAlertViewModel() {
+        guard wallet?.type == .watchOnly else {
+            view?.didReceiveAlert(viewModel: nil)
+            return
+        }
+
+        let viewModel = inlinableAlertViewModelFactory.createWOAssetListAlertViewModel(for: selectedLocale)
+
+        view?.didReceiveAlert(viewModel: viewModel)
     }
 
     func createAssetAccountPrice(
@@ -463,6 +477,10 @@ private extension AssetListPresenter {
         provideOrganizerViewModel()
     }
 
+    func updateAlertView() {
+        provideAlertViewModel()
+    }
+
     func presentAssetDetails(for chainAssetId: ChainAssetId) {
         // get chain from interactor that includes also disabled assets
         let optChain = interactor.getFullChain(for: chainAssetId.chainId) ?? model.allChains[chainAssetId.chainId]
@@ -496,6 +514,13 @@ private extension AssetListPresenter {
 // MARK: AssetListPresenterProtocol
 
 extension AssetListPresenter: AssetListPresenterProtocol {
+    func presentLearnMore(_ alertType: InlinableAlertView.Model.AlertType) {
+        wireframe.showLearnMore(
+            from: view,
+            for: alertType
+        )
+    }
+
     func selectOrganizerItem(at index: Int) {
         guard
             let organizerViewModel,
@@ -702,6 +727,7 @@ extension AssetListPresenter: AssetListInteractorOutputProtocol {
 
         updateAssetsView()
         updateOrganizerView()
+        updateAlertView()
     }
 
     func didChange(name: String) {
@@ -864,6 +890,7 @@ extension AssetListPresenter: IconAppearanceDepending {
 
         provideAssetViewModels()
         updateOrganizerView()
+        updateAlertView()
     }
 }
 
@@ -878,6 +905,12 @@ extension AssetListPresenter: PrivacyModeSupporting {
             let assetGroups = createAssetsViewModel()
         else { return }
 
+        let alertViewModel: InlinableAlertView.Model? = if wallet?.type == .watchOnly {
+            inlinableAlertViewModelFactory.createWOAssetListAlertViewModel(for: selectedLocale)
+        } else {
+            nil
+        }
+
         let organizerViewModel = viewModelFactory.createOrganizerViewModel(
             from: model.nfts,
             operations: model.pendingOperations,
@@ -889,6 +922,7 @@ extension AssetListPresenter: PrivacyModeSupporting {
         }
 
         let viewModel = AssetListFullUpdateViewModel(
+            inlinableAlert: alertViewModel,
             header: headerViewModel,
             assetGroups: assetGroups,
             organizer: organizerViewModel
