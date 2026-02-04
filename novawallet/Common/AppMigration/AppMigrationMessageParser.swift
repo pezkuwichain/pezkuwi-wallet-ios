@@ -8,7 +8,7 @@ public enum AppMigrationMessageParsingError: Error {
 
 public protocol AppMigrationMessageParsing {
     func parseAction(from url: URL) -> AppMigrationAction?
-    
+
     func parseMessage(
         for action: AppMigrationAction,
         from url: URL

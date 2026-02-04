@@ -2,7 +2,7 @@ import Foundation
 import Keystore_iOS
 import NovaCrypto
 
-enum SettingsKey: String {
+enum SettingsKey: String, CaseIterable {
     case selectedLocalization
     case biometryEnabled
     case crowdloadChainId

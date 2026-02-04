@@ -6,8 +6,20 @@ struct ASMInfoPopupViewFactory {
     static func createView(info: ASMRemoteData) -> InfoPopupViewProtocol? {
         let localizationManager = LocalizationManager.shared
 
+        // Create AppMigrationRemoteConfig from ASMRemoteData
+        let migrationConfig = AppMigrationRemoteConfig(
+            destinationAppLinkURL: info.destinationLinkData.universalLink,
+            destinationScheme: info.destinationLinkData.urlScheme,
+            originScheme: info.sourceLinkData.urlScheme
+        )
+
+        // Create AppMigrationOrigin to start the migration flow
+        let appMigrationOrigin = AppMigrationFactory.createOrigin(config: migrationConfig)
+
         let interactor = ASMInfoPopupInteractor(
-            settingsManager: SettingsManager.shared
+            settingsManager: SettingsManager.shared,
+            appMigrationOrigin: appMigrationOrigin,
+            migrationConfig: migrationConfig
         )
 
         let wireframe = InfoPopupWireframe()
@@ -18,7 +30,7 @@ struct ASMInfoPopupViewFactory {
             wireframe: wireframe,
             viewModelFactory: viewModelFactory,
             learnMoreURL: info.wikiURL,
-            mainAction: .url(info.destinationLinkData.universalLink),
+            mainAction: .custom {},
             skipAction: .custom {},
             localizationManager: localizationManager
         )
