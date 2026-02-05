@@ -2034,3 +2034,4 @@
 "inlinable.alert.wo.message" = "Cảnh giác với kẻ lừa đảo. Không ai có thể mở khóa một ví chỉ theo dõi hoặc số tiền của nó";
 "create.watch.only.missing.any.address" = "Nhập ít nhất một địa chỉ...";
 "asset.list.watch.only.balance" = "Số dư chỉ theo dõi";
+"create.watch.only.subtitle" = "Theo dõi hoạt động ví mà không cần khóa riêng.\nBạn sẽ không thể thực hiện bất kỳ giao dịch nào.";
