@@ -2034,3 +2034,4 @@
 "inlinable.alert.wo.message" = "警惕骗子。没有人可以解锁仅观察钱包或其资金";
 "create.watch.only.missing.any.address" = "请输入至少一个地址...";
 "asset.list.watch.only.balance" = "仅观察余额";
+"create.watch.only.subtitle" = "在没有私钥的情况下跟踪钱包活动。\n您将无法执行任何交易。";
