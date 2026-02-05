@@ -2034,3 +2034,4 @@
 "inlinable.alert.wo.message" = "Dolandırıcılara dikkat edin. Hiç kimse sadece-izleme cüzdanını veya fonlarını açamaz";
 "create.watch.only.missing.any.address" = "En az bir adres girin...";
 "asset.list.watch.only.balance" = "Sadece-izleme bakiyesi";
+"create.watch.only.subtitle" = "Cüzdan aktivitesini özel anahtar olmadan izleyin.\nHerhangi bir işlem gerçekleştiremezsiniz.";
