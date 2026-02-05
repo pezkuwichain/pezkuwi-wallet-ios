@@ -60,7 +60,7 @@ enum DelegatedMessageSheetViewFactory {
 
         presenter.view = view
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view.controller.modalTransitioningFactory = factory
         view.controller.modalPresentationStyle = .custom
 
@@ -110,7 +110,7 @@ enum DelegatedMessageSheetViewFactory {
         let view = MessageSheetViewFactory.createNoContentView(viewModel: viewModel, allowsSwipeDown: false)
         view?.controller.preferredContentSize = CGSize(width: 0.0, height: 294.0)
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view?.controller.modalTransitioningFactory = factory
         view?.controller.modalPresentationStyle = .custom
 
@@ -162,7 +162,7 @@ enum DelegatedMessageSheetViewFactory {
         let view = MessageSheetViewFactory.createNoContentView(viewModel: viewModel, allowsSwipeDown: true)
         view?.controller.preferredContentSize = CGSize(width: 0.0, height: 312.0)
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view?.controller.modalTransitioningFactory = factory
         view?.controller.modalPresentationStyle = .custom
 
@@ -218,7 +218,7 @@ enum DelegatedMessageSheetViewFactory {
 
         presenter.view = view
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view.controller.modalTransitioningFactory = factory
         view.controller.modalPresentationStyle = .custom
 

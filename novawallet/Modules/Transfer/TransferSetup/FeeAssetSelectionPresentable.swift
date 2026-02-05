@@ -29,7 +29,7 @@ extension FeeAssetSelectionPresentable {
 
         let bottomSheet = FeeAssetSelectSheetViewFactory.createView(from: viewModel)
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         bottomSheet.controller.modalTransitioningFactory = factory
         bottomSheet.controller.modalPresentationStyle = .custom

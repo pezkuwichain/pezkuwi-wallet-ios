@@ -33,7 +33,7 @@ enum MultisigNotificationsSheetFactory {
         let view = MessageSheetViewFactory.createNoContentView(viewModel: viewModel, allowsSwipeDown: true)
         view?.controller.preferredContentSize = CGSize(width: 0.0, height: 312.0)
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view?.controller.modalTransitioningFactory = factory
         view?.controller.modalPresentationStyle = .custom
 

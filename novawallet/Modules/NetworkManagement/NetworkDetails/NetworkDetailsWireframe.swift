@@ -51,7 +51,7 @@ final class NetworkDetailsWireframe: NetworkDetailsWireframeProtocol {
             onNodeDelete: onDelete
         ) else { return }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         manageNode.controller.modalTransitioningFactory = factory
         manageNode.controller.modalPresentationStyle = .custom

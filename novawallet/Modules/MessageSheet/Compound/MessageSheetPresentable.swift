@@ -43,7 +43,7 @@ extension MessageSheetPresentable {
     }
 
     func transitToMessageSheet(_ newMessageSheetView: MessageSheetViewProtocol, on view: ControllerBackedProtocol) {
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         newMessageSheetView.controller.modalTransitioningFactory = factory
         newMessageSheetView.controller.modalPresentationStyle = .custom

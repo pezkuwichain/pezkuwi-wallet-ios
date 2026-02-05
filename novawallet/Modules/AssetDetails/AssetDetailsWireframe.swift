@@ -23,7 +23,7 @@ final class AssetDetailsWireframe {
             return
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: .nova)
+        let factory = ModalSheetPresentationFactory(configuration: .novaManual)
         viewController.modalTransitioningFactory = factory
         viewController.modalPresentationStyle = .custom
         navigationController.present(viewController, animated: true)

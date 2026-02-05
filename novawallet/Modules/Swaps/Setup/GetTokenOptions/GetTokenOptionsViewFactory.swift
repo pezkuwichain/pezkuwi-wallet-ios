@@ -38,7 +38,7 @@ enum GetTokenOptionsViewFactory {
         view.separatorColor = R.color.colorDivider()
         view.cellHeight = 48
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view.modalTransitioningFactory = factory
 
         let height = view.headerHeight + CGFloat(presenter.allOperations.count) * view.cellHeight + view.footerHeight
