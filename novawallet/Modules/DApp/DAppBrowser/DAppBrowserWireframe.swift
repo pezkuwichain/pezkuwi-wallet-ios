@@ -50,7 +50,7 @@ class BaseDAppBrowserWireframe {
         }
 
         let factory = ModalSheetPresentationFactory(
-            configuration: ModalSheetPresentationConfiguration.nova
+            configuration: ModalSheetPresentationConfiguration.novaManual
         )
         authVew.controller.modalTransitioningFactory = factory
         authVew.controller.modalPresentationStyle = .custom
@@ -67,7 +67,7 @@ class BaseDAppBrowserWireframe {
         }
 
         let factory = ModalSheetPresentationFactory(
-            configuration: ModalSheetPresentationConfiguration.nova
+            configuration: ModalSheetPresentationConfiguration.novaManual
         )
         phishingView.controller.modalTransitioningFactory = factory
         phishingView.controller.modalPresentationStyle = .custom
@@ -104,7 +104,7 @@ class BaseDAppBrowserWireframe {
         }
 
         let factory = ModalSheetPresentationFactory(
-            configuration: ModalSheetPresentationConfiguration.nova
+            configuration: ModalSheetPresentationConfiguration.novaManual
         )
         dappSettingsView.controller.modalTransitioningFactory = factory
         dappSettingsView.controller.modalPresentationStyle = .custom

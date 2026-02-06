@@ -859,6 +859,7 @@ extension AssetListPresenter: Localizable {
         if let view = view, view.isSetup {
             updateAssetsView()
             updateOrganizerView()
+            updateAlertView()
             bannersModule?.updateLocale(selectedLocale)
         }
     }

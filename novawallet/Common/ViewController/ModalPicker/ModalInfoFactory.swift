@@ -103,7 +103,7 @@ struct ModalInfoFactory {
         let viewModels = [maxViewModel, avgViewModel]
         viewController.viewModels = viewModels
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         viewController.modalTransitioningFactory = factory
 
         let height = viewController.headerHeight + CGFloat(viewModels.count) * viewController.cellHeight +
@@ -147,7 +147,7 @@ struct ModalInfoFactory {
 
         viewController.viewModels = viewModels
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         viewController.modalTransitioningFactory = factory
 
         let height = viewController.headerHeight + CGFloat(viewModels.count) * viewController.cellHeight +

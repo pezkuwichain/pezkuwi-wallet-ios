@@ -86,7 +86,7 @@ enum ModalNetworksFactory {
             viewController.selectedIndex = NSNotFound
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: .nova)
+        let factory = ModalSheetPresentationFactory(configuration: .novaManual)
         viewController.modalTransitioningFactory = factory
 
         let itemsCount = crossChainViewModels.count + 1
@@ -115,7 +115,7 @@ enum ModalNetworksFactory {
 
         viewController.viewModels = convertNetworkListToViewModels(from: networks)
 
-        let factory = ModalSheetPresentationFactory(configuration: .nova)
+        let factory = ModalSheetPresentationFactory(configuration: .novaManual)
         viewController.modalTransitioningFactory = factory
 
         let height = viewController.headerHeight + CGFloat(networks.count) * viewController.cellHeight
@@ -178,7 +178,7 @@ enum ModalNetworksFactory {
             }
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: .nova)
+        let factory = ModalSheetPresentationFactory(configuration: .novaManual)
         viewController.modalTransitioningFactory = factory
 
         let height = viewController.headerHeight +

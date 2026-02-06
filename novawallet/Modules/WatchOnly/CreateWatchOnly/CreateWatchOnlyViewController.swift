@@ -55,7 +55,7 @@ private extension CreateWatchOnlyViewController {
         let localizedStrings = R.string(preferredLanguages: selectedLocale.rLanguages).localizable
 
         rootView.titleLabel.text = localizedStrings.welcomeWatchOnlyTitle()
-        rootView.detailsLabel.text = localizedStrings.createWatchOnlyDetails()
+        rootView.detailsLabel.text = localizedStrings.createWatchOnlySubtitle()
 
         rootView.presetSegmentControl.titles = [
             localizedStrings.welcomeWatchOnlyCustom(),

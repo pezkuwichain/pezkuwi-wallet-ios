@@ -125,6 +125,7 @@ extension CreateWatchOnlyViewLayout {
     static func createSectionTitleLabel() -> UILabel {
         .create { view in
             view.font = .regularFootnote
+            view.numberOfLines = 0
             view.textColor = R.color.colorTextSecondary()
         }
     }

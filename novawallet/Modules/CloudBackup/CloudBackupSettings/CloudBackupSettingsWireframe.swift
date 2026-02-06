@@ -26,7 +26,7 @@ final class CloudBackupSettingsWireframe: CloudBackupSettingsWireframeProtocol {
             return
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         reviewChangesView.controller.modalTransitioningFactory = factory
         reviewChangesView.controller.modalPresentationStyle = .custom

@@ -11,6 +11,7 @@ final class WOScamAlertSheetViewLayout: UIView {
 
     let titleLabel: UILabel = .create { view in
         view.apply(style: .title3Primary)
+        view.numberOfLines = 0
         view.textAlignment = .center
     }
 

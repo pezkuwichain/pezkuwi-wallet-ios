@@ -45,7 +45,7 @@ final class GovEditDelegationTracksWireframe: GovernanceSelectTracksWireframe,
             return
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         presentingView.controller.modalTransitioningFactory = factory
         presentingView.controller.modalPresentationStyle = .custom

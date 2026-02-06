@@ -39,7 +39,7 @@ final class WalletSelectionWireframe: WalletsListWireframe, WalletSelectionWiref
             return
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         proxiedsUpdatesView.controller.modalTransitioningFactory = factory
         proxiedsUpdatesView.controller.modalPresentationStyle = .custom
 

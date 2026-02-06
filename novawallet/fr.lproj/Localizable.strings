@@ -2034,3 +2034,4 @@
 "inlinable.alert.wo.message" = "Attention aux arnaqueurs. Personne ne peut déverrouiller un portefeuille en consultation seulement ou ses fonds";
 "create.watch.only.missing.any.address" = "Entrez au moins une adresse...";
 "asset.list.watch.only.balance" = "Solde en consultation seulement";
+"create.watch.only.subtitle" = "Suivez l'activité du portefeuille sans clé privée.\nVous ne pourrez effectuer aucune transaction.";

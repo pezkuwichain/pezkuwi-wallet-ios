@@ -30,7 +30,7 @@ final class DAppInteractionPresenter: AlertPresentable, ErrorPresentable {
 
     private func presentInBottomSheet(the controller: UIViewController) {
         let factory = ModalSheetPresentationFactory(
-            configuration: ModalSheetPresentationConfiguration.nova
+            configuration: ModalSheetPresentationConfiguration.novaManual
         )
 
         controller.modalTransitioningFactory = factory
@@ -103,7 +103,7 @@ extension DAppInteractionPresenter: DAppInteractionOutputProtocol {
         }
 
         let factory = ModalSheetPresentationFactory(
-            configuration: ModalSheetPresentationConfiguration.nova
+            configuration: ModalSheetPresentationConfiguration.novaManual
         )
         phishingView.controller.modalTransitioningFactory = factory
         phishingView.controller.modalPresentationStyle = .custom

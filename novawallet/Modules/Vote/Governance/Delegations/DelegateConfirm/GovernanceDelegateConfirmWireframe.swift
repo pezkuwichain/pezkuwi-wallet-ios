@@ -16,7 +16,7 @@ final class GovernanceDelegateConfirmWireframe: GovernanceDelegateConfirmWirefra
             return
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         tracksView.controller.modalTransitioningFactory = factory
         tracksView.controller.modalPresentationStyle = .custom

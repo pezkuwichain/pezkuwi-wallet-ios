@@ -52,7 +52,7 @@ enum PayCardSheetViewFactory {
 
         presenter.view = view
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         view.controller.modalTransitioningFactory = factory
         view.controller.modalPresentationStyle = .custom
 

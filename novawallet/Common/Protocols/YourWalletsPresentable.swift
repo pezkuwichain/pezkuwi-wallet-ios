@@ -25,7 +25,7 @@ extension YourWalletsPresentable {
             return
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
         viewController.controller.modalTransitioningFactory = factory
         viewController.controller.modalPresentationStyle = .custom
 
