@@ -143,7 +143,8 @@ final class DelegationReferendumVotersViewController: UIViewController, ViewHold
         let formatter = quantityFormatter.value(for: selectedLocale)
 
         guard
-            let value = value,
+            let value,
+            value > 0,
             let valueString = formatter.string(from: value as NSNumber) else {
             return
         }
@@ -152,6 +153,7 @@ final class DelegationReferendumVotersViewController: UIViewController, ViewHold
         rootView.totalVotersLabel.sizeToFit()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rootView.totalVotersLabel)
+        navigationItem.rightBarButtonItem?.applyNoLiquidGlassStyle()
         votersCount = value
     }
 }

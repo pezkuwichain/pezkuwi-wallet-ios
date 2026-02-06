@@ -8,6 +8,7 @@ final class DelegationReferendumVotersViewLayout: UIView, AdaptiveDesignable {
         view.backgroundView.fillColor = R.color.colorChipsBackground()!
         view.titleLabel.apply(style: .init(textColor: R.color.colorChipText()!, font: .semiBoldFootnote))
         view.contentInsets = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
+        view.titleLabel.textAlignment = .center
         view.backgroundView.cornerRadius = 6
     }
 

@@ -56,14 +56,14 @@ final class NftListViewController: UIViewController, ViewHolder {
             let counterString = quantityFormater.value(for: selectedLocale).string(
                 from: NSNumber(value: numberOfItems)
             ) {
-            rootView.counterView.titleLabel.text = counterString
+            rootView.counterView.contentView.text = counterString
 
             let barItem = UIBarButtonItem(customView: rootView.counterView)
             barItem.applyNoLiquidGlassStyle()
 
             navigationItem.rightBarButtonItem = barItem
         } else {
-            rootView.counterView.titleLabel.text = ""
+            rootView.counterView.contentView.text = ""
             navigationItem.rightBarButtonItem = nil
         }
     }
