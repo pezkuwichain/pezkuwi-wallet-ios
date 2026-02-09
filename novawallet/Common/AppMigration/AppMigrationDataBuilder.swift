@@ -4,12 +4,12 @@ import SubstrateSdk
 import Operation_iOS
 
 protocol AppMigrationDataBuilding {
-    func build() throws -> AppMigrationData
+    func buildWrapper() -> CompoundOperationWrapper<AppMigrationData>
 }
 
 enum AppMigrationDataBuilderError: Error {
-    case failedToBuildSettings
-    case failedToBuildWallets(Error)
+    case walletConversionFailed(Error)
+    case secretsExportFailed(Error)
 }
 
 final class AppMigrationDataBuilder {
@@ -31,58 +31,68 @@ final class AppMigrationDataBuilder {
     }
 
     private func buildSettings() -> [String: CodableValue] {
-        var settings: [String: CodableValue] = [:]
-
-        for settingsKey in SettingsKey.allCases {
-            let key = settingsKey.rawValue
-
-            if let anyValue = settingsManager.anyValue(for: key) {
-                if let codableValue = CodableValue.from(anyValue: anyValue) {
-                    settings[key] = codableValue
-                }
-            }
+        SettingsKey.allCases.reduce(into: [:]) {
+            $0[$1.rawValue] = CodableValue.from(anyValue: settingsManager.anyValue(for: $1.rawValue))
         }
-
-        return settings
     }
+}
 
-    private func buildWallets() throws -> WalletsData {
-        // Create repository for fetching all wallets
+extension AppMigrationDataBuilder: AppMigrationDataBuilding {
+    func buildWrapper() -> CompoundOperationWrapper<AppMigrationData> {
         let walletRepository = walletRepositoryFactory.createMetaAccountRepository(
             for: nil,
             sortDescriptors: []
         )
 
-        // Fetch all wallets from repository
-        let wallets = try walletRepository.fetchAllOperation(
+        let fetchOperation = walletRepository.fetchAllOperation(
             with: RepositoryFetchOptions()
-        ).extractNoCancellableResultData()
-
-        let walletsSet = Set(wallets)
-
-        // Convert to public info
-        let publicInfo = try walletConverter.convertToPublicInfo(from: walletsSet)
-
-        // Extract private secrets
-        let privateInfo = try walletSecretsExporter.exportSecrets(from: walletsSet)
-
-        return WalletsData(
-            publicInfo: publicInfo,
-            privateInfo: privateInfo
         )
-    }
-}
 
-extension AppMigrationDataBuilder: AppMigrationDataBuilding {
-    func build() throws -> AppMigrationData {
-        let settings = buildSettings()
-        let wallets = try buildWallets()
+        let buildOperation = ClosureOperation<AppMigrationData> { [weak self] in
+            guard let self else {
+                throw BaseOperationError.parentOperationCancelled
+            }
 
-        return AppMigrationData(
-            version: "1.0",
-            migratedAt: UInt64(Date().timeIntervalSince1970),
-            settings: settings,
-            wallets: wallets
+            let wallets = try fetchOperation.extractNoCancellableResultData()
+            let walletsSet = Set(wallets)
+
+            // Build settings
+            let settings = self.buildSettings()
+
+            // Convert to public info
+            let publicInfo: Set<CloudBackup.WalletPublicInfo>
+            do {
+                publicInfo = try self.walletConverter.convertToPublicInfo(from: walletsSet)
+            } catch {
+                throw AppMigrationDataBuilderError.walletConversionFailed(error)
+            }
+
+            // Extract private secrets
+            let privateInfo: Set<CloudBackup.DecryptedFileModel.WalletPrivateInfo>
+            do {
+                privateInfo = try self.walletSecretsExporter.exportSecrets(from: walletsSet)
+            } catch {
+                throw AppMigrationDataBuilderError.secretsExportFailed(error)
+            }
+
+            let walletsData = WalletsData(
+                publicInfo: publicInfo,
+                privateInfo: privateInfo
+            )
+
+            return AppMigrationData(
+                version: "1.0",
+                migratedAt: UInt64(Date().timeIntervalSince1970),
+                settings: settings,
+                wallets: walletsData
+            )
+        }
+
+        buildOperation.addDependency(fetchOperation)
+
+        return CompoundOperationWrapper(
+            targetOperation: buildOperation,
+            dependencies: [fetchOperation]
         )
     }
 }

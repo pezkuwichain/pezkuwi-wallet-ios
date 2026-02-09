@@ -1838,7 +1838,6 @@
 		2D4734662F33BB750096F10A /* AppMigrationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4734652F33BB750096F10A /* AppMigrationData.swift */; };
 		2D47346D2F33BB990096F10A /* AppMigrationDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D47346C2F33BB990096F10A /* AppMigrationDataBuilder.swift */; };
 		2D4734742F33BBD30096F10A /* AppMigrationWalletSecretsExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4734732F33BBD30096F10A /* AppMigrationWalletSecretsExporter.swift */; };
-		2D4734792F33BC6B0096F10A /* AppMigrationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4734782F33BC6B0096F10A /* AppMigrationCoordinator.swift */; };
 		2D4DD6582F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */; };
 		2D4DD6602F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */; };
 		2D4DD66D2F31F659001B2C1D /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */; };
@@ -2637,6 +2636,11 @@
 		2DF95D342D786097001D8785 /* CustomHapticPatternConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF95D332D786097001D8785 /* CustomHapticPatternConfig.swift */; };
 		2DF95D372D786156001D8785 /* SequentialHapticPlayerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF95D362D786156001D8785 /* SequentialHapticPlayerConfig.swift */; };
 		2DF95D3B2D786631001D8785 /* HapticPlayerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF95D3A2D786631001D8785 /* HapticPlayerFactory.swift */; };
+		2DF9CE1A2F39E5C50078C898 /* AppMigrationDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9CE192F39E5C50078C898 /* AppMigrationDataImporter.swift */; };
+		2DF9CE1F2F39E5DD0078C898 /* AppMigrationWalletSecretsImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9CE1E2F39E5DD0078C898 /* AppMigrationWalletSecretsImporter.swift */; };
+		2DF9CE2C2F39EED70078C898 /* AppMigrationCoordinating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9CE2B2F39EED70078C898 /* AppMigrationCoordinating.swift */; };
+		2DF9CE312F39EEEE0078C898 /* AppMigrationOriginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9CE302F39EEEE0078C898 /* AppMigrationOriginCoordinator.swift */; };
+		2DF9CE382F39EF020078C898 /* AppMigrationDestinationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9CE372F39EF020078C898 /* AppMigrationDestinationCoordinator.swift */; };
 		2DFF39B82E15353C00529984 /* UnsupportedFeatureType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFF39B72E15353C00529984 /* UnsupportedFeatureType.swift */; };
 		2DFF39BA2E1539A800529984 /* FeatureSupportChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFF39B92E1539A800529984 /* FeatureSupportChecking.swift */; };
 		2DFF39BC2E16534E00529984 /* WalletInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFF39BB2E16534E00529984 /* WalletInfoView.swift */; };
@@ -8466,7 +8470,6 @@
 		2D4734652F33BB750096F10A /* AppMigrationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationData.swift; sourceTree = "<group>"; };
 		2D47346C2F33BB990096F10A /* AppMigrationDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationDataBuilder.swift; sourceTree = "<group>"; };
 		2D4734732F33BBD30096F10A /* AppMigrationWalletSecretsExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationWalletSecretsExporter.swift; sourceTree = "<group>"; };
-		2D4734782F33BC6B0096F10A /* AppMigrationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationCoordinator.swift; sourceTree = "<group>"; };
 		2D4DD6572F31DE2B001B2C1D /* InlinableAlertViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertViewModelFactory.swift; sourceTree = "<group>"; };
 		2D4DD65F2F31E4BD001B2C1D /* InlinableAlertCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlinableAlertCollectionViewCell.swift; sourceTree = "<group>"; };
 		2D4DD66C2F31F659001B2C1D /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -9006,6 +9009,11 @@
 		2DF95D332D786097001D8785 /* CustomHapticPatternConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHapticPatternConfig.swift; sourceTree = "<group>"; };
 		2DF95D362D786156001D8785 /* SequentialHapticPlayerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequentialHapticPlayerConfig.swift; sourceTree = "<group>"; };
 		2DF95D3A2D786631001D8785 /* HapticPlayerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticPlayerFactory.swift; sourceTree = "<group>"; };
+		2DF9CE192F39E5C50078C898 /* AppMigrationDataImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationDataImporter.swift; sourceTree = "<group>"; };
+		2DF9CE1E2F39E5DD0078C898 /* AppMigrationWalletSecretsImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationWalletSecretsImporter.swift; sourceTree = "<group>"; };
+		2DF9CE2B2F39EED70078C898 /* AppMigrationCoordinating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationCoordinating.swift; sourceTree = "<group>"; };
+		2DF9CE302F39EEEE0078C898 /* AppMigrationOriginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationOriginCoordinator.swift; sourceTree = "<group>"; };
+		2DF9CE372F39EF020078C898 /* AppMigrationDestinationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationDestinationCoordinator.swift; sourceTree = "<group>"; };
 		2DFF39B72E15353C00529984 /* UnsupportedFeatureType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsupportedFeatureType.swift; sourceTree = "<group>"; };
 		2DFF39B92E1539A800529984 /* FeatureSupportChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureSupportChecking.swift; sourceTree = "<group>"; };
 		2DFF39BB2E16534E00529984 /* WalletInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletInfoView.swift; sourceTree = "<group>"; };
@@ -18403,7 +18411,11 @@
 				2D4734652F33BB750096F10A /* AppMigrationData.swift */,
 				2D47346C2F33BB990096F10A /* AppMigrationDataBuilder.swift */,
 				2D4734732F33BBD30096F10A /* AppMigrationWalletSecretsExporter.swift */,
-				2D4734782F33BC6B0096F10A /* AppMigrationCoordinator.swift */,
+				2DF9CE192F39E5C50078C898 /* AppMigrationDataImporter.swift */,
+				2DF9CE1E2F39E5DD0078C898 /* AppMigrationWalletSecretsImporter.swift */,
+				2DF9CE2B2F39EED70078C898 /* AppMigrationCoordinating.swift */,
+				2DF9CE302F39EEEE0078C898 /* AppMigrationOriginCoordinator.swift */,
+				2DF9CE372F39EF020078C898 /* AppMigrationDestinationCoordinator.swift */,
 			);
 			path = AppMigration;
 			sourceTree = "<group>";
@@ -31560,6 +31572,7 @@
 				844C3E672A0763D500C4305F /* WalletTotalAmountView.swift in Sources */,
 				8425EB1B25EADD8600C307C9 /* StakingConstants.swift in Sources */,
 				84690783264132AB0030E693 /* WithdrawUnbondedCall.swift in Sources */,
+				2DF9CE1F2F39E5DD0078C898 /* AppMigrationWalletSecretsImporter.swift in Sources */,
 				842EBB332890A77C00B952D8 /* WalletSelectionInteractor.swift in Sources */,
 				8444407128AA57D600446D22 /* LedgerApplication.swift in Sources */,
 				77F9FB092A9D971000820625 /* NominationPoolBondMoreSetupInteractor.swift in Sources */,
@@ -32937,6 +32950,7 @@
 				845B811228F429BB0040CE84 /* SupportPallet.swift in Sources */,
 				0C3205C62A877594002EB914 /* EvmGasPriceWithFallbackProvider.swift in Sources */,
 				0C0387872D0A24E6000A2F24 /* SwapRouteDetailsView.swift in Sources */,
+				2DF9CE382F39EF020078C898 /* AppMigrationDestinationCoordinator.swift in Sources */,
 				8470D6D4253E35F0009E9A5D /* StorageUpdate.swift in Sources */,
 				8460E715284AC0AA002896E9 /* ParaStkBaseUnstakeInteractor.swift in Sources */,
 				84355CEE28B614A7004E5C5E /* MessageSheetImageGraphicsView.swift in Sources */,
@@ -33955,6 +33969,7 @@
 				84AE7AB727D3AC4B00495267 /* RMRKV1DetailsInteractor.swift in Sources */,
 				2AFF4BA0274D1E4D00D790B4 /* UsernameSetupViewController.swift in Sources */,
 				843A2C6F26A8548B00266F53 /* RowView.swift in Sources */,
+				2DF9CE1A2F39E5C50078C898 /* AppMigrationDataImporter.swift in Sources */,
 				8434B608298D4FD500FACF4C /* GovernanceAddDelegationTracksWireframe.swift in Sources */,
 				8886020B29D101B000C6344C /* Web3NameServiceError.swift in Sources */,
 				0CED71BC2D9D25A200F79C02 /* XcmPayment.swift in Sources */,
@@ -34022,7 +34037,6 @@
 				0CED3A0C2BD1762D00B1E994 /* CloudBackupServiceFacadeProtocol.swift in Sources */,
 				27B8E16A2E12A5FA00EB1F5B /* UniqueDetailsInteractor.swift in Sources */,
 				8485D924277E16C400767243 /* DAppBrowserScriptHandler.swift in Sources */,
-				2D4734792F33BC6B0096F10A /* AppMigrationCoordinator.swift in Sources */,
 				8427495528FEB92700B2B70B /* GovernanceLockStateFactory.swift in Sources */,
 				0C2200692ACA80BB0067BA61 /* AssetHubSwapQuoteBuilder.swift in Sources */,
 				0C9680F32A8AC2F2006A411B /* EvmTokenAddResult.swift in Sources */,
@@ -35314,6 +35328,7 @@
 				3B6F50061AD9FC31D6712D9F /* CollatorStakingSelectSearchProtocols.swift in Sources */,
 				0C61084F2CD92C6F00909928 /* GraphEdgeFiltering.swift in Sources */,
 				52326E49B049C54434C95132 /* ParaStkCollatorsSearchWireframe.swift in Sources */,
+				2DF9CE2C2F39EED70078C898 /* AppMigrationCoordinating.swift in Sources */,
 				84117078285B1050006F4DFB /* XcmAssetTransfer.swift in Sources */,
 				0C3205D82A896009002EB914 /* EvmDefaultNonceProvider.swift in Sources */,
 				2DF95D342D786097001D8785 /* CustomHapticPatternConfig.swift in Sources */,
@@ -36397,6 +36412,7 @@
 				594EA36463252924AB73475B /* NPoolsUnstakeSetupPresenter.swift in Sources */,
 				0C1CF73F2E54CFE200B1DA66 /* BatchDictSubscriptionHandler.swift in Sources */,
 				1E1B60AC1FBF11673A70955C /* NPoolsUnstakeSetupInteractor.swift in Sources */,
+				2DF9CE312F39EEEE0078C898 /* AppMigrationOriginCoordinator.swift in Sources */,
 				BF31A2900BA28194047D2219 /* NPoolsUnstakeSetupViewController.swift in Sources */,
 				CB2E57FC45AC1E2980E3492E /* NPoolsUnstakeSetupViewLayout.swift in Sources */,
 				0C59E8FE2AA773D6001E11F3 /* OperationDetailsDataProviderFactory.swift in Sources */,
