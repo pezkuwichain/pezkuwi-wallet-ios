@@ -4,7 +4,9 @@ import SubstrateSdk
 import NovaCrypto
 
 protocol AppMigrationWalletSecretsExporting {
-    func exportSecrets(from wallets: Set<MetaAccountModel>) throws -> Set<CloudBackup.DecryptedFileModel.WalletPrivateInfo>
+    func exportSecrets(
+        from wallets: Set<MetaAccountModel>
+    ) throws -> Set<CloudBackup.DecryptedFileModel.WalletPrivateInfo>
 }
 
 final class AppMigrationWalletSecretsExporter {

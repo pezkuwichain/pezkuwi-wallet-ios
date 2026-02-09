@@ -339,7 +339,7 @@ final class AccountCreationHelper {
 
         let operationQueue = OperationQueue()
 
-        operationQueue.addOperation(operation)
+        operationQueue.addOperations([operation], waitUntilFinished: true)
 
         let wallet = try operation.extractNoCancellableResultData()
 

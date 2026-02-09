@@ -59,28 +59,20 @@ private extension AppMigrationDataImporter {
 
 extension AppMigrationDataImporter: AppMigrationDataImporting {
     func importWrapper(migrationData: AppMigrationData) -> CompoundOperationWrapper<Void> {
-        let walletRepository = walletRepositoryFactory.createMetaAccountRepository(
+        let walletRepository = walletRepositoryFactory.createManagedMetaAccountRepository(
             for: nil,
             sortDescriptors: []
         )
 
-        let importOperation = ClosureOperation<Void> { [weak self] in
-            guard let self else {
-                throw BaseOperationError.parentOperationCancelled
-            }
+        // Convert public info to wallet models
+        let wallets: Set<MetaAccountModel>
+        do {
+            wallets = try walletConverter.convertFromPublicInfo(
+                models: migrationData.wallets.publicInfo
+            )
 
             // Import settings
-            self.importSettings(migrationData.settings)
-
-            // Convert public info to wallet models
-            let wallets: Set<MetaAccountModel>
-            do {
-                wallets = try self.walletConverter.convertFromPublicInfo(
-                    models: migrationData.wallets.publicInfo
-                )
-            } catch {
-                throw AppMigrationDataImporterError.walletConversionFailed(error)
-            }
+            importSettings(migrationData.settings)
 
             // Import wallet secrets to keychain
             let privateDataByWalletId = migrationData
@@ -100,27 +92,24 @@ extension AppMigrationDataImporter: AppMigrationDataImporting {
                     throw AppMigrationDataImporterError.secretsImportFailed(error)
                 }
             }
+
+            // Save wallets to repository
+            let saveOperation = walletRepository.saveOperation(
+                {
+                    wallets.enumerated().map { index, wallet in
+                        ManagedMetaAccountModel(
+                            info: wallet,
+                            isSelected: index == 0,
+                            order: UInt32(index)
+                        )
+                    }
+                },
+                { [] }
+            )
+
+            return CompoundOperationWrapper(targetOperation: saveOperation)
+        } catch {
+            return .createWithError(AppMigrationDataImporterError.walletConversionFailed(error))
         }
-
-        // Save wallets to repository
-        let saveOperation = walletRepository.saveOperation(
-            {
-                try importOperation.extractNoCancellableResultData()
-
-                let wallets = try self.walletConverter.convertFromPublicInfo(
-                    models: migrationData.wallets.publicInfo
-                )
-
-                return Array(wallets)
-            },
-            { [] }
-        )
-
-        saveOperation.addDependency(importOperation)
-
-        return CompoundOperationWrapper(
-            targetOperation: saveOperation,
-            dependencies: [importOperation]
-        )
     }
 }

@@ -19,45 +19,66 @@ enum CodableValue: Codable, Equatable {
     case data(Data)
     case null
 
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
+    private enum TypeTag: String, Codable {
+        case bool
+        case int
+        case double
+        case string
+        case data
+        case null
+    }
 
-        if container.decodeNil() {
-            self = .null
-        } else if let value = try? container.decode(Bool.self) {
+    private enum CodingKeys: String, CodingKey {
+        case type
+        case value
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(TypeTag.self, forKey: .type)
+
+        switch type {
+        case .bool:
+            let value = try container.decode(Bool.self, forKey: .value)
             self = .bool(value)
-        } else if let value = try? container.decode(Int.self) {
+        case .int:
+            let value = try container.decode(Int.self, forKey: .value)
             self = .int(value)
-        } else if let value = try? container.decode(Double.self) {
+        case .double:
+            let value = try container.decode(Double.self, forKey: .value)
             self = .double(value)
-        } else if let value = try? container.decode(String.self) {
+        case .string:
+            let value = try container.decode(String.self, forKey: .value)
             self = .string(value)
-        } else if let value = try? container.decode(Data.self) {
+        case .data:
+            let value = try container.decode(Data.self, forKey: .value)
             self = .data(value)
-        } else {
-            throw DecodingError.dataCorruptedError(
-                in: container,
-                debugDescription: "Cannot decode CodableValue"
-            )
+        case .null:
+            self = .null
         }
     }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
+        var container = encoder.container(keyedBy: CodingKeys.self)
 
         switch self {
         case let .bool(value):
-            try container.encode(value)
+            try container.encode(TypeTag.bool, forKey: .type)
+            try container.encode(value, forKey: .value)
         case let .int(value):
-            try container.encode(value)
+            try container.encode(TypeTag.int, forKey: .type)
+            try container.encode(value, forKey: .value)
         case let .double(value):
-            try container.encode(value)
+            try container.encode(TypeTag.double, forKey: .type)
+            try container.encode(value, forKey: .value)
         case let .string(value):
-            try container.encode(value)
+            try container.encode(TypeTag.string, forKey: .type)
+            try container.encode(value, forKey: .value)
         case let .data(value):
-            try container.encode(value)
+            try container.encode(TypeTag.data, forKey: .type)
+            try container.encode(value, forKey: .value)
         case .null:
-            try container.encodeNil()
+            try container.encode(TypeTag.null, forKey: .type)
         }
     }
 
