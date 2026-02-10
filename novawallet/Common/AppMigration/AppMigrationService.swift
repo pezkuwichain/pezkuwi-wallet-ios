@@ -26,7 +26,7 @@ public final class AppMigrationService {
     public init(
         localDeepLinkScheme: String,
         queryFactory: AppMigrationQueryFactoryProtocol = AppMigrationDefaultQueryFactory(),
-        notificationQueue: DispatchQueue = .init(label: "io.novawallet.assetmigrationservice.\(UUID().uuidString)")
+        notificationQueue: DispatchQueue = .init(label: "io.novawallet.appmigrationservice.\(UUID().uuidString)")
     ) {
         parser = AppMigrationMessageParser(
             localDeepLinkScheme: localDeepLinkScheme,
