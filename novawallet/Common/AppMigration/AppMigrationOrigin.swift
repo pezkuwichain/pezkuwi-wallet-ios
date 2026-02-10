@@ -22,6 +22,8 @@ public final class AppMigrationOrigin {
     }
 }
 
+// MARK: - Private
+
 private extension AppMigrationOrigin {
     func createStartAppLink(for message: AppMigrationMessage.Start) throws -> URL {
         guard var components = URLComponents(

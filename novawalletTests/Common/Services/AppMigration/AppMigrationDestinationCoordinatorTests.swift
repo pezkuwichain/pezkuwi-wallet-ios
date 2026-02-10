@@ -355,9 +355,6 @@ final class AppMigrationDestinationCoordinatorTests: XCTestCase {
         let originSessionManager = SecureSessionManager.createForWalletMigration()
         let originPublicKey = try originSessionManager.startSession()
 
-        let targetKeystore = MockKeychain()
-        let targetStorageFacade = UserDataStorageTestFacade()
-
         let service = MockAppMigrationServiceProtocol()
         var capturedObserver: AppMigrationObserver?
 
@@ -381,7 +378,16 @@ final class AppMigrationDestinationCoordinatorTests: XCTestCase {
         let destinationSessionManager = SecureSessionManager.createForWalletMigration()
 
         // Use a failing importer
-        let failingImporter = MockFailingMigrationDataImporter()
+        let failingImporter = MockAppMigrationDataImporting()
+        stub(failingImporter) { stub in
+            when(stub.importWrapper(migrationData: any())).then { _ in
+                .createWithError(
+                    AppMigrationDataImporterError.walletConversionFailed(
+                        NSError(domain: "test", code: 1)
+                    )
+                )
+            }
+        }
 
         let coordinator = AppMigrationDestinationCoordinator(
             appMigrationService: service,
@@ -692,10 +698,12 @@ final class AppMigrationDestinationCoordinatorTests: XCTestCase {
         let targetEntropy = targetKeystore.getRawStore()[entropyTag]
         XCTAssertEqual(sourceEntropy, targetEntropy)
     }
+}
 
-    // MARK: - Helpers
+// MARK: - Helpers
 
-    private func createDestinationCoordinator(
+private extension AppMigrationDestinationCoordinatorTests {
+    func createDestinationCoordinator(
         service: AppMigrationServiceProtocol,
         destination: AppMigrationDestinationProtocol? = nil,
         keystore: KeystoreProtocol? = nil,
@@ -735,19 +743,5 @@ final class AppMigrationDestinationCoordinatorTests: XCTestCase {
             callbackQueue: .main,
             logger: Logger.shared
         )
-    }
-}
-
-// MARK: - Mock Failing Importer
-
-private final class MockFailingMigrationDataImporter: AppMigrationDataImporting {
-    func importWrapper(migrationData _: AppMigrationData) -> CompoundOperationWrapper<Void> {
-        let operation = ClosureOperation<Void> {
-            throw AppMigrationDataImporterError.walletConversionFailed(
-                NSError(domain: "test", code: 1)
-            )
-        }
-
-        return CompoundOperationWrapper(targetOperation: operation)
     }
 }

@@ -58,7 +58,7 @@ final class AppMigrationWalletSecretsExporterTests: XCTestCase {
             operationQueue: operationQueue
         )
 
-        let derivationPath = "//hard/soft///password"
+        let derivationPath = DerivationPathConstants.hardSoftPasswordPlaceholder
 
         try AccountCreationHelper.createMetaAccountFromMnemonic(
             cryptoType: .sr25519,
@@ -201,12 +201,13 @@ final class AppMigrationWalletSecretsExporterTests: XCTestCase {
         }
 
         XCTAssertEqual(privateInfo.walletId, wallet.metaId)
+
         XCTAssertNil(privateInfo.entropy)
         XCTAssertNil(privateInfo.substrate)
         XCTAssertNil(privateInfo.ethereum)
+
         XCTAssertFalse(privateInfo.chainAccounts.isEmpty)
 
-        // Verify chain account has derivation path
         guard let chainAccountSecrets = privateInfo.chainAccounts.first else {
             XCTFail("Expected chain account secrets")
             return
@@ -271,17 +272,17 @@ final class AppMigrationWalletSecretsExporterTests: XCTestCase {
 
         var wallets: [MetaAccountModel] = []
 
-        for i in 0 ..< 3 {
+        try (0 ..< 3).forEach {
             try AccountCreationHelper.createMetaAccountFromMnemonic(
                 cryptoType: .sr25519,
-                name: "Wallet \(i)",
+                name: "Wallet \($0)",
                 keychain: keystore,
                 settings: walletSettings
             )
 
-            if let wallet = walletSettings.value {
-                wallets.append(wallet)
-            }
+            guard let wallet = walletSettings.value else { return }
+
+            wallets.append(wallet)
         }
 
         let exporter = AppMigrationWalletSecretsExporter(keychain: keystore)
@@ -319,7 +320,6 @@ final class AppMigrationWalletSecretsExporterTests: XCTestCase {
             return
         }
 
-        // Add chain account
         try AccountCreationHelper.addMnemonicChainAccount(
             to: wallet,
             chainId: KnowChainId.kusama,

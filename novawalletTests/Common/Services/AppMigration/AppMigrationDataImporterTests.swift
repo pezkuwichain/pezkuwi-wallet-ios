@@ -200,17 +200,17 @@ final class AppMigrationDataImporterTests: XCTestCase {
 
         var sourceWalletIds: Set<String> = []
 
-        for i in 0 ..< 3 {
+        try (0 ..< 3).forEach {
             try AccountCreationHelper.createMetaAccountFromMnemonic(
                 cryptoType: .sr25519,
-                name: "Wallet \(i)",
+                name: "Wallet \($0)",
                 keychain: sourceKeystore,
                 settings: sourceWalletSettings
             )
 
-            if let wallet = sourceWalletSettings.value {
-                sourceWalletIds.insert(wallet.metaId)
-            }
+            guard let wallet = sourceWalletSettings.value else { return }
+
+            sourceWalletIds.insert(wallet.metaId)
         }
 
         // Build migration data from source
@@ -285,7 +285,7 @@ final class AppMigrationDataImporterTests: XCTestCase {
         try AccountCreationHelper.createMetaAccountFromMnemonic(
             cryptoType: .sr25519,
             name: "Main Wallet",
-            derivationPath: "//test",
+            derivationPath: DerivationPathConstants.hardPlaceholder,
             keychain: sourceKeystore,
             settings: sourceWalletSettings
         )

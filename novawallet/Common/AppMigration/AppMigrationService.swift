@@ -1,4 +1,5 @@
 import Foundation
+import Operation_iOS
 
 public protocol AppMigrationObserver: AnyObject {
     func didReceiveMigration(message: AppMigrationMessage)
@@ -14,19 +15,24 @@ public protocol AppMigrationServiceProtocol {
 }
 
 public final class AppMigrationService {
-    private var observers: [WeakWrapper] = []
+    private var observers: [WeakObserver<AppMigrationMessage>] = []
     private var pendingMessage: AppMigrationMessage?
 
     private let parser: AppMigrationMessageParser
+    private let notificationQueue: DispatchQueue
+
+    private let mutex = NSLock()
 
     public init(
         localDeepLinkScheme: String,
-        queryFactory: AppMigrationQueryFactoryProtocol = AppMigrationDefaultQueryFactory()
+        queryFactory: AppMigrationQueryFactoryProtocol = AppMigrationDefaultQueryFactory(),
+        notificationQueue: DispatchQueue = .init(label: "io.novawallet.assetmigrationservice.\(UUID().uuidString)")
     ) {
         parser = AppMigrationMessageParser(
             localDeepLinkScheme: localDeepLinkScheme,
             queryFactory: queryFactory
         )
+        self.notificationQueue = notificationQueue
     }
 }
 
@@ -38,17 +44,25 @@ private extension AppMigrationService {
     }
 
     func handle(message: AppMigrationMessage) {
-        observers.clearEmptyItems()
+        clearEmptyItems()
 
-        if !observers.isEmpty {
-            markPendingMessageConsumed()
-
-            observers.forEach {
-                ($0.target as? AppMigrationObserver)?.didReceiveMigration(message: message)
-            }
-        } else {
+        guard !observers.isEmpty else {
             pendingMessage = message
+            return
         }
+
+        markPendingMessageConsumed()
+
+        observers.forEach { observer in
+            dispatchInQueueWhenPossible(
+                observer.notificationQueue,
+                block: { observer.closure(message) }
+            )
+        }
+    }
+
+    func clearEmptyItems() {
+        observers = observers.filter { $0.target != nil }
     }
 }
 
@@ -56,6 +70,9 @@ private extension AppMigrationService {
 
 extension AppMigrationService: AppMigrationServiceProtocol {
     public func handle(url: URL) -> Bool {
+        mutex.lock()
+        defer { mutex.unlock() }
+
         guard let action = parser.parseAction(from: url) else {
             return false
         }
@@ -68,20 +85,35 @@ extension AppMigrationService: AppMigrationServiceProtocol {
     }
 
     public func addObserver(_ observer: AppMigrationObserver) {
-        observers.clearEmptyItems()
+        mutex.lock()
+        defer { mutex.unlock() }
 
-        if !observers.contains(where: { $0.target === observer }) {
-            observers.append(.init(target: observer))
-        }
+        clearEmptyItems()
+
+        guard !observers.contains(where: { $0.target === observer }) else { return }
+
+        let weakObserver = WeakObserver(
+            target: observer,
+            notificationQueue: notificationQueue,
+            closure: { observer.didReceiveMigration(message: $0) }
+        )
+
+        observers.append(weakObserver)
     }
 
     public func removeObserver(_ observer: AppMigrationObserver) {
-        observers.clearEmptyItems()
+        mutex.lock()
+        defer { mutex.unlock() }
+
+        clearEmptyItems()
 
         observers = observers.filter { $0.target !== observer }
     }
 
     public func consumePendingMessage() -> AppMigrationMessage? {
+        mutex.lock()
+        defer { mutex.unlock() }
+
         let message = pendingMessage
 
         markPendingMessageConsumed()

@@ -26,14 +26,14 @@ typealias AssetsExchangeStateMediating = AssetsExchangeStateManaging & AssetsExc
 
 final class AssetsExchangeStateMediator {
     private var stateProviders: [WeakWrapper] = []
-    private var observers: [WeakObserver] = []
+    private var observers: [WeakObserver<Void>] = []
 
     private let syncQueue: DispatchQueue = .init(label: "io.novawallet.assetexchangestatemediator.\(UUID().uuidString)")
 
     private func notifyObservers() {
         observers.forEach { observer in
             if observer.target != nil {
-                dispatchInQueueWhenPossible(observer.notificationQueue, block: observer.closure)
+                dispatchInQueueWhenPossible(observer.notificationQueue, block: { observer.closure(()) })
             }
         }
     }

@@ -84,9 +84,7 @@ private extension AppMigrationMessageParser {
     func parseStartMessage(from url: URL) throws -> AppMigrationMessage {
         if url.scheme == localDeepLinkScheme {
             return try parseStartDeepLinkMessage(from: url)
-        } else if
-            let scheme = url.scheme,
-            AppMigrationParams.allowedAppLinkSchemes.contains(scheme) {
+        } else if let scheme = url.scheme, AppMigrationParams.allowedAppLinkSchemes.contains(scheme) {
             return try parseStartAppLinkMessage(from: url)
         } else {
             throw AppMigrationMessageParsingError.schemeMismatch(url.scheme)

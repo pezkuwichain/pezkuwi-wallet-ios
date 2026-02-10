@@ -69,19 +69,14 @@ private extension AppMigrationOriginCoordinator {
         destinationPublicKey: Data
     ) {
         do {
-            // Encode migration data to JSON
             let jsonData = try JSONEncoder().encode(migrationData)
 
-            // Start secure session and get our public key
             let originPublicKey = try secureSessionManager.startSession()
 
-            // Derive cryptor using destination's public key
             let cryptor = try secureSessionManager.deriveCryptor(peerPubKey: destinationPublicKey)
 
-            // Encrypt data with the derived key
             let encryptedData = try cryptor.encrypt(jsonData)
 
-            // Send complete message with encrypted data
             let completeMessage = AppMigrationMessage.Complete(
                 originPublicKey: originPublicKey,
                 encryptedData: encryptedData

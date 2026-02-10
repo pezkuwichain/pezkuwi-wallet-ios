@@ -44,18 +44,15 @@ final class AppMigrationWalletSecretsImporterTests: XCTestCase {
         let sourceRawStore = sourceKeystore.getRawStore()
         let targetRawStore = targetKeystore.getRawStore()
 
-        // Check entropy
         let entropyTag = KeystoreTagV2.entropyTagForMetaId(wallet.metaId)
         XCTAssertEqual(sourceRawStore[entropyTag], targetRawStore[entropyTag])
 
-        // Check substrate secrets
         let substrateSeedTag = KeystoreTagV2.substrateSeedTagForMetaId(wallet.metaId)
         XCTAssertEqual(sourceRawStore[substrateSeedTag], targetRawStore[substrateSeedTag])
 
         let substrateSecretKeyTag = KeystoreTagV2.substrateSecretKeyTagForMetaId(wallet.metaId)
         XCTAssertEqual(sourceRawStore[substrateSecretKeyTag], targetRawStore[substrateSecretKeyTag])
 
-        // Check ethereum secrets
         let ethereumSecretKeyTag = KeystoreTagV2.ethereumSecretKeyTagForMetaId(wallet.metaId)
         XCTAssertEqual(sourceRawStore[ethereumSecretKeyTag], targetRawStore[ethereumSecretKeyTag])
     }
@@ -72,7 +69,7 @@ final class AppMigrationWalletSecretsImporterTests: XCTestCase {
             operationQueue: operationQueue
         )
 
-        let derivationPath = "//hard/soft///password"
+        let derivationPath = DerivationPathConstants.hardSoftPasswordPlaceholder
 
         try AccountCreationHelper.createMetaAccountFromMnemonic(
             cryptoType: .sr25519,
@@ -360,7 +357,7 @@ final class AppMigrationWalletSecretsImporterTests: XCTestCase {
 
         try AccountCreationHelper.createMetaAccountFromMnemonic(
             cryptoType: .sr25519,
-            derivationPath: "//test/path",
+            derivationPath: DerivationPathConstants.hardSoftPlaceholder,
             keychain: sourceKeystore,
             settings: walletSettings
         )
@@ -390,11 +387,11 @@ final class AppMigrationWalletSecretsImporterTests: XCTestCase {
         // Get all keys related to this wallet from source
         let walletRelatedKeys = sourceStore.keys.filter { $0.contains(wallet.metaId) }
 
-        for key in walletRelatedKeys {
+        walletRelatedKeys.forEach {
             XCTAssertEqual(
-                sourceStore[key],
-                targetStore[key],
-                "Key \(key) should match between source and target"
+                sourceStore[$0],
+                targetStore[$0],
+                "Key \($0) should match between source and target"
             )
         }
     }

@@ -43,10 +43,8 @@ private extension AppMigrationDestinationCoordinator {
         logger.info("Received migration start request from origin scheme: \(message.originScheme)")
 
         do {
-            // Generate our keypair for secure communication
             let destinationPublicKey = try secureSessionManager.startSession()
 
-            // Send acceptance with our public key
             let acceptedMessage = AppMigrationMessage.Accepted(
                 destinationPublicKey: destinationPublicKey
             )
@@ -64,13 +62,10 @@ private extension AppMigrationDestinationCoordinator {
         logger.info("Received migration data, decrypting and importing...")
 
         do {
-            // Derive cryptor using origin's public key
             let cryptor = try secureSessionManager.deriveCryptor(peerPubKey: message.originPublicKey)
 
-            // Decrypt the data
             let decryptedData = try cryptor.decrypt(message.encryptedData)
 
-            // Decode migration data
             let migrationData = try JSONDecoder().decode(AppMigrationData.self, from: decryptedData)
 
             logger.info("Successfully decrypted migration data (version: \(migrationData.version))")

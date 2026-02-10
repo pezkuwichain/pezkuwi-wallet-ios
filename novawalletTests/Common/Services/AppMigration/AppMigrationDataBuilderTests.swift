@@ -108,11 +108,10 @@ final class AppMigrationDataBuilderTests: XCTestCase {
             operationQueue: operationQueue
         )
 
-        // Create multiple wallets
-        for i in 0 ..< 3 {
+        try (0 ..< 3).forEach {
             try AccountCreationHelper.createMetaAccountFromMnemonic(
                 cryptoType: .sr25519,
-                name: "Wallet \(i)",
+                name: "Wallet \($0)",
                 keychain: keystore,
                 settings: walletSettings
             )
@@ -234,7 +233,6 @@ final class AppMigrationDataBuilderTests: XCTestCase {
             return
         }
 
-        // Ledger wallets have derivation paths in chain accounts, not entropy
         XCTAssertNil(privateInfo.entropy)
         XCTAssertFalse(privateInfo.chainAccounts.isEmpty)
     }

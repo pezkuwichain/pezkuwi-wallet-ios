@@ -160,7 +160,16 @@ final class AppMigrationOriginCoordinatorTests: XCTestCase {
         }
 
         // Use a builder that will fail
-        let failingBuilder = MockFailingMigrationDataBuilder()
+        let failingBuilder = MockAppMigrationDataBuilding()
+        stub(failingBuilder) { stub in
+            when(stub.buildWrapper()).then {
+                CompoundOperationWrapper.createWithError(
+                    AppMigrationDataBuilderError.walletConversionFailed(
+                        NSError(domain: "test", code: 1)
+                    )
+                )
+            }
+        }
 
         let coordinator = AppMigrationOriginCoordinator(
             appMigrationService: service,
@@ -332,10 +341,12 @@ final class AppMigrationOriginCoordinatorTests: XCTestCase {
         XCTAssertNotNil(sentCompleteMessage)
         verify(delegate).appMigrationCoordinatorDidComplete(any())
     }
+}
 
-    // MARK: - Helpers
+// MARK: - Helpers
 
-    private func createOriginCoordinator(
+private extension AppMigrationOriginCoordinatorTests {
+    func createOriginCoordinator(
         service: AppMigrationServiceProtocol,
         origin: AppMigrationOriginProtocol? = nil,
         keystore: KeystoreProtocol? = nil,
@@ -375,19 +386,5 @@ final class AppMigrationOriginCoordinatorTests: XCTestCase {
             callbackQueue: .main,
             logger: Logger.shared
         )
-    }
-}
-
-// MARK: - Mock Failing Builder
-
-private final class MockFailingMigrationDataBuilder: AppMigrationDataBuilding {
-    func buildWrapper() -> CompoundOperationWrapper<AppMigrationData> {
-        let operation = ClosureOperation<AppMigrationData> {
-            throw AppMigrationDataBuilderError.walletConversionFailed(
-                NSError(domain: "test", code: 1)
-            )
-        }
-
-        return CompoundOperationWrapper(targetOperation: operation)
     }
 }

@@ -15,8 +15,12 @@ final class AppMigrationWalletSecretsExporter {
     init(keychain: KeystoreProtocol) {
         self.keychain = keychain
     }
+}
 
-    private func convertToBackup(
+// MARK: - Private
+
+private extension AppMigrationWalletSecretsExporter {
+    func convertToBackup(
         secretKey: Data,
         publicKey: Data,
         cryptoType: UInt8
@@ -41,13 +45,13 @@ final class AppMigrationWalletSecretsExporter {
         }
     }
 
-    private func fetchEntropy(for wallet: MetaAccountModel, chainAccount: ChainAccountModel?) throws -> String? {
+    func fetchEntropy(for wallet: MetaAccountModel, chainAccount: ChainAccountModel?) throws -> String? {
         let tag = KeystoreTagV2.entropyTagForMetaId(wallet.metaId, accountId: chainAccount?.accountId)
         let entropy = try keychain.loadIfKeyExists(tag)
         return entropy?.toHex()
     }
 
-    private func fetchDerivationPath(
+    func fetchDerivationPath(
         for wallet: MetaAccountModel,
         chainAccount: ChainAccountModel?,
         isEthereumBased: Bool
@@ -68,7 +72,7 @@ final class AppMigrationWalletSecretsExporter {
         }
     }
 
-    private func fetchRegularDerivationPath(
+    func fetchRegularDerivationPath(
         for wallet: MetaAccountModel,
         chainAccount: ChainAccountModel?,
         isEthereumBased: Bool
@@ -86,7 +90,7 @@ final class AppMigrationWalletSecretsExporter {
         return String(data: derivationPath, encoding: .utf8)
     }
 
-    private func fetchLedgerDerivationPath(
+    func fetchLedgerDerivationPath(
         for wallet: MetaAccountModel,
         chainAccount: ChainAccountModel?,
         isEthereumBased: Bool
@@ -104,7 +108,7 @@ final class AppMigrationWalletSecretsExporter {
         return try LedgerPathConverter().convertFromChaincodesData(from: derivationPath)
     }
 
-    private func fetchSeed(
+    func fetchSeed(
         for wallet: MetaAccountModel,
         chainAccountModel: ChainAccountModel?,
         isEthereumBased: Bool
@@ -119,7 +123,7 @@ final class AppMigrationWalletSecretsExporter {
         return seed?.toHex()
     }
 
-    private func fetchPrivateKey(
+    func fetchPrivateKey(
         for wallet: MetaAccountModel,
         chainAccountModel: ChainAccountModel?,
         isEthereumBased: Bool
@@ -160,7 +164,7 @@ final class AppMigrationWalletSecretsExporter {
         }
     }
 
-    private func fetchUniversalSubstrateSecrets(
+    func fetchUniversalSubstrateSecrets(
         for wallet: MetaAccountModel
     ) throws -> CloudBackup.DecryptedFileModel.SubstrateSecrets? {
         guard
@@ -178,7 +182,7 @@ final class AppMigrationWalletSecretsExporter {
         return .init(seed: seed, keypair: keypairSecrets, derivationPath: derivationPath)
     }
 
-    private func fetchUniversalEthereumSecrets(
+    func fetchUniversalEthereumSecrets(
         for wallet: MetaAccountModel
     ) throws -> CloudBackup.DecryptedFileModel.EthereumSecrets? {
         guard
@@ -196,7 +200,7 @@ final class AppMigrationWalletSecretsExporter {
         return .init(seed: seed, keypair: keypairSecrets, derivationPath: derivationPath)
     }
 
-    private func createChainAccountSecrets(
+    func createChainAccountSecrets(
         from wallet: MetaAccountModel
     ) throws -> Set<CloudBackup.DecryptedFileModel.ChainAccountSecrets> {
         let chainAccountSecrets = try wallet.chainAccounts.map { chainAccount in
@@ -232,7 +236,7 @@ final class AppMigrationWalletSecretsExporter {
         return Set(chainAccountSecrets)
     }
 
-    private func createPrivateInfoFromSecretsWalletType(
+    func createPrivateInfoFromSecretsWalletType(
         _ wallet: MetaAccountModel
     ) throws -> CloudBackup.DecryptedFileModel.WalletPrivateInfo {
         let entropy = try fetchEntropy(for: wallet, chainAccount: nil)
@@ -249,7 +253,7 @@ final class AppMigrationWalletSecretsExporter {
         )
     }
 
-    private func createPrivateInfoFromLedgerWalletType(
+    func createPrivateInfoFromLedgerWalletType(
         _ wallet: MetaAccountModel
     ) throws -> CloudBackup.DecryptedFileModel.WalletPrivateInfo {
         let chainAccounts = try createChainAccountSecrets(from: wallet)
@@ -263,7 +267,7 @@ final class AppMigrationWalletSecretsExporter {
         )
     }
 
-    private func createPrivateInfoFromGenericWalletType(
+    func createPrivateInfoFromGenericWalletType(
         _ wallet: MetaAccountModel
     ) throws -> CloudBackup.DecryptedFileModel.WalletPrivateInfo {
         let substrateDerivationPath = try fetchDerivationPath(
@@ -305,29 +309,29 @@ final class AppMigrationWalletSecretsExporter {
         )
     }
 
-    private func createPrivateInfo(
+    func createPrivateInfo(
         from wallet: MetaAccountModel
     ) throws -> CloudBackup.DecryptedFileModel.WalletPrivateInfo? {
         switch wallet.type {
         case .secrets:
-            return try createPrivateInfoFromSecretsWalletType(wallet)
+            try createPrivateInfoFromSecretsWalletType(wallet)
         case .genericLedger:
-            return try createPrivateInfoFromGenericWalletType(wallet)
+            try createPrivateInfoFromGenericWalletType(wallet)
         case .ledger:
-            return try createPrivateInfoFromLedgerWalletType(wallet)
-        case .watchOnly, .polkadotVault, .paritySigner:
-            return nil
-        case .proxied, .multisig:
-            return nil
+            try createPrivateInfoFromLedgerWalletType(wallet)
+        case .watchOnly, .polkadotVault, .paritySigner, .proxied, .multisig:
+            nil
         }
     }
 }
 
+// MARK: - AppMigrationWalletSecretsExporting
+
 extension AppMigrationWalletSecretsExporter: AppMigrationWalletSecretsExporting {
-    func exportSecrets(from wallets: Set<MetaAccountModel>) throws -> Set<CloudBackup.DecryptedFileModel.WalletPrivateInfo> {
-        let privateInfoList = try wallets.compactMap { wallet in
-            try createPrivateInfo(from: wallet)
-        }
+    func exportSecrets(
+        from wallets: Set<MetaAccountModel>
+    ) throws -> Set<CloudBackup.DecryptedFileModel.WalletPrivateInfo> {
+        let privateInfoList = try wallets.compactMap { try createPrivateInfo(from: $0) }
 
         return Set(privateInfoList)
     }
