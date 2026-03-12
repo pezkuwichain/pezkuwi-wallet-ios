@@ -186,8 +186,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/novasamatech/hydra-math-swift",
       "state" : {
-        "revision" : "52c6a9882721751254b0615892c289e08f0ce663",
-        "version" : "0.4.1"
+        "revision" : "1e40c9e092864c0b55c0b0736541ca0386cc807c"
       }
     },
     {
