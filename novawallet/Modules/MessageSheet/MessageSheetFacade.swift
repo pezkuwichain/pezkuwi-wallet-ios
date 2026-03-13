@@ -3,7 +3,7 @@ import UIKit_iOS
 
 enum MessageSheetViewFacade {
     static func setupBottomSheet(from controller: UIViewController, preferredHeight: CGFloat) {
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         controller.modalTransitioningFactory = factory
         controller.modalPresentationStyle = .custom

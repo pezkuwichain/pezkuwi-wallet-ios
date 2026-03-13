@@ -57,7 +57,7 @@ struct TransferNetworkSelectionViewFactory {
             viewController.selectedIndex = NSNotFound
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: .nova)
+        let factory = ModalSheetPresentationFactory(configuration: .novaManual)
         viewController.modalTransitioningFactory = factory
 
         let itemsCount = selectionState.availablePeerChainAssets.count

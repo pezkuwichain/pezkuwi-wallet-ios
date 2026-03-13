@@ -32,7 +32,7 @@ struct UnifiedAddressPopupViewFactory {
         presenter.view = view
         interactor.presenter = presenter
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         let preferredSize = CGSize(
             width: .zero,

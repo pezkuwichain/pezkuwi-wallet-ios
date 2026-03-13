@@ -10,7 +10,7 @@ protocol StakingMainViewProtocol: ControllerBackedProtocol {
     func expandNetworkInfoView(_ isExpanded: Bool)
     func didReceiveStatics(viewModel: StakingMainStaticViewModelProtocol)
     func didReceiveSelectedEntity(_ entity: StakingSelectedEntityViewModel)
-    func didReceiveAHMAlert(viewModel: AHMAlertView.Model?)
+    func didReceiveAHMAlert(viewModel: InlinableAlertView.Model?)
     func didEditRewardFilters()
 }
 

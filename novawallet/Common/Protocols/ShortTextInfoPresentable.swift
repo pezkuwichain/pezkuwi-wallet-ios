@@ -24,7 +24,7 @@ extension ShortTextInfoPresentable {
 
         let bottomSheet = TitleDetailsSheetViewFactory.createContentSizedView(from: viewModel)
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         bottomSheet.controller.modalTransitioningFactory = factory
         bottomSheet.controller.modalPresentationStyle = .custom

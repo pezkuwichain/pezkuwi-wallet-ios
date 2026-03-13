@@ -10,6 +10,7 @@ extension HydraOmnipool {
         let assetOutBalance: Balance?
         let assetInFee: HydraDx.FeeEntry?
         let assetOutFee: HydraDx.FeeEntry?
+        let maxSlipFee: BigUInt?
         let blockHash: Data?
     }
 
@@ -20,6 +21,7 @@ extension HydraOmnipool {
         let assetOutState: HydraOmnipool.AssetState?
         let assetInFee: HydraDx.FeeEntry?
         let assetOutFee: HydraDx.FeeEntry?
+        let maxSlipFee: HydraOmnipool.SlipFeeConfig?
         let blockHash: Data?
 
         init(
@@ -27,12 +29,14 @@ extension HydraOmnipool {
             assetOutState: HydraOmnipool.AssetState?,
             assetInFee: HydraDx.FeeEntry?,
             assetOutFee: HydraDx.FeeEntry?,
+            maxSlipFee: HydraOmnipool.SlipFeeConfig?,
             blockHash: Data?
         ) {
             self.assetInState = assetInState
             self.assetOutState = assetOutState
             self.assetInFee = assetInFee
             self.assetOutFee = assetOutFee
+            self.maxSlipFee = maxSlipFee
             self.blockHash = blockHash
         }
 
@@ -41,6 +45,7 @@ extension HydraOmnipool {
             assetOutState = change.assetOutState.valueWhenDefined(else: nil)
             assetInFee = change.assetInFee.valueWhenDefined(else: nil)
             assetOutFee = change.assetOutFee.valueWhenDefined(else: nil)
+            maxSlipFee = change.maxSlipFee.valueWhenDefined(else: nil)
             blockHash = change.blockHash
         }
 
@@ -50,6 +55,7 @@ extension HydraOmnipool {
                 assetOutState: change.assetOutState.valueWhenDefined(else: assetOutState),
                 assetInFee: change.assetInFee.valueWhenDefined(else: assetInFee),
                 assetOutFee: change.assetOutFee.valueWhenDefined(else: assetOutFee),
+                maxSlipFee: change.maxSlipFee.valueWhenDefined(else: maxSlipFee),
                 blockHash: change.blockHash
             )
         }
@@ -61,12 +67,14 @@ extension HydraOmnipool {
             case assetOutState
             case assetInFee
             case assetOutFee
+            case maxSlipFee
         }
 
         let assetInState: UncertainStorage<HydraOmnipool.AssetState?>
         let assetOutState: UncertainStorage<HydraOmnipool.AssetState?>
         let assetInFee: UncertainStorage<HydraDx.FeeEntry?>
         let assetOutFee: UncertainStorage<HydraDx.FeeEntry?>
+        let maxSlipFee: UncertainStorage<HydraOmnipool.SlipFeeConfig?>
         let blockHash: Data?
 
         init(
@@ -74,12 +82,14 @@ extension HydraOmnipool {
             assetOutState: UncertainStorage<HydraOmnipool.AssetState?>,
             assetInFee: UncertainStorage<HydraDx.FeeEntry?>,
             assetOutFee: UncertainStorage<HydraDx.FeeEntry?>,
+            maxSlipFee: UncertainStorage<HydraOmnipool.SlipFeeConfig?>,
             blockHash: Data?
         ) {
             self.assetInState = assetInState
             self.assetOutState = assetOutState
             self.assetInFee = assetInFee
             self.assetOutFee = assetOutFee
+            self.maxSlipFee = maxSlipFee
             self.blockHash = blockHash
         }
 
@@ -109,6 +119,12 @@ extension HydraOmnipool {
             assetOutFee = try UncertainStorage<HydraDx.FeeEntry?>(
                 values: values,
                 mappingKey: Key.assetOutFee.rawValue,
+                context: context
+            )
+
+            maxSlipFee = try UncertainStorage<HydraOmnipool.SlipFeeConfig?>(
+                values: values,
+                mappingKey: Key.maxSlipFee.rawValue,
                 context: context
             )
 

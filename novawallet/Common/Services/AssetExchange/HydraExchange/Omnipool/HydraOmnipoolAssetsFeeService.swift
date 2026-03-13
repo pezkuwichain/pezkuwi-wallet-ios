@@ -85,11 +85,20 @@ final class HydraOmnipoolAssetsFeeService: ObservableSubscriptionSyncService<Hyd
             mappingKey: HydraOmnipool.AssetsFeeStateChange.Key.assetOutFee
         )
 
+        let maxSlipFeeRequest = BatchStorageSubscriptionRequest(
+            innerRequest: UnkeyedSubscriptionRequest(
+                storagePath: HydraOmnipool.slipFeePath,
+                localKey: ""
+            ),
+            mappingKey: HydraOmnipool.AssetsFeeStateChange.Key.maxSlipFee.rawValue
+        )
+
         return [
             assetInStateRequest,
             assetOutStateRequest,
             assetInFeeRequest,
-            assetOutFeeRequest
+            assetOutFeeRequest,
+            maxSlipFeeRequest
         ]
     }
 }

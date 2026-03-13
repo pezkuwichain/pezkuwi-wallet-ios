@@ -14,8 +14,6 @@ final class NftListViewLayout: UIView {
         return blurView
     }()
 
-    var navBarBlurViewHeightConstraint: Constraint!
-
     let collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         let view = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -26,14 +24,11 @@ final class NftListViewLayout: UIView {
         return view
     }()
 
-    let counterView: BorderedLabelView = {
-        let view = BorderedLabelView()
-        view.titleLabel.textColor = R.color.colorTextPrimary()!
-        view.titleLabel.font = .regularFootnote
+    let counterView: GenericBorderedView<UILabel> = .create { view in
+        view.contentView.apply(style: .footnotePrimary)
+        view.contentView.textAlignment = .center
         view.contentInsets = UIEdgeInsets(top: 2.0, left: 8.0, bottom: 2.0, right: 8.0)
-        view.backgroundView.cornerRadius = 6.0
-        return view
-    }()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,8 +61,7 @@ final class NftListViewLayout: UIView {
         addSubview(navBarBlurView)
         navBarBlurView.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview()
-            self.navBarBlurViewHeightConstraint = make.height.equalTo(0).constraint
-            self.navBarBlurViewHeightConstraint.activate()
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.top)
         }
     }
 }

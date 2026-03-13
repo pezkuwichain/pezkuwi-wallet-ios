@@ -28,6 +28,10 @@ enum HydraOmnipool {
         let tradable: Tradable
     }
 
+    struct SlipFeeConfig: Decodable {
+        @StringCodable var maxSlipFee: BigUInt
+    }
+
     static func getPoolAccountId(for size: Int) throws -> AccountId {
         guard let accountIdPrefix = "modlomnipool".data(using: .utf8) else {
             throw CommonError.dataCorruption

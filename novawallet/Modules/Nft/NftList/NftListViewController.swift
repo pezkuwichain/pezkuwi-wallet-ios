@@ -42,22 +42,11 @@ final class NftListViewController: UIViewController, ViewHolder {
         setupLocalization()
         setupHandlers()
 
-        setupNavigationBarStyle()
-
         presenter.setup()
     }
 
     private func setupHandlers() {
         rootView.collectionView.refreshControl?.addTarget(self, action: #selector(actionRefresh), for: .valueChanged)
-    }
-
-    private func setupNavigationBarStyle() {
-        guard let navigationBar = navigationController?.navigationBar else { return }
-
-        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
-        let navBarHeight = navigationBar.bounds.height
-        let blurHeight = statusBarHeight + navBarHeight
-        rootView.navBarBlurViewHeightConstraint.update(offset: blurHeight)
     }
 
     private func updateCounter() {
@@ -67,12 +56,14 @@ final class NftListViewController: UIViewController, ViewHolder {
             let counterString = quantityFormater.value(for: selectedLocale).string(
                 from: NSNumber(value: numberOfItems)
             ) {
-            rootView.counterView.titleLabel.text = counterString
+            rootView.counterView.contentView.text = counterString
 
             let barItem = UIBarButtonItem(customView: rootView.counterView)
+            barItem.applyNoLiquidGlassStyle()
+
             navigationItem.rightBarButtonItem = barItem
         } else {
-            rootView.counterView.titleLabel.text = ""
+            rootView.counterView.contentView.text = ""
             navigationItem.rightBarButtonItem = nil
         }
     }

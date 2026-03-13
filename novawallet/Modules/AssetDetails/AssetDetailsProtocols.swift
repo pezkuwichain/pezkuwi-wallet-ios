@@ -5,7 +5,7 @@ protocol AssetDetailsViewProtocol: AnyObject, ControllerBackedProtocol, Containa
     func didReceive(balance: AssetDetailsBalanceModel)
     func didReceive(availableOperations: AssetDetailsOperation)
     func didReceiveChartAvailable(_ available: Bool)
-    func didReceive(ahmAlert: AHMAlertView.Model?)
+    func didReceive(ahmAlert: InlinableAlertView.Model?)
 }
 
 protocol AssetDetailsPresenterProtocol: AnyObject {

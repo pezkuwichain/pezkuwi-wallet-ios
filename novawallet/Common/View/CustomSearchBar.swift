@@ -2,14 +2,11 @@ import UIKit
 import UIKit_iOS
 
 final class CustomSearchBar: UIView {
-    let textFieldBackgroundView: RoundedView = {
-        let view = RoundedView()
+    let textFieldBackgroundView: RoundedView = .create { view in
         view.apply(style: .searchBarTextField)
-        return view
-    }()
+    }
 
-    let textField: UITextField = {
-        let view = UITextField()
+    let textField: UITextField = .create { view in
         view.textColor = R.color.colorTextPrimary()
         view.font = .regularFootnote
         view.background = UIImage()
@@ -23,8 +20,7 @@ final class CustomSearchBar: UIView {
         searchButton.imageWithTitleView?.iconImage = R.image.iconSearch()
         view.leftViewMode = .always
         view.leftView = searchButton
-        return view
-    }()
+    }
 
     override var intrinsicContentSize: CGSize {
         let width = UIView.layoutFittingExpandedSize.width
@@ -68,5 +64,7 @@ final class CustomSearchBar: UIView {
             make.leading.trailing.equalToSuperview().inset(12.0)
             make.top.bottom.equalToSuperview()
         }
+
+        layoutIfNeeded()
     }
 }

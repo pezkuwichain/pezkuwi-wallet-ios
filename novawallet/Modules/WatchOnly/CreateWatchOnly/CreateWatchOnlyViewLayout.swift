@@ -2,210 +2,131 @@ import UIKit
 import Foundation_iOS
 import UIKit_iOS
 
-final class CreateWatchOnlyViewLayout: UIView {
-    enum Constants {
-        static let presetsInsets: CGFloat = 16.0
+final class CreateWatchOnlyViewLayout: SCSingleActionLayoutView {
+    let titleLabel: UILabel = .create { view in
+        view.textColor = R.color.colorTextPrimary()
+        view.font = .boldTitle3
     }
 
-    static func createSectionTitleLabel() -> UILabel {
-        let label = UILabel()
-        label.font = .regularFootnote
-        label.textColor = R.color.colorTextSecondary()
-        return label
+    let detailsLabel: UILabel = .create { view in
+        view.textColor = R.color.colorTextSecondary()
+        view.font = .regularFootnote
+        view.numberOfLines = 0
     }
 
-    static func createHintLabel() -> UILabel {
-        let label = UILabel()
-        label.font = .caption1
-        label.textColor = R.color.colorTextSecondary()
-        label.numberOfLines = 0
-        return label
+    let presetSegmentControl: RoundedSegmentedControl = .create { view in
+        view.backgroundView.fillColor = R.color.colorSegmentedBackgroundOnBlack()!
+        view.selectionColor = R.color.colorSegmentedTabActive()!
+        view.titleFont = .regularFootnote
+        view.selectedTitleColor = R.color.colorTextPrimary()!
+        view.titleColor = R.color.colorTextSecondary()!
+        view.backgroundView.cornerRadius = Constants.segmentControlCornerRadius
     }
-
-    let containerView: ScrollableContainerView = {
-        let view = ScrollableContainerView(axis: .vertical, respectsSafeArea: true)
-        view.stackView.layoutMargins = UIEdgeInsets(top: 12.0, left: 16.0, bottom: 0.0, right: 16.0)
-        view.stackView.isLayoutMarginsRelativeArrangement = true
-        view.stackView.alignment = .fill
-        return view
-    }()
-
-    let actionButton: TriangularedButton = {
-        let button = TriangularedButton()
-        button.applyDefaultStyle()
-        return button
-    }()
-
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = R.color.colorTextPrimary()
-        label.font = .boldTitle3
-        return label
-    }()
-
-    let detailsLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = R.color.colorTextSecondary()
-        label.font = .regularFootnote
-        label.numberOfLines = 0
-        return label
-    }()
-
-    let presetsTitleLabel = CreateWatchOnlyViewLayout.createSectionTitleLabel()
-
-    let presetsContainerView: ScrollableContainerView = {
-        let view = ScrollableContainerView(axis: .horizontal)
-        view.stackView.distribution = .fill
-        view.stackView.alignment = .center
-        view.stackView.layoutMargins = UIEdgeInsets(
-            top: 0.0,
-            left: Constants.presetsInsets,
-            bottom: 0.0,
-            right: Constants.presetsInsets
-        )
-
-        view.stackView.isLayoutMarginsRelativeArrangement = true
-        view.stackView.spacing = 6.0
-        view.scrollView.showsHorizontalScrollIndicator = false
-        view.clipsToBounds = false
-        return view
-    }()
 
     let walletNameTitleLabel = CreateWatchOnlyViewLayout.createSectionTitleLabel()
 
     let walletNameInputView = TextInputView()
 
-    let walletNameHintLabel = CreateWatchOnlyViewLayout.createHintLabel()
-
     let substrateAddressTitleLabel = CreateWatchOnlyViewLayout.createSectionTitleLabel()
 
-    let substrateAddressInputView: AccountInputView = {
-        let view = AccountInputView()
+    let substrateAddressInputView: AccountInputView = .create { view in
         view.showsMyself = false
-
-        view.localizablePlaceholder = LocalizableResource { locale in
-            R.string(preferredLanguages: locale.rLanguages).localizable.commonSubstrateAddressTitle()
-        }
-
-        return view
-    }()
-
-    let substrateAddressHintLabel = CreateWatchOnlyViewLayout.createHintLabel()
+        view.localizablePlaceholder = .init(closure: { _ in Constants.substrateFieldPlaceholder })
+    }
 
     let evmAddressTitleLabel = CreateWatchOnlyViewLayout.createSectionTitleLabel()
 
-    let evmAddressInputView: AccountInputView = {
-        let view = AccountInputView()
+    let evmAddressInputView: AccountInputView = .create { view in
         view.showsMyself = false
+        view.localizablePlaceholder = .init(closure: { _ in Constants.evmFieldPlaceholder })
+    }
 
-        view.localizablePlaceholder = LocalizableResource { locale in
-            R.string(preferredLanguages: locale.rLanguages).localizable.commonEvmAddress()
+    let termsControl: RowView<IconDetailsView> = .create { view in
+        view.rowContentView.iconWidth = Constants.termsCheckboxIconWidth
+        view.rowContentView.spacing = Constants.termsContentSpacing
+        view.rowContentView.stackView.alignment = .top
+        view.roundedBackgroundView.apply(style: .roundedLightCell)
+
+        view.rowContentView.imageView.image = R.image.iconCheckboxEmpty()
+        view.rowContentView.detailsLabel.numberOfLines = 0
+
+        view.contentInsets = Constants.temsContainerInsets
+    }
+
+    override func setupLayout() {
+        super.setupLayout()
+
+        layoutTermsView()
+
+        addArrangedSubview(titleLabel, spacingAfter: Constants.fieldTitleOffset)
+        addArrangedSubview(detailsLabel, spacingAfter: Constants.fieldOffset)
+
+        addArrangedSubview(presetSegmentControl, spacingAfter: Constants.fieldOffset)
+
+        addArrangedSubview(walletNameTitleLabel, spacingAfter: Constants.fieldTitleOffset)
+        addArrangedSubview(walletNameInputView, spacingAfter: Constants.fieldOffset)
+
+        addArrangedSubview(substrateAddressTitleLabel, spacingAfter: Constants.fieldTitleOffset)
+        addArrangedSubview(substrateAddressInputView, spacingAfter: Constants.fieldOffset)
+
+        addArrangedSubview(evmAddressTitleLabel, spacingAfter: Constants.fieldTitleOffset)
+        addArrangedSubview(evmAddressInputView, spacingAfter: Constants.fieldOffset)
+
+        presetSegmentControl.snp.makeConstraints { make in
+            make.height.equalTo(Constants.segmentControlHeight)
         }
+    }
 
-        return view
-    }()
-
-    let evmAddressHintLabel = CreateWatchOnlyViewLayout.createHintLabel()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func setupStyle() {
+        super.setupStyle()
 
         backgroundColor = R.color.colorSecondaryScreenBackground()
-
-        setupLayout()
+        genericActionView.applyDefaultStyle()
     }
+}
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+// MARK: - Private
 
-    func addPresetButton(with title: String) -> RoundedButton {
-        let button = RoundedButton()
-        button.imageWithTitleView?.titleFont = .regularFootnote
-        button.roundedBackgroundView?.shadowOpacity = 0.0
-        button.roundedBackgroundView?.strokeWidth = 0.0
-        button.roundedBackgroundView?.fillColor = R.color.colorButtonBackgroundSecondary()!
-        button.roundedBackgroundView?.highlightedFillColor = R.color.colorButtonBackgroundSecondary()!
-        button.roundedBackgroundView?.cornerRadius = 10.0
-        button.changesContentOpacityWhenHighlighted = true
-        button.contentInsets = UIEdgeInsets(top: 0.0, left: 12.0, bottom: 0.0, right: 12.0)
-        button.imageWithTitleView?.title = title
+private extension CreateWatchOnlyViewLayout {
+    func layoutTermsView() {
+        addSubview(termsControl)
 
-        presetsContainerView.stackView.addArrangedSubview(button)
-
-        button.snp.makeConstraints { make in
-            make.height.equalTo(32.0)
-        }
-
-        return button
-    }
-
-    func clearPresets() {
-        let presetButtons = presetsContainerView.stackView.arrangedSubviews
-
-        presetButtons.forEach { $0.removeFromSuperview() }
-    }
-
-    private func setupLayout() {
-        addSubview(actionButton)
-        actionButton.snp.makeConstraints { make in
+        termsControl.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(UIConstants.actionBottomInset)
-            make.height.equalTo(UIConstants.actionHeight)
+            make.bottom.equalTo(genericActionView.snp.top).inset(-UIConstants.actionBottomInset)
         }
 
-        addSubview(containerView)
-        containerView.snp.makeConstraints { make in
+        containerView.snp.remakeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(actionButton.snp.top).offset(-8.0)
+            make.bottom.equalTo(termsControl.snp.top).offset(-Constants.fieldOffset)
         }
+    }
+}
 
-        containerView.stackView.addArrangedSubview(titleLabel)
-        containerView.stackView.setCustomSpacing(8.0, after: titleLabel)
+// MARK: - Constants
 
-        containerView.stackView.addArrangedSubview(detailsLabel)
-        containerView.stackView.setCustomSpacing(16.0, after: detailsLabel)
+private extension CreateWatchOnlyViewLayout {
+    enum Constants {
+        static let segmentControlHeight: CGFloat = 40
+        static let fieldTitleOffset: CGFloat = 8.0
+        static let fieldOffset: CGFloat = 16.0
+        static let segmentControlCornerRadius: CGFloat = 12.0
+        static let termsCheckboxIconWidth: CGFloat = 24.0
+        static let termsContentSpacing: CGFloat = 14.0
+        static let temsContainerInsets: UIEdgeInsets = .init(inset: 12)
+        static let substrateFieldPlaceholder = "1..."
+        static let evmFieldPlaceholder = "0x..."
+    }
+}
 
-        containerView.stackView.addArrangedSubview(presetsTitleLabel)
-        containerView.stackView.setCustomSpacing(8.0, after: presetsTitleLabel)
+// MARK: - Label Factories
 
-        let presetsContentView = UIView()
-        containerView.stackView.addArrangedSubview(presetsContentView)
-
-        presetsContentView.addSubview(presetsContainerView)
-        presetsContainerView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(-Constants.presetsInsets)
+extension CreateWatchOnlyViewLayout {
+    static func createSectionTitleLabel() -> UILabel {
+        .create { view in
+            view.font = .regularFootnote
+            view.numberOfLines = 0
+            view.textColor = R.color.colorTextSecondary()
         }
-
-        containerView.stackView.setCustomSpacing(16.0, after: presetsContentView)
-
-        containerView.stackView.addArrangedSubview(walletNameTitleLabel)
-        containerView.stackView.setCustomSpacing(8.0, after: walletNameTitleLabel)
-
-        containerView.stackView.addArrangedSubview(walletNameInputView)
-        containerView.stackView.setCustomSpacing(8.0, after: walletNameInputView)
-
-        containerView.stackView.addArrangedSubview(walletNameHintLabel)
-        containerView.stackView.setCustomSpacing(20.0, after: walletNameHintLabel)
-
-        containerView.stackView.addArrangedSubview(substrateAddressTitleLabel)
-        containerView.stackView.setCustomSpacing(8.0, after: substrateAddressTitleLabel)
-
-        containerView.stackView.addArrangedSubview(substrateAddressInputView)
-        containerView.stackView.setCustomSpacing(8.0, after: substrateAddressInputView)
-
-        containerView.stackView.addArrangedSubview(substrateAddressHintLabel)
-        containerView.stackView.setCustomSpacing(20.0, after: substrateAddressHintLabel)
-
-        containerView.stackView.addArrangedSubview(evmAddressTitleLabel)
-        containerView.stackView.setCustomSpacing(8.0, after: evmAddressTitleLabel)
-
-        containerView.stackView.addArrangedSubview(evmAddressInputView)
-        containerView.stackView.setCustomSpacing(8.0, after: evmAddressInputView)
-
-        containerView.stackView.addArrangedSubview(evmAddressHintLabel)
-        containerView.stackView.setCustomSpacing(20.0, after: evmAddressHintLabel)
     }
 }

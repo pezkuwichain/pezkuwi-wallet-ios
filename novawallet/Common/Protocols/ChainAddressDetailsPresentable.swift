@@ -21,7 +21,7 @@ enum ChainAddressDetailsPresentableFactory {
             return nil
         }
 
-        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.nova)
+        let factory = ModalSheetPresentationFactory(configuration: ModalSheetPresentationConfiguration.novaManual)
 
         detailsView.controller.modalTransitioningFactory = factory
         detailsView.controller.modalPresentationStyle = .custom

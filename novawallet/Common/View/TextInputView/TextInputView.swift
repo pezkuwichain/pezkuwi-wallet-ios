@@ -45,6 +45,8 @@ class TextInputView: BackgroundedContentControl {
         }
     }
 
+    private(set) var isLocked: Bool = false
+
     let stackView: UIStackView = {
         let view = UIStackView()
         view.spacing = 8.0
@@ -106,6 +108,35 @@ class TextInputView: BackgroundedContentControl {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Locked State
+
+    func applyLockedState() {
+        isLocked = true
+
+        textField.isUserInteractionEnabled = false
+        textField.textColor = R.color.colorTextSecondary()
+
+        roundedBackgroundView?.apply(style: .inputDisabled)
+
+        updateControlsState()
+
+        setNeedsLayout()
+    }
+
+    func applyDefaultState() {
+        isLocked = false
+
+        textField.isUserInteractionEnabled = true
+        textField.textColor = R.color.colorTextPrimary()
+
+        roundedBackgroundView?.apply(style: .strokeOnEditing)
+        roundedBackgroundView?.strokeWidth = textField.isFirstResponder ? 0.5 : 0.0
+
+        updateControlsState()
+
+        setNeedsLayout()
     }
 
     // MARK: Layout
@@ -225,7 +256,9 @@ class TextInputView: BackgroundedContentControl {
     }
 
     func applyControlsState() {
-        if shouldUseClearButton, hasText, textField.isEnabled {
+        if isLocked {
+            clearButton.isHidden = true
+        } else if shouldUseClearButton, hasText, textField.isEnabled {
             clearButton.isHidden = false
         } else {
             clearButton.isHidden = true
@@ -257,19 +290,20 @@ class TextInputView: BackgroundedContentControl {
     }
 
     @objc private func actionEditingBeginEnd() {
-        roundedBackgroundView?.strokeWidth = textField.isFirstResponder ? 0.5 : 0
+        if !isLocked {
+            roundedBackgroundView?.strokeWidth = textField.isFirstResponder ? 0.5 : 0.0
+        }
 
         updateControlsState()
     }
 
     @objc private func actionTouchUpInside() {
+        guard !isLocked else { return }
         textField.becomeFirstResponder()
     }
 
     @objc func actionClear() {
-        guard hasText else {
-            return
-        }
+        guard !isLocked, hasText else { return }
 
         textField.text = ""
         inputViewModel?.inputHandler.changeValue(to: "")
@@ -286,8 +320,8 @@ extension TextInputView: UITextFieldDelegate {
         shouldChangeCharactersIn range: NSRange,
         replacementString string: String
     ) -> Bool {
-        guard let inputViewModel = inputViewModel else {
-            return true
+        guard !isLocked, let inputViewModel = inputViewModel else {
+            return !isLocked
         }
 
         let shouldApply = inputViewModel.inputHandler.didReceiveReplacement(string, for: range)
@@ -300,8 +334,8 @@ extension TextInputView: UITextFieldDelegate {
     }
 
     func textFieldShouldClear(_: UITextField) -> Bool {
+        guard !isLocked else { return false }
         inputViewModel?.inputHandler.changeValue(to: "")
-
         return true
     }
 
@@ -315,6 +349,7 @@ extension TextInputView: UITextFieldDelegate {
     }
 
     func textFieldShouldBeginEditing(_: UITextField) -> Bool {
+        guard !isLocked else { return false }
         delegate?.textInputViewWillStartEditing(self)
         return true
     }

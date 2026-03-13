@@ -39,7 +39,8 @@ extension NSAttributedString {
         _ items: [String],
         formattingClosure: ([String]) -> String,
         color: UIColor,
-        font: UIFont
+        font: UIFont,
+        defaultAttributes: [NSAttributedString.Key: Any]? = nil
     ) -> NSAttributedString {
         highlightedItems(
             items,
@@ -48,7 +49,7 @@ extension NSAttributedString {
                 .foregroundColor: color,
                 .font: font
             ],
-            defaultAttributes: nil
+            defaultAttributes: defaultAttributes
         )
     }
 }

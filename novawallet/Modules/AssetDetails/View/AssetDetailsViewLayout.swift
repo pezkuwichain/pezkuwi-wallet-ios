@@ -31,7 +31,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         options: [.curveLinear]
     )
 
-    lazy var ahmAlertView: AHMAlertView = .create { view in
+    lazy var ahmAlertView: InlinableAlertView = .create { view in
         view.isHidden = true
     }
 
@@ -98,23 +98,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
             $0.edges.equalToSuperview()
         }
 
-        let assetView = UIStackView(arrangedSubviews: [assetIconView, assetLabel])
-        assetView.spacing = 8
-        addSubview(assetView)
-
-        assetIconView.setContentHuggingPriority(.low, for: .horizontal)
-        assetLabel.setContentHuggingPriority(.low, for: .horizontal)
-
-        assetIconView.snp.makeConstraints {
-            $0.width.height.equalTo(Constants.assetImageViewSize)
-        }
-
-        assetView.snp.makeConstraints {
-            $0.leading.greaterThanOrEqualToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(Constants.assetHeight)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.top).offset(-7.0)
-        }
+        layoutAssetIconView()
 
         balanceWidget.snp.makeConstraints { make in
             make.height.equalTo(balanceWidget.state.height)
@@ -131,7 +115,63 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         }
     }
 
-    private func hideAlertWithAnimation() {
+    var prefferedHeight: CGFloat {
+        let balanceSectionHeight = Constants.containerViewTopOffset
+            + currentBalanceHeight
+        let buttonsRowHeight = buttonsRow.preferredHeight ?? 0
+
+        return Constants.containerViewTopOffset
+            + containerView.stackView.layoutMargins.top
+            + balanceSectionHeight
+            + Constants.sectionSpace * 2
+            + buttonsRowHeight
+            + Constants.chartWidgetInset * 2
+            + chartViewHeight
+            + Constants.bottomOffset
+            + currentAHMAlertHeight
+    }
+}
+
+// MARK: - Private
+
+private extension AssetDetailsViewLayout {
+    func layoutAssetIconView() {
+        let assetView = UIStackView(arrangedSubviews: [assetIconView, assetLabel])
+        assetView.spacing = 8
+
+        let assetViewContainer = UIView()
+
+        assetViewContainer.addSubview(assetView)
+
+        assetView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+
+            if #available(iOS 26.0, *) {
+                $0.top.equalToSuperview()
+            } else {
+                $0.centerY.equalToSuperview()
+            }
+
+            $0.height.equalTo(Constants.assetHeight)
+        }
+
+        addSubview(assetViewContainer)
+
+        assetIconView.setContentHuggingPriority(.low, for: .horizontal)
+        assetLabel.setContentHuggingPriority(.low, for: .horizontal)
+
+        assetIconView.snp.makeConstraints {
+            $0.width.height.equalTo(Constants.assetImageViewSize)
+        }
+
+        assetViewContainer.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(44)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide.snp.top)
+        }
+    }
+
+    func hideAlertWithAnimation() {
         alertDisappearanceAnimator.animate(
             view: ahmAlertView,
             completionBlock: nil
@@ -150,7 +190,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         delegate?.didUpdateHeight(prefferedHeight)
     }
 
-    private func showAlertWithAnimation() {
+    func showAlertWithAnimation() {
         ahmAlertView.alpha = 0
 
         insertArrangedSubview(
@@ -179,7 +219,11 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         currentAHMAlertHeight = ahmAlertView.frame.height
         delegate?.didUpdateHeight(prefferedHeight)
     }
+}
 
+// MARK: - Internal
+
+extension AssetDetailsViewLayout {
     func set(locale: Locale) {
         let languages = locale.rLanguages
 
@@ -231,7 +275,7 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
         containerView.stackView.layoutMargins.bottom = inset + Constants.bottomOffset
     }
 
-    func setAHMAlert(with model: AHMAlertView.Model?) {
+    func setAHMAlert(with model: InlinableAlertView.Model?) {
         if let model {
             guard ahmAlertView.superview == nil else {
                 ahmAlertView.bind(model)
@@ -249,23 +293,9 @@ final class AssetDetailsViewLayout: ScrollableContainerLayoutView {
             hideAlertWithAnimation()
         }
     }
-
-    var prefferedHeight: CGFloat {
-        let balanceSectionHeight = Constants.containerViewTopOffset
-            + currentBalanceHeight
-        let buttonsRowHeight = buttonsRow.preferredHeight ?? 0
-
-        return Constants.containerViewTopOffset
-            + containerView.stackView.layoutMargins.top
-            + balanceSectionHeight
-            + Constants.sectionSpace * 2
-            + buttonsRowHeight
-            + Constants.chartWidgetInset * 2
-            + chartViewHeight
-            + Constants.bottomOffset
-            + currentAHMAlertHeight
-    }
 }
+
+// MARK: - AssetDetailsBalanceWidgetDelegate
 
 extension AssetDetailsViewLayout: AssetDetailsBalanceWidgetDelegate {
     func didChangeState(to state: AssetDetailsBalanceWidget.State) {
@@ -283,6 +313,8 @@ extension AssetDetailsViewLayout: AssetDetailsBalanceWidgetDelegate {
         delegate?.didUpdateHeight(prefferedHeight)
     }
 }
+
+// MARK: - Constants
 
 extension AssetDetailsViewLayout {
     enum Constants {

@@ -1,0 +1,95 @@
+{
+  "fill-specializations" : [
+    {
+      "value" : {
+        "linear-gradient" : [
+          "display-p3:0.17647,0.38824,0.90196,1.00000",
+          "display-p3:0.20784,0.30892,0.91765,1.00000"
+        ]
+      }
+    },
+    {
+      "appearance" : "dark",
+      "value" : "system-dark"
+    }
+  ],
+  "groups" : [
+    {
+      "blend-mode" : "normal",
+      "blur-material" : null,
+      "hidden" : false,
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "fill" : {
+            "linear-gradient" : [
+              "display-p3:1.00000,1.00000,1.00000,1.00000",
+              "display-p3:1.00000,1.00000,1.00000,0.82000"
+            ]
+          },
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "24Vector.png",
+          "name" : "24Vector",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 0.96,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "glass" : false,
+          "image-name" : "Ellipse 786 2.png",
+          "name" : "Ellipse 786 2",
+          "position" : {
+            "scale" : 0.95,
+            "translation-in-points" : [
+              -542.8292698509323,
+              509.51604129554926
+            ]
+          }
+        },
+        {
+          "glass" : false,
+          "image-name" : "Ellipse 787.png",
+          "name" : "Ellipse 787",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              242.24633747521753,
+              -238.08915144929145
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          0,
+          0
+        ]
+      },
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.8
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.04
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : [
+      "iOS"
+    ]
+  }
+}

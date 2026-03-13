@@ -262,6 +262,30 @@ final class AssetsExchangeTests: XCTestCase {
         }
     }
 
+    func testRouteDOTUSDTHydration() throws {
+        let params = buildCommonParams()
+
+        let pahChain = try params.chainRegistry.getChainOrError(for: KnowChainId.hydra)
+
+        let dot = try pahChain.chainAssetForSymbolOrError("DOT").chainAssetId
+        let usdt = try pahChain.chainAssetForSymbolOrError("USDT").chainAssetId
+
+        guard let graph = createGraph(for: params) else {
+            XCTFail("No graph")
+            return
+        }
+
+        let route = graph.fetchPaths(from: dot, to: usdt, maxTopPaths: 10)
+        for path in route {
+            let pathDescription = AssetsExchangeGraphDescription.getDescriptionForPath(
+                edges: path,
+                chainRegistry: params.chainRegistry
+            )
+
+            Logger.shared.info("Route: \(pathDescription)")
+        }
+    }
+
     func testRouteGDOTDOTPolkadot() throws {
         let params = buildCommonParams()
 

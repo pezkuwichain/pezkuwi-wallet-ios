@@ -68,6 +68,7 @@ private extension MainTabBarViewFactory {
         let operationQueue = OperationManagerFacade.sharedDefaultQueue
         let settingsManager = SettingsManager.shared
         let securedLayer = SecurityLayerService.shared
+
         let inAppUpdatesService = InAppUpdatesServiceFactory().createService()
 
         let notificationsSettingsRepository: CoreDataRepository<Web3Alert.LocalSettings, CDUserSingleValue> =

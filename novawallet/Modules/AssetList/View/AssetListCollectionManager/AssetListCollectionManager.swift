@@ -18,6 +18,7 @@ final class AssetListCollectionManager {
     init(
         viewController: AssetListViewController,
         bannersViewProvider: BannersViewProviderProtocol,
+        alertViewModel: InlinableAlertView.Model? = nil,
         groupsViewModel: AssetListViewModel,
         delegate: AssetListCollectionManagerDelegate? = nil,
         selectedLocale: Locale
@@ -29,6 +30,7 @@ final class AssetListCollectionManager {
         collectionViewDataSource = AssetListCollectionViewDataSource(
             view: viewController,
             bannersViewProvider: bannersViewProvider,
+            alertViewModel: alertViewModel,
             groupsViewModel: groupsViewModel,
             selectedLocale: selectedLocale
         )
@@ -85,6 +87,8 @@ final class AssetListCollectionManager {
 
 extension AssetListCollectionManager: AssetListCollectionManagerProtocol {
     func setupCollectionView() {
+        viewController?.rootView.collectionView.registerCellClass(EmptyCollectionCell.self)
+        viewController?.rootView.collectionView.registerCellClass(InlinableAlertCollectionViewCell.self)
         viewController?.rootView.collectionView.registerCellClass(AssetListTokenGroupAssetCell.self)
         viewController?.rootView.collectionView.registerCellClass(AssetListNetworkGroupAssetCell.self)
         viewController?.rootView.collectionView.registerCellClass(AssetListTotalBalanceCell.self)
@@ -169,6 +173,10 @@ extension AssetListCollectionManager: AssetListCollectionManagerProtocol {
                 groupViewModel.assets.count > 1
             )
         }
+    }
+
+    func updateAlertViewModel(with model: InlinableAlertView.Model?) {
+        collectionViewDataSource.alertViewModel = model
     }
 
     func updateGroupsViewModel(with model: AssetListViewModel) {
