@@ -209,8 +209,19 @@ class SwapBaseInteractor: AnyCancellableCleaning, AnyProviderAutoCleaning, SwapB
         ) { [weak self] result in
             switch result {
             case let .success(quote):
-                self?.basePresenter?.didReceive(quote: quote, for: args)
-                self?.setupReQuoteSubscription(for: args.assetIn, assetOut: args.assetOut)
+                guard let self else {
+                    return
+                }
+
+                let description = AssetExchangeQuoteDescription.getDescription(
+                    quote: quote,
+                    chainRegistry: chainRegistry
+                )
+
+                logger.debug(description)
+
+                basePresenter?.didReceive(quote: quote, for: args)
+                setupReQuoteSubscription(for: args.assetIn, assetOut: args.assetOut)
             case let .failure(error):
                 self?.basePresenter?.didReceive(baseError: .quote(error, args))
             }

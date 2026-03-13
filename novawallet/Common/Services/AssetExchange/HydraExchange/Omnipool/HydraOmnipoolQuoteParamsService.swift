@@ -80,6 +80,7 @@ final class HydraOmnipoolQuoteParamsService: ObservableSyncService, ObservableSu
             assetOutBalance: balanceOut.free,
             assetInFee: assetFeeState.assetInFee,
             assetOutFee: assetFeeState.assetOutFee,
+            maxSlipFee: assetFeeState.maxSlipFee?.maxSlipFee,
             blockHash: assetFeeState.blockHash
         )
     }
