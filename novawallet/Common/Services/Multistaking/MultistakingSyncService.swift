@@ -193,7 +193,7 @@ final class MultistakingSyncService {
                 for: chainAssetOption.chainAsset,
                 stakingType: chainAssetOption.type
             )
-        case .parachain, .turing:
+        case .parachain, .turing, .parachainAvn:
             createParachainStaking(
                 for: chainAssetOption.chainAsset,
                 stakingType: chainAssetOption.type
@@ -299,10 +299,11 @@ final class MultistakingSyncService {
         for chainAsset: ChainAsset,
         stakingType: StakingType
     ) -> OnchainSyncServiceProtocol? {
-        guard
-            let account = wallet.fetch(for: chainAsset.chain.accountRequest()),
-            let connection = chainRegistry.getConnection(for: chainAsset.chain.chainId),
-            let runtimeService = chainRegistry.getRuntimeProvider(for: chainAsset.chain.chainId) else {
+        let account = wallet.fetch(for: chainAsset.chain.accountRequest())
+        let connection = chainRegistry.getConnection(for: chainAsset.chain.chainId)
+        let runtimeService = chainRegistry.getRuntimeProvider(for: chainAsset.chain.chainId)
+
+        guard let account, let connection, let runtimeService else {
             return nil
         }
 
