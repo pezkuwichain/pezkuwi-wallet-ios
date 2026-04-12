@@ -10,8 +10,11 @@ struct StartStakingInfoViewFactory {
         }.first
 
         guard let mainStakingType = optMainStakingType else {
+            NSLog("[EWT-DEBUG] StartStakingInfoViewFactory: no staking type for %@", chainAsset.chain.name)
             return nil
         }
+
+        NSLog("[EWT-DEBUG] StartStakingInfoViewFactory: chain=%@ type=%@", chainAsset.chain.name, mainStakingType.rawValue)
 
         switch mainStakingType {
         case .relaychain:
@@ -34,6 +37,13 @@ struct StartStakingInfoViewFactory {
             )
         case .parachain, .turing:
             return createParachainView(
+                for: .init(
+                    chainAsset: chainAsset,
+                    type: selectedStakingType ?? mainStakingType
+                )
+            )
+        case .parachainAvn:
+            return createParachainAvnView(
                 for: .init(
                     chainAsset: chainAsset,
                     type: selectedStakingType ?? mainStakingType
