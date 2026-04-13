@@ -1,4 +1,5 @@
 import Foundation
+import Foundation_iOS
 
 final class StakingDashboardWireframe: StakingDashboardWireframeProtocol {
     let stateObserver: Observable<StakingDashboardModel>
@@ -29,6 +30,11 @@ final class StakingDashboardWireframe: StakingDashboardWireframeProtocol {
         from view: StakingDashboardViewProtocol?,
         option: Multistaking.ChainAssetOption
     ) {
+        if option.type == .subtensor {
+            showSubtensorStakingDetails(from: view, chainAsset: option.chainAsset)
+            return
+        }
+
         guard let detailsView = StakingMainViewFactory.createView(
             for: option,
             delegatedAccountSyncService: delegatedAccountSyncService
@@ -42,6 +48,21 @@ final class StakingDashboardWireframe: StakingDashboardWireframeProtocol {
             detailsView.controller,
             animated: true
         )
+    }
+
+    private func showSubtensorStakingDetails(
+        from view: StakingDashboardViewProtocol?,
+        chainAsset: ChainAsset
+    ) {
+        guard
+            let wallet = SelectedWalletSettings.shared.value,
+            let accountResponse = wallet.fetchMetaChainAccount(for: chainAsset.chain.accountRequest())
+        else { return }
+
+        let coldkey = accountResponse.chainAccount.accountId
+        let vc = SubtensorStakingViewFactory.createView(chainAsset: chainAsset, coldkey: coldkey)
+        vc.hidesBottomBarWhenPushed = true
+        view?.controller.navigationController?.pushViewController(vc, animated: true)
     }
 
     func showStartStaking(from view: StakingDashboardViewProtocol?, chainAsset: ChainAsset) {
