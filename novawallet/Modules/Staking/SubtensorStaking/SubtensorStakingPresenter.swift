@@ -7,54 +7,51 @@ final class SubtensorStakingPresenter: SubtensorStakingPresenterProtocol {
     let interactor: SubtensorStakingInteractorInputProtocol
     let wireframe: SubtensorStakingWireframeProtocol
 
-    private var validators: [SubtensorValidator] = []
+    private let chainAsset: ChainAsset
     private var positions: [SubtensorStakePosition] = []
     private var minDelegation: BigUInt?
 
     init(
         interactor: SubtensorStakingInteractorInputProtocol,
-        wireframe: SubtensorStakingWireframeProtocol
+        wireframe: SubtensorStakingWireframeProtocol,
+        chainAsset: ChainAsset
     ) {
         self.interactor = interactor
         self.wireframe = wireframe
+        self.chainAsset = chainAsset
     }
 
     func setup() {
+        view?.didReceiveStatus("loading")
         interactor.setup()
     }
 
     func didTapStake() {
-        // v1 stub flow: pick the first validator in the list and submit a
-        // minimal stake. Real flow has a picker + amount input — that comes
-        // once the UI shell is QA'd.
-        guard let first = validators.first, let min = minDelegation else {
-            view?.didReceiveStatus("No validators loaded yet")
-            return
-        }
-        interactor.submitStake(hotkey: first.hotkey, amount: min)
+        guard let controller = view?.controller else { return }
+        wireframe.showStakingFlow(from: controller)
     }
 }
 
 extension SubtensorStakingPresenter: SubtensorStakingInteractorOutputProtocol {
-    func didReceive(validators: [SubtensorValidator]) {
-        self.validators = validators
-        view?.didReceive(validators: validators)
-    }
+    func didReceive(positions: [SubtensorStakePosition]) {
+        self.positions = positions
 
-    func didReceive(stakePositions: [SubtensorStakePosition]) {
-        positions = stakePositions
-        view?.didReceive(positions: stakePositions)
+        let precision = chainAsset.assetDisplayInfo.assetPrecision
+        let viewModels = positions.map {
+            SubtensorPositionViewModel.make(from: $0, assetPrecision: precision)
+        }
+
+        view?.didReceive(positions: viewModels)
     }
 
     func didReceive(minDelegation: BigUInt) {
         self.minDelegation = minDelegation
-        view?.didReceive(minDelegation: minDelegation)
     }
 
     func didReceive(error: Error) {
-        Logger.shared.error("SubtensorStaking: service error — \(error.localizedDescription)")
+        Logger.shared.error("SubtensorStaking: \(error.localizedDescription)")
         guard let view else { return }
         wireframe.showError(from: view.controller, message: error.localizedDescription)
-        view.didReceiveStatus("Unable to load validators")
+        view.didReceiveStatus("error")
     }
 }

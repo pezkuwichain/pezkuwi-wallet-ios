@@ -1,12 +1,12 @@
 import UIKit
-import BigInt
 
+/// Main TAO staking dashboard. Shows the user's active stake positions
+/// (queried live from chain) and provides a path to start new stakes.
 final class SubtensorStakingViewController: UIViewController, SubtensorStakingViewProtocol {
     private let presenter: SubtensorStakingPresenterProtocol
+    private let rootView = SubtensorStakingViewLayout()
 
-    private let titleLabel = UILabel()
-    private let statusLabel = UILabel()
-    private let stakeButton = UIButton(type: .system)
+    private var positionViewModels: [SubtensorPositionViewModel] = []
 
     var controller: UIViewController { self }
 
@@ -16,57 +16,49 @@ final class SubtensorStakingViewController: UIViewController, SubtensorStakingVi
     }
 
     @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) is not supported")
+    required init?(coder _: NSCoder) { fatalError() }
+
+    // MARK: - Lifecycle
+
+    override func loadView() {
+        view = rootView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO(localization): en.lproj keys exist (staking.subtensor.*) — wire via
-        // R.string(preferredLanguages:).localizable.stakingSubtensor*() once a LocalizationManager is
-        // injected into this VIPER module. Hardcoded strings are acceptable for v1 manual QA.
-        title = "TAO staking"
-        view.backgroundColor = .systemBackground
-        setupLayout()
+        title = "TAO Staking"
+        setupNavBar()
+        setupTableView()
+        rootView.showState(.loading)
+
+        rootView.startStakingButton.addTarget(self, action: #selector(didTapStake), for: .touchUpInside)
+
         presenter.setup()
     }
 
-    private func setupLayout() {
-        // TODO(localization): en.lproj keys exist (staking.subtensor.*) — wire via
-        // R.string(preferredLanguages:).localizable.stakingSubtensor*() once a LocalizationManager is
-        // injected into this VIPER module. Hardcoded strings are acceptable for v1 manual QA.
-        titleLabel.text = "TAO staking"
-        titleLabel.font = .preferredFont(forTextStyle: .title2)
-        titleLabel.textAlignment = .center
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    // MARK: - Nav bar
 
-        statusLabel.text = "Loading validators..."
-        statusLabel.font = .preferredFont(forTextStyle: .body)
-        statusLabel.textAlignment = .center
-        statusLabel.numberOfLines = 0
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        stakeButton.setTitle("Stake", for: .normal)
-        stakeButton.addTarget(self, action: #selector(didTapStake), for: .touchUpInside)
-        stakeButton.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(titleLabel)
-        view.addSubview(statusLabel)
-        view.addSubview(stakeButton)
-
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
-            statusLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            statusLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            statusLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
-            stakeButton.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 32),
-            stakeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+    private func setupNavBar() {
+        let addButton = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(didTapStake)
+        )
+        navigationItem.rightBarButtonItem = addButton
     }
+
+    // MARK: - Table view
+
+    private func setupTableView() {
+        rootView.tableView.dataSource = self
+        rootView.tableView.delegate = self
+        rootView.tableView.register(
+            SubtensorPositionTableViewCell.self,
+            forCellReuseIdentifier: SubtensorPositionTableViewCell.reuseId
+        )
+    }
+
+    // MARK: - Actions
 
     @objc private func didTapStake() {
         presenter.didTapStake()
@@ -74,29 +66,90 @@ final class SubtensorStakingViewController: UIViewController, SubtensorStakingVi
 
     // MARK: - SubtensorStakingViewProtocol
 
-    func didReceive(validators: [SubtensorValidator]) {
-        // TODO(localization): en.lproj keys exist (staking.subtensor.*) — wire via
-        // R.string(preferredLanguages:).localizable.stakingSubtensor*() once a LocalizationManager is
-        // injected into this VIPER module. Hardcoded strings are acceptable for v1 manual QA.
-        if validators.isEmpty {
-            statusLabel.text = "No validators available"
+    func didReceive(positions: [SubtensorPositionViewModel]) {
+        positionViewModels = positions
+        if positions.isEmpty {
+            rootView.showState(.empty)
         } else {
-            let count = validators.count
-            statusLabel.text = "Loaded \(count) validators"
+            rootView.showState(.loaded)
+            rootView.tableView.reloadData()
         }
     }
 
-    func didReceive(positions: [SubtensorStakePosition]) {
-        // v1: no positions UI yet. This callback lets us confirm the data
-        // path works end-to-end during manual QA.
-        _ = positions
-    }
-
-    func didReceive(minDelegation: BigUInt) {
-        _ = minDelegation
-    }
-
     func didReceiveStatus(_ status: String) {
-        statusLabel.text = status
+        switch status {
+        case "loading":
+            rootView.showState(.loading)
+        default:
+            break
+        }
     }
+}
+
+// MARK: - UITableViewDataSource
+
+extension SubtensorStakingViewController: UITableViewDataSource {
+    func numberOfSections(in _: UITableView) -> Int { 1 }
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        positionViewModels.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: SubtensorPositionTableViewCell.reuseId,
+            for: indexPath
+        ) as! SubtensorPositionTableViewCell // swiftlint:disable:this force_cast
+        cell.bind(viewModel: positionViewModels[indexPath.row])
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension SubtensorStakingViewController: UITableViewDelegate {
+    func tableView(_: UITableView, heightForHeaderInSection _: Int) -> CGFloat {
+        positionViewModels.isEmpty ? 0 : 48
+    }
+
+    func tableView(_: UITableView, viewForHeaderInSection _: Int) -> UIView? {
+        guard !positionViewModels.isEmpty else { return nil }
+        let header = StakingSectionHeaderView()
+        header.titleLabel.text = "Your Stakes"
+        return header
+    }
+
+    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // P1: tap → manage / unstake flow. No-op for now.
+        tableView(rootView.tableView, didDeselectRowAt: indexPath)
+    }
+
+    func tableView(_: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        rootView.tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+// MARK: - Section header
+
+private final class StakingSectionHeaderView: UIView {
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .semiBoldFootnote
+        label.textColor = R.color.colorTextSecondary()
+        return label
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = R.color.colorSecondaryScreenBackground()
+        addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) { fatalError() }
 }
