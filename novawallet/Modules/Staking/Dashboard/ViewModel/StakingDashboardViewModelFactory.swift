@@ -145,7 +145,9 @@ final class StakingDashboardViewModelFactory {
                 title: R.string(preferredLanguages: locale.rLanguages).localizable.stakingPool().uppercased(),
                 icon: R.image.iconStakingPool()
             )
-        case .parachain, .turing, .mythos, .unsupported:
+        case .parachain, .turing, .mythos, .subtensor, .unsupported:
+            // v1 TODO(integration): .subtensor has a single staking type per chain — the multi-type picker
+            // is never reached for Bittensor, so returning nil matches the intended UX.
             return nil
         }
     }

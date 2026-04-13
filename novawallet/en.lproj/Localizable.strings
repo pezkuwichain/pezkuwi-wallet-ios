@@ -2042,3 +2042,26 @@ Do you want to continue?";
 "inlinable.alert.wo.message" = "Beware of scammers. No one can unlock a watch-only wallet or its funds";
 "create.watch.only.missing.any.address" = "Enter at least one address...";
 "asset.list.watch.only.balance" = "Watch-only balance";
+
+/* Staking — Subtensor (TAO root subnet) */
+"staking.subtensor.title" = "TAO staking";
+"staking.subtensor.select.validator" = "Select validator";
+"staking.subtensor.min.active.stake" = "Minimum active stake";
+"staking.subtensor.amount.placeholder" = "Amount";
+"staking.subtensor.gas.reserve.warning" = "Keep at least %@ TAO in your balance for future transaction fees.";
+"staking.subtensor.submit" = "Stake";
+"staking.subtensor.unstake" = "Unstake";
+"staking.subtensor.change.validator" = "Change validator";
+"staking.subtensor.validator.list.title" = "Active validators";
+"staking.subtensor.no.validators.error" = "Unable to load validator list. Check your connection and retry.";
+"staking.subtensor.loading" = "Loading validators...";
+"staking.subtensor.status.loaded" = "Loaded %d validators";
+"staking.subtensor.status.no.validators" = "No validators available";
+"staking.subtensor.error.no.validators.loaded" = "No validators loaded yet";
+"staking.subtensor.error.unable.to.load" = "Unable to load validators";
+"staking.subtensor.hint.no.unbonding" = "Unstaking is immediate — no waiting period";
+"staking.subtensor.type.root" = "Root staking";
+"staking.subtensor.type.root.details" = "Minimum stake: 0.01 TAO\nRewards: Auto-compounded\nNo unbonding period\nStake denominated in TAO";
+"staking.subtensor.type.subnet" = "Subnet staking";
+"staking.subtensor.type.subnet.details" = "Minimum stake: 0.01 TAO\nRewards: Subnet alpha tokens\nNo unbonding period\nSubject to AMM slippage";
+"staking.subtensor.subnet.picker.title" = "Select subnet";

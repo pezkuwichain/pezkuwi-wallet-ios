@@ -208,6 +208,9 @@ final class MultistakingSyncService {
                 for: chainAssetOption.chainAsset,
                 stakingType: chainAssetOption.type
             )
+        case .subtensor:
+            // v1 TODO(integration): no indexer backend for Subtensor (design spec §13) — mirrors .unsupported.
+            nil
         case .unsupported:
             nil
         }
