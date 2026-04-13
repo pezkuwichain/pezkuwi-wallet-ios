@@ -209,8 +209,10 @@ final class MultistakingSyncService {
                 stakingType: chainAssetOption.type
             )
         case .subtensor:
-            // v1 TODO(integration): no indexer backend for Subtensor (design spec §13) — mirrors .unsupported.
-            nil
+            createSubtensorStaking(
+                for: chainAssetOption.chainAsset,
+                stakingType: chainAssetOption.type
+            )
         case .unsupported:
             nil
         }
@@ -378,6 +380,25 @@ final class MultistakingSyncService {
             runtimeService: runtimeService,
             operationQueue: operationQueue,
             workingQueue: workingQueue,
+            logger: logger
+        )
+    }
+
+    private func createSubtensorStaking(
+        for chainAsset: ChainAsset,
+        stakingType: StakingType
+    ) -> OnchainSyncServiceProtocol? {
+        guard let account = wallet.fetch(for: chainAsset.chain.accountRequest()) else {
+            return nil
+        }
+
+        return SubtensorMultistakingUpdateService(
+            walletId: wallet.metaId,
+            accountId: account.accountId,
+            chainAsset: chainAsset,
+            stakingType: stakingType,
+            dashboardRepository: multistakingRepositoryFactory.createSubtensorRepository(),
+            operationQueue: operationQueue,
             logger: logger
         )
     }

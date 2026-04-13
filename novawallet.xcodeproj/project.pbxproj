@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B1C4D82B3F1E4567890ABCDE /* Multistaking+Subtensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D82A3F1E4567890ABCDE /* Multistaking+Subtensor.swift */; };
+		B1C4D82D3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D82C3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift */; };
+		B1C4D82F3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D82E3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift */; };
 		0B42B466DEAF4CAF9993A617 /* SubtensorPositionFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AAA92198D047168AAFEDE5 /* SubtensorPositionFetcher.swift */; };
 		0794DB14B2E040768482B125 /* SubtensorPositionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0234E1C019D94656866D5285 /* SubtensorPositionViewModel.swift */; };
 		6DA1A6A7166B4611AEBA13C8 /* SubtensorPositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103397760436426493577ECC /* SubtensorPositionTableViewCell.swift */; };
@@ -6661,6 +6664,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B1C4D82A3F1E4567890ABCDE /* Multistaking+Subtensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Multistaking+Subtensor.swift"; sourceTree = "<group>"; };
+		B1C4D82C3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtensorMultistakingUpdateService.swift; sourceTree = "<group>"; };
+		B1C4D82E3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakingDashboardSubtensorMapper.swift; sourceTree = "<group>"; };
 		18AAA92198D047168AAFEDE5 /* SubtensorPositionFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtensorPositionFetcher.swift; path = SubtensorStaking/Service/SubtensorPositionFetcher.swift; sourceTree = "<group>"; };
 		0234E1C019D94656866D5285 /* SubtensorPositionViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtensorPositionViewModel.swift; path = SubtensorStaking/Model/SubtensorPositionViewModel.swift; sourceTree = "<group>"; };
 		103397760436426493577ECC /* SubtensorPositionTableViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtensorPositionTableViewCell.swift; path = SubtensorStaking/PositionList/SubtensorPositionTableViewCell.swift; sourceTree = "<group>"; };
@@ -22650,6 +22656,8 @@
 				0C1BE1A52A47FC240010933C /* MultistakingSyncServiceFactory.swift */,
 				0C0F6D662D394AF800943A7C /* MythosMultistakingUpdateService.swift */,
 				0C0F6D682D394BE000943A7C /* Multistaking+Mythos.swift */,
+				B1C4D82A3F1E4567890ABCDE /* Multistaking+Subtensor.swift */,
+				B1C4D82C3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift */,
 			);
 			path = Multistaking;
 			sourceTree = "<group>";
@@ -22699,6 +22707,7 @@
 				770ABB8D2B85593700132465 /* Web3TopicSettingsMapper.swift */,
 				2D06CC482E3C95A30093CA84 /* AppAttestBrowserSettingsMapper.swift */,
 				0C0F6D6D2D39549100943A7C /* StakingDashboardMythosMapper.swift */,
+				B1C4D82E3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift */,
 			);
 			path = EntityToModel;
 			sourceTree = "<group>";
@@ -35127,6 +35136,9 @@
 				8402CC9E275B946100E5BF30 /* DAppItemView.swift in Sources */,
 				FFE19A19E5B4ED67A2C61951 /* DAppSearchProtocols.swift in Sources */,
 				0C0F6D6E2D39549100943A7C /* StakingDashboardMythosMapper.swift in Sources */,
+					B1C4D82B3F1E4567890ABCDE /* Multistaking+Subtensor.swift in Sources */,
+					B1C4D82D3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift in Sources */,
+					B1C4D82F3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift in Sources */,
 				881CA22729E3F20B00159C5B /* ChainModel+Equilibrium.swift in Sources */,
 				F88D85C73094F6A1FC494D87 /* DAppSearchWireframe.swift in Sources */,
 				84880C4029016F1500CADB06 /* ReferendumLockChangeViewModel.swift in Sources */,
