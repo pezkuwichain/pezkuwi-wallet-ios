@@ -29,6 +29,8 @@ extension StakingDashboardSubtensorMapper: CoreDataMapperProtocol {
         entity.assetId = Int32(bitPattern: chainAssetId.assetId)
         entity.stakingType = model.stakingOption.option.type.rawValue
 
+        // One row per (ChainAsset, .subtensor) → one netuid. The stake value is the
+        // user's alpha amount for that netuid (TAO for netuid=0, subnet alpha otherwise).
         if model.state.totalStake > 0 {
             entity.stake = String(model.state.totalStake)
             // activeIndependent: no offchain check needed — stake is self-evident

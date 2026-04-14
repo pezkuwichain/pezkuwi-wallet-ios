@@ -392,11 +392,17 @@ final class MultistakingSyncService {
             return nil
         }
 
+        // netuid comes from the ChainAsset's typeExtras.netuid in nova-utils.
+        // TAO (native asset) has no typeExtras → defaults to netuid=0 (root).
+        // Subnet alpha assets carry typeExtras.netuid ∈ 1…128.
+        let netuid = SubtensorNetuidExtractor.extract(from: chainAsset.asset) ?? 0
+
         return SubtensorMultistakingUpdateService(
             walletId: wallet.metaId,
             accountId: account.accountId,
             chainAsset: chainAsset,
             stakingType: stakingType,
+            netuid: netuid,
             dashboardRepository: multistakingRepositoryFactory.createSubtensorRepository(),
             operationQueue: operationQueue,
             logger: logger

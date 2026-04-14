@@ -10,6 +10,8 @@
 		B1C4D82B3F1E4567890ABCDE /* Multistaking+Subtensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D82A3F1E4567890ABCDE /* Multistaking+Subtensor.swift */; };
 		B1C4D82D3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D82C3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift */; };
 		B1C4D82F3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D82E3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift */; };
+		B1C4D8313F1E4567890ABCDE /* SubtensorNetuidExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D8303F1E4567890ABCDE /* SubtensorNetuidExtractor.swift */; };
+		B1C4D8333F1E4567890ABCDE /* SubtensorPositionCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C4D8323F1E4567890ABCDE /* SubtensorPositionCache.swift */; };
 		0B42B466DEAF4CAF9993A617 /* SubtensorPositionFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AAA92198D047168AAFEDE5 /* SubtensorPositionFetcher.swift */; };
 		0794DB14B2E040768482B125 /* SubtensorPositionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0234E1C019D94656866D5285 /* SubtensorPositionViewModel.swift */; };
 		6DA1A6A7166B4611AEBA13C8 /* SubtensorPositionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 103397760436426493577ECC /* SubtensorPositionTableViewCell.swift */; };
@@ -6667,6 +6669,8 @@
 		B1C4D82A3F1E4567890ABCDE /* Multistaking+Subtensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Multistaking+Subtensor.swift"; sourceTree = "<group>"; };
 		B1C4D82C3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtensorMultistakingUpdateService.swift; sourceTree = "<group>"; };
 		B1C4D82E3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakingDashboardSubtensorMapper.swift; sourceTree = "<group>"; };
+		B1C4D8303F1E4567890ABCDE /* SubtensorNetuidExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtensorNetuidExtractor.swift; sourceTree = "<group>"; };
+		B1C4D8323F1E4567890ABCDE /* SubtensorPositionCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtensorPositionCache.swift; sourceTree = "<group>"; };
 		18AAA92198D047168AAFEDE5 /* SubtensorPositionFetcher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtensorPositionFetcher.swift; path = SubtensorStaking/Service/SubtensorPositionFetcher.swift; sourceTree = "<group>"; };
 		0234E1C019D94656866D5285 /* SubtensorPositionViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtensorPositionViewModel.swift; path = SubtensorStaking/Model/SubtensorPositionViewModel.swift; sourceTree = "<group>"; };
 		103397760436426493577ECC /* SubtensorPositionTableViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SubtensorPositionTableViewCell.swift; path = SubtensorStaking/PositionList/SubtensorPositionTableViewCell.swift; sourceTree = "<group>"; };
@@ -22658,6 +22662,8 @@
 				0C0F6D682D394BE000943A7C /* Multistaking+Mythos.swift */,
 				B1C4D82A3F1E4567890ABCDE /* Multistaking+Subtensor.swift */,
 				B1C4D82C3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift */,
+				B1C4D8303F1E4567890ABCDE /* SubtensorNetuidExtractor.swift */,
+				B1C4D8323F1E4567890ABCDE /* SubtensorPositionCache.swift */,
 			);
 			path = Multistaking;
 			sourceTree = "<group>";
@@ -35138,6 +35144,8 @@
 				0C0F6D6E2D39549100943A7C /* StakingDashboardMythosMapper.swift in Sources */,
 					B1C4D82B3F1E4567890ABCDE /* Multistaking+Subtensor.swift in Sources */,
 					B1C4D82D3F1E4567890ABCDE /* SubtensorMultistakingUpdateService.swift in Sources */,
+					B1C4D8313F1E4567890ABCDE /* SubtensorNetuidExtractor.swift in Sources */,
+					B1C4D8333F1E4567890ABCDE /* SubtensorPositionCache.swift in Sources */,
 					B1C4D82F3F1E4567890ABCDE /* StakingDashboardSubtensorMapper.swift in Sources */,
 				881CA22729E3F20B00159C5B /* ChainModel+Equilibrium.swift in Sources */,
 				F88D85C73094F6A1FC494D87 /* DAppSearchWireframe.swift in Sources */,
