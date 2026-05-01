@@ -12,8 +12,22 @@ final class SubtensorSubnetPickerViewController: UIViewController, UITableViewDa
     private let chainAsset: ChainAsset
     private let onSelection: (SubtensorSubnetInfo) -> Void
 
+    private var allSubnets: [SubtensorSubnetInfo] = []
     private var subnets: [SubtensorSubnetInfo] = []
     private var isLoading = true
+    private var filterState: SubtensorSubnetFilterViewController.State = .default
+
+    private lazy var searchButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(R.image.iconSearchWhite(), for: .normal)
+        return button
+    }()
+
+    private lazy var filterButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(R.image.iconFilter(), for: .normal)
+        return button
+    }()
 
     private let tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
@@ -65,7 +79,85 @@ final class SubtensorSubnetPickerViewController: UIViewController, UITableViewDa
         tableView.dataSource = self
         tableView.delegate = self
 
+        setupNavigationBar()
+
         fetchSubnets()
+    }
+
+    private func setupNavigationBar() {
+        let filterBarButton = UIBarButtonItem(customView: filterButton)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
+        navigationItem.rightBarButtonItems = [filterBarButton, searchBarButton]
+        searchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(tapFilterButton), for: .touchUpInside)
+    }
+
+    @objc private func tapSearchButton() {
+        let search = SubtensorSubnetSearchViewController(
+            allSubnets: allSubnets,
+            onSelection: { [weak self] subnet in
+                guard let self else { return }
+                self.dismiss(animated: true) {
+                    self.onSelection(subnet)
+                }
+            }
+        )
+        search.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: search,
+            action: #selector(SubtensorSubnetSearchViewController.dismissAnimated)
+        )
+        let nav = UINavigationController(rootViewController: search)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    @objc private func tapFilterButton() {
+        let filter = SubtensorSubnetFilterViewController(
+            state: filterState,
+            onApply: { [weak self] newState in
+                guard let self else { return }
+                self.filterState = newState
+                self.refreshFilterButtonStyle()
+                self.applySort()
+            }
+        )
+        filter.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: filter,
+            action: #selector(SubtensorSubnetFilterViewController.dismissAnimated)
+        )
+        let nav = UINavigationController(rootViewController: filter)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    private func refreshFilterButtonStyle() {
+        let active = filterState != .default
+        filterButton.setImage(
+            active ? R.image.iconFilterActive() : R.image.iconFilter(),
+            for: .normal
+        )
+    }
+
+    private func applySort() {
+        switch filterState.sort {
+        case .totalStakeDesc:
+            subnets = allSubnets.sorted { $0.taoReserve > $1.taoReserve }
+        case .netuidAsc:
+            subnets = allSubnets.sorted { $0.netuid < $1.netuid }
+        }
+        tableView.reloadData()
     }
 
     // MARK: - Data fetching
@@ -78,10 +170,10 @@ final class SubtensorSubnetPickerViewController: UIViewController, UITableViewDa
                 let fetched = try await SubtensorSubnetFetcher.fetchAllSubnets(
                     chainId: chainAsset.chain.chainId
                 )
-                self.subnets = fetched.sorted { $0.taoReserve > $1.taoReserve }
+                self.allSubnets = fetched
+                self.applySort()
                 self.isLoading = false
                 self.activityIndicator.stopAnimating()
-                self.tableView.reloadData()
             } catch {
                 self.isLoading = false
                 self.activityIndicator.stopAnimating()

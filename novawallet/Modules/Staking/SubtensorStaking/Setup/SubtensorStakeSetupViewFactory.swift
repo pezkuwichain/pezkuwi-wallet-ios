@@ -52,9 +52,19 @@ enum SubtensorStakeSetupViewFactory {
             dataSource: dataSource
         )
 
+        // Pull the chain's preferred RPC node so dev / staging configs
+        // don't silently fall back to mainnet. Mirrors the resolution
+        // already used by `SubtensorMultistakingUpdateService` and the
+        // dashboard view factory.
+        let rpcURL = chainAsset.chain.nodes
+            .compactMap { URL(string: $0.url) }
+            .first { $0.scheme == "https" || $0.scheme == "http" }
+            ?? URL(string: "https://entrypoint-finney.opentensor.ai")!
+
         let service = SubtensorStakingService(
             validatorProvider: validatorProvider,
-            selectedColdkey: selectedAccount.chainAccount.accountId
+            selectedColdkey: selectedAccount.chainAccount.accountId,
+            rpcURL: rpcURL
         )
 
         let interactor = SubtensorStakeSetupInteractor(

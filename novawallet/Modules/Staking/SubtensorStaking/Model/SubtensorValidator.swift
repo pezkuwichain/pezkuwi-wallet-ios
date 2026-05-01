@@ -29,4 +29,10 @@ struct SubtensorValidator {
 
     /// Minimum delegation amount from chain runtime constant. nil if not yet fetched.
     let minDelegation: BigUInt?
+
+    /// Annualized return as a fraction 0.0...1.0; nil when the data source
+    /// can't supply it (e.g. validator outside the TaoStats sample). APR is
+    /// reported post-commission — what the delegator actually realized over
+    /// the last 30 days.
+    let apr: Double?
 }

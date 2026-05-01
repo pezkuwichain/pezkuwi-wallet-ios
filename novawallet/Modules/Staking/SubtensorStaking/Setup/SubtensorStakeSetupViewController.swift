@@ -66,7 +66,7 @@ final class SubtensorStakeSetupViewController: UIViewController, ViewHolder {
 
         rootView.validatorTitleLabel.text = R.string(
             preferredLanguages: languages
-        ).localizable.parachainStakingCollator()
+        ).localizable.stakingSubtensorValidator()
 
         applyValidator(viewModel: validatorViewModel)
 
@@ -94,7 +94,7 @@ final class SubtensorStakeSetupViewController: UIViewController, ViewHolder {
 
             rootView.actionButton.imageWithTitleView?.title = R.string(
                 preferredLanguages: selectedLocale.rLanguages
-            ).localizable.parachainStakingHintSelectCollator()
+            ).localizable.stakingSubtensorHintSelectValidator()
             rootView.actionButton.invalidateLayout()
 
             return
@@ -142,7 +142,7 @@ final class SubtensorStakeSetupViewController: UIViewController, ViewHolder {
                     address: "",
                     name: R.string(
                         preferredLanguages: selectedLocale.rLanguages
-                    ).localizable.parachainStakingSelectCollator(),
+                    ).localizable.stakingSubtensorSelectValidator(),
                     imageViewModel: nil
                 ),
                 details: nil

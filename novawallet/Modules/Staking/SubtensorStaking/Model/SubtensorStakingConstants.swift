@@ -25,4 +25,25 @@ enum SubtensorStakingConstants {
     /// Conservative TAO reserve kept in free balance for tx fees on later
     /// unstake / change-validator flows. In RAO (1 TAO = 10^9 RAO).
     static let gasFeeReserveRao: UInt64 = 750 // 0.00000075 TAO
+
+    /// AssetId for the native TAO asset on the Bittensor chain. Subnet
+    /// alpha assets are 10001+ in chain config; TAO is always 0.
+    static let taoAssetId: AssetModel.Id = 0
+}
+
+extension ChainAsset {
+    /// Returns the TAO `ChainAsset` for the same Bittensor chain. Used to
+    /// normalize a possibly-subnet-alpha `ChainAsset` (e.g. SN8) into TAO
+    /// before entering the staking flows: stake amounts, balance display,
+    /// and price lookup must all use TAO regardless of netuid because
+    /// Bittensor staking sources from TAO and only the *received* stake is
+    /// denominated in alpha.
+    func subtensorTaoAsset() -> ChainAsset? {
+        guard let taoAsset = chain.assets.first(where: {
+            $0.assetId == SubtensorStakingConstants.taoAssetId
+        }) else {
+            return nil
+        }
+        return ChainAsset(chain: chain, asset: taoAsset)
+    }
 }

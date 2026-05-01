@@ -70,6 +70,36 @@ final class SubtensorStakingTypeViewController: UIViewController, ViewHolder {
         rootView.continueButton.imageWithTitleView?.title = R.string(
             preferredLanguages: selectedLocale.rLanguages
         ).localizable.commonContinue()
+
+        let linkText = R.string(preferredLanguages: selectedLocale.rLanguages)
+            .localizable.stakingSubtensorTypeWikiLink()
+        let fullText = R.string(preferredLanguages: selectedLocale.rLanguages)
+            .localizable.stakingSubtensorTypeWikiFooter(linkText)
+
+        let attributed = NSMutableAttributedString(
+            string: fullText,
+            attributes: [
+                .foregroundColor: R.color.colorTextSecondary()!,
+                .font: UIFont.regularFootnote
+            ]
+        )
+        if let linkRange = (fullText as NSString).range(of: linkText) as NSRange?,
+           linkRange.location != NSNotFound {
+            attributed.addAttributes(
+                [
+                    .foregroundColor: R.color.colorButtonTextAccent()!,
+                    .underlineStyle: NSUnderlineStyle.single.rawValue
+                ],
+                range: linkRange
+            )
+        }
+        // TODO(wiki): when the Nova Wiki page for Bittensor staking is published,
+        // make "Nova Wiki" tappable. Two options: (1) swap UILabel for UITextView
+        // with `.link` attribute + delegate handler, or (2) keep UILabel and add
+        // a UITapGestureRecognizer that hit-tests `linkRange` via UILabel layout
+        // manager. URL likely lands in `applicationConfig` or as a chain
+        // `additional.stakingWiki` value alongside the other chains.
+        rootView.wikiLabel.attributedText = attributed
     }
 
     // MARK: - Handlers

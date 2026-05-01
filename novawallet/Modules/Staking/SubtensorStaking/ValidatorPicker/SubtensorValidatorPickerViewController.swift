@@ -26,6 +26,7 @@ final class SubtensorValidatorPickerViewController: UIViewController {
     private var allValidators: [SubtensorValidator] = []
     private var filteredViewModels: [SubtensorValidatorCellViewModel] = []
     private var fetchTask: Task<Void, Never>?
+    private var filterState: SubtensorValidatorFilterViewController.State = .default
 
     init(
         netuid: UInt16 = SubtensorStakingConstants.rootNetuid,
@@ -64,6 +65,18 @@ final class SubtensorValidatorPickerViewController: UIViewController {
         view = SubtensorValidatorPickerViewLayout()
     }
 
+    private lazy var searchButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(R.image.iconSearchWhite(), for: .normal)
+        return button
+    }()
+
+    private lazy var filterButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(R.image.iconFilter(), for: .normal)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -77,14 +90,92 @@ final class SubtensorValidatorPickerViewController: UIViewController {
             SubtensorValidatorTableViewCell.self,
             forCellReuseIdentifier: SubtensorValidatorTableViewCell.reuseId
         )
-        rootView.searchBar.delegate = self
         rootView.retryButton.addTarget(self, action: #selector(actionRetry), for: .touchUpInside)
+
+        setupNavigationBar()
 
         if !allValidators.isEmpty {
             applyValidators(allValidators)
         } else {
             loadValidators()
         }
+    }
+
+    private func setupNavigationBar() {
+        // Order matters: rightBarButtonItems renders right-to-left, so passing
+        // [filter, search] places filter as the rightmost icon (matches the
+        // Polkadot custom-validators screen).
+        let filterBarButton = UIBarButtonItem(customView: filterButton)
+        let searchBarButton = UIBarButtonItem(customView: searchButton)
+        navigationItem.rightBarButtonItems = [filterBarButton, searchBarButton]
+
+        searchButton.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(tapFilterButton), for: .touchUpInside)
+    }
+
+    @objc private func tapSearchButton() {
+        let search = SubtensorValidatorSearchViewController(
+            prefetched: allValidators,
+            netuid: netuid,
+            cellViewModelFactory: cellViewModelFactory,
+            onSelection: { [weak self] validator in
+                guard let self else { return }
+                self.dismiss(animated: true) {
+                    self.onSelection(validator)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        )
+        // Provide a back-arrow style left bar button to match Polkadot's
+        // search modal — drag-to-dismiss alone can be unintuitive.
+        search.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: search,
+            action: #selector(SubtensorValidatorSearchViewController.dismissAnimated)
+        )
+
+        let nav = UINavigationController(rootViewController: search)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    @objc private func tapFilterButton() {
+        let filter = SubtensorValidatorFilterViewController(
+            state: filterState,
+            onApply: { [weak self] newState in
+                guard let self else { return }
+                self.filterState = newState
+                self.refreshFilterButtonStyle()
+                self.applyValidators(self.allValidators)
+            }
+        )
+        filter.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: filter,
+            action: #selector(SubtensorValidatorFilterViewController.dismissAnimated)
+        )
+
+        let nav = UINavigationController(rootViewController: filter)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(nav, animated: true)
+    }
+
+    private func refreshFilterButtonStyle() {
+        let active = filterState != .default
+        filterButton.setImage(
+            active ? R.image.iconFilterActive() : R.image.iconFilter(),
+            for: .normal
+        )
     }
 
     @objc private func actionRetry() {
@@ -119,22 +210,29 @@ final class SubtensorValidatorPickerViewController: UIViewController {
             return
         }
 
-        let query = (rootView.searchBar.text ?? "").trimmingCharacters(in: .whitespaces)
-        let matched = filter(validators: validators, query: query)
-        filteredViewModels = matched.map { cellViewModelFactory.create(from: $0, netuid: netuid) }
+        let filtered = validators.filter { validator in
+            if filterState.requireIdentity, (validator.identity ?? "").isEmpty {
+                return false
+            }
+            if filterState.hideMaxCommission, validator.commission >= 1.0 {
+                return false
+            }
+            return true
+        }
+
+        let sorted: [SubtensorValidator]
+        switch filterState.sort {
+        case .totalStakeDesc:
+            sorted = filtered.sorted { $0.totalStake > $1.totalStake }
+        case .aprDesc:
+            // Validators without APR data sink to the bottom (TaoStats only
+            // returns APR for the validators present in its top-stake sample).
+            sorted = filtered.sorted { ($0.apr ?? -1) > ($1.apr ?? -1) }
+        }
+
+        filteredViewModels = sorted.map { cellViewModelFactory.create(from: $0, netuid: netuid) }
         rootView.tableView.reloadData()
         rootView.showState(filteredViewModels.isEmpty ? .empty : .loaded)
-    }
-
-    private func filter(validators: [SubtensorValidator], query: String) -> [SubtensorValidator] {
-        guard !query.isEmpty else { return validators }
-        let lower = query.lowercased()
-        return validators.filter { validator in
-            if let name = validator.identity?.lowercased(), name.contains(lower) {
-                return true
-            }
-            return validator.hotkey.toHex().lowercased().contains(lower)
-        }
     }
 }
 
@@ -170,24 +268,6 @@ extension SubtensorValidatorPickerViewController: UITableViewDelegate {
             return
         }
         onSelection(validator)
-        dismiss(animated: true)
-    }
-}
-
-// MARK: - UISearchBarDelegate
-
-extension SubtensorValidatorPickerViewController: UISearchBarDelegate {
-    func searchBar(_: UISearchBar, textDidChange _: String) {
-        applyValidators(allValidators)
-    }
-
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = nil
-        searchBar.resignFirstResponder()
-        applyValidators(allValidators)
+        navigationController?.popViewController(animated: true)
     }
 }

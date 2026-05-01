@@ -65,7 +65,8 @@ final class SubtensorValidatorProvider {
                         delegatedStake: delegated,
                         commission: row.commission,
                         nominatorCount: row.nominatorCount,
-                        minDelegation: minDelegation
+                        minDelegation: minDelegation,
+                        apr: row.apr
                     )
                 )
             }
@@ -84,7 +85,8 @@ final class SubtensorValidatorProvider {
                         delegatedStake: 0,
                         commission: 0.0,
                         nominatorCount: nil,
-                        minDelegation: minDelegation
+                        minDelegation: minDelegation,
+                        apr: nil
                     )
                 )
             }

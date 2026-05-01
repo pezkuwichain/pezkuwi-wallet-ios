@@ -2,7 +2,7 @@ import Foundation
 import BigInt
 import SubstrateSdk
 
-/// Display model for a single user stake position row on the main staking screen.
+/// Display model for a single user stake position row.
 struct SubtensorPositionViewModel {
     /// Raw hotkey bytes — used for routing (unstake / manage actions).
     let hotkey: AccountId
@@ -23,9 +23,6 @@ struct SubtensorPositionViewModel {
     /// Short hotkey ("5E2L...eZ5u") shown as secondary line when an identity name exists.
     let shortHotkey: String?
 
-    /// Human-readable network label: "Root", "SN1", "SN8" etc.
-    let networkText: String
-
     /// Formatted stake amount, e.g. "0.0042 TAO" or "14,230.00 α".
     let amountText: String
 }
@@ -42,13 +39,9 @@ extension SubtensorPositionViewModel {
         let shortHk = shorten(address: address)
         let identicon = try? PolkadotIconGenerator().generateFromAccountId(position.hotkey)
 
-        let hasName = position.validatorIdentity?.isEmpty == false
-        let nameText = hasName ? position.validatorIdentity! : shortHk
-        let secondaryHotkey: String? = hasName ? shortHk : nil
-
-        let networkText = position.netuid == SubtensorStakingConstants.rootNetuid
-            ? "Root"
-            : "SN\(position.netuid)"
+        let identityName = position.validatorIdentity.flatMap { $0.isEmpty ? nil : $0 }
+        let nameText = identityName ?? shortHk
+        let secondaryHotkey: String? = identityName == nil ? nil : shortHk
 
         let amountText = formatAmount(
             position.amount,
@@ -61,14 +54,17 @@ extension SubtensorPositionViewModel {
             netuid: position.netuid,
             identicon: identicon,
             nameText: nameText,
-            nameIsAddress: !hasName,
+            nameIsAddress: identityName == nil,
             shortHotkey: secondaryHotkey,
-            networkText: networkText,
             amountText: amountText
         )
     }
 
-    private static func formatAmount(_ amount: BigUInt, precision: Int, isRoot: Bool) -> String {
+    /// Formats a substrate balance value with the chain's precision and
+    /// the right unit suffix (`TAO` for root, `α` for subnet alpha).
+    /// Made `static` (not `private`) so the dashboard presenter can format
+    /// per-netuid totals using the same rules as individual rows.
+    static func formatAmount(_ amount: BigUInt, precision: Int, isRoot: Bool) -> String {
         guard precision > 0 else { return "\(amount) \(isRoot ? "TAO" : "α")" }
         let divisor = BigUInt(10).power(precision)
         let whole = amount / divisor

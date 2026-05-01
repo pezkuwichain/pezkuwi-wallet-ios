@@ -2,32 +2,27 @@ import Foundation
 import UIKit
 import Foundation_iOS
 
-/// Routes the "Start staking" button on Nova's generic info screen to the
-/// TAO staking dashboard. From the dashboard the user can see existing
-/// positions and start new stakes (Root or Subnet).
 final class StartStakingInfoSubtensorWireframe: StartStakingInfoWireframe {
     let chainAsset: ChainAsset
+
+    // Retained so the type-picker's onSelection closure (which weakly captures
+    // the staking wireframe) can still reach a live wireframe when Continue is
+    // tapped. Without this hold, the wireframe deallocates as soon as
+    // showSetupAmount returns and Continue silently no-ops.
+    private var stakingWireframe: SubtensorStakingWireframe?
 
     init(chainAsset: ChainAsset) {
         self.chainAsset = chainAsset
     }
 
     override func showSetupAmount(from view: ControllerBackedProtocol?) {
-        // Resolve the current wallet's coldkey for this chain.
-        guard
-            let wallet = SelectedWalletSettings.shared.value,
-            let accountResponse = wallet.fetchMetaChainAccount(for: chainAsset.chain.accountRequest())
-        else {
-            return
-        }
+        guard let viewController = view?.controller else { return }
 
-        let coldkey = accountResponse.chainAccount.accountId
-
-        let dashboard = SubtensorStakingViewFactory.createView(
+        let wireframe = SubtensorStakingWireframe(
             chainAsset: chainAsset,
-            coldkey: coldkey
+            localizationManager: LocalizationManager.shared
         )
-
-        view?.controller.navigationController?.pushViewController(dashboard, animated: true)
+        stakingWireframe = wireframe
+        wireframe.showStakingFlow(from: viewController)
     }
 }

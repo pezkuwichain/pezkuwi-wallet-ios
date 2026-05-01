@@ -1,12 +1,11 @@
 import UIKit
 
-/// Main TAO staking dashboard. Shows the user's active stake positions
-/// (queried live from chain) and provides a path to start new stakes.
+/// Main TAO staking dashboard, scoped to the entry netuid (root or a
+/// specific subnet). Layout: Your stake total → Stake/Unstake action list
+/// → Your validator(s) card → Staking info expandable footer.
 final class SubtensorStakingViewController: UIViewController, SubtensorStakingViewProtocol {
     private let presenter: SubtensorStakingPresenterProtocol
     private let rootView = SubtensorStakingViewLayout()
-
-    private var positionViewModels: [SubtensorPositionViewModel] = []
 
     var controller: UIViewController { self }
 
@@ -27,129 +26,84 @@ final class SubtensorStakingViewController: UIViewController, SubtensorStakingVi
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "TAO Staking"
-        setupNavBar()
-        setupTableView()
         rootView.showState(.loading)
-
-        rootView.startStakingButton.addTarget(self, action: #selector(didTapStake), for: .touchUpInside)
-
+        wireActions()
         presenter.setup()
     }
 
-    // MARK: - Nav bar
+    private var hasAppeared = false
 
-    private func setupNavBar() {
-        let addButton = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(didTapStake)
-        )
-        navigationItem.rightBarButtonItem = addButton
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Initial load is driven by `setup()` from viewDidLoad. Subsequent
+        // appearances (e.g. popping back from the stake confirm flow) need
+        // a refresh so the new position lands without making the user
+        // reopen the screen.
+        if hasAppeared {
+            presenter.refresh()
+        } else {
+            hasAppeared = true
+        }
     }
 
-    // MARK: - Table view
-
-    private func setupTableView() {
-        rootView.tableView.dataSource = self
-        rootView.tableView.delegate = self
-        rootView.tableView.register(
-            SubtensorPositionTableViewCell.self,
-            forCellReuseIdentifier: SubtensorPositionTableViewCell.reuseId
+    private func wireActions() {
+        rootView.startStakingButton.addTarget(
+            self,
+            action: #selector(didTapStakeMore),
+            for: .touchUpInside
+        )
+        rootView.stakeMoreCell.addTarget(
+            self,
+            action: #selector(didTapStakeMore),
+            for: .touchUpInside
+        )
+        rootView.unstakeCell.addTarget(
+            self,
+            action: #selector(didTapUnstake),
+            for: .touchUpInside
         )
     }
 
     // MARK: - Actions
 
-    @objc private func didTapStake() {
-        presenter.didTapStake()
+    @objc private func didTapStakeMore() {
+        presenter.didTapStakeMore()
+    }
+
+    @objc private func didTapUnstake() {
+        presenter.didTapUnstake()
     }
 
     // MARK: - SubtensorStakingViewProtocol
 
-    func didReceive(positions: [SubtensorPositionViewModel]) {
-        positionViewModels = positions
-        if positions.isEmpty {
+    func didReceive(viewModel: SubtensorStakingDashboardViewModel) {
+        guard let totalRow = viewModel.totalStakeRow else {
             rootView.showState(.empty)
-        } else {
-            rootView.showState(.loaded)
-            rootView.tableView.reloadData()
+            return
         }
+
+        rootView.stakeCardView.bind(title: "Your stake", rows: [totalRow])
+
+        rootView.stakeMoreCell.bind(
+            title: "Stake more",
+            icon: R.image.iconBondMore(),
+            details: nil
+        )
+        rootView.unstakeCell.bind(
+            title: "Unstake",
+            icon: R.image.iconUnbond(),
+            details: nil
+        )
+
+        rootView.validatorListView.bind(
+            title: viewModel.validatorsTitle,
+            rows: viewModel.validatorRows
+        )
+        rootView.validatorListView.isHidden = viewModel.validatorRows.isEmpty
+
+        rootView.stakingInfoView.bind(model: viewModel.info)
+
+        rootView.showState(.loaded)
     }
-
-    func didReceiveStatus(_ status: String) {
-        switch status {
-        case "loading":
-            rootView.showState(.loading)
-        default:
-            break
-        }
-    }
-}
-
-// MARK: - UITableViewDataSource
-
-extension SubtensorStakingViewController: UITableViewDataSource {
-    func numberOfSections(in _: UITableView) -> Int { 1 }
-
-    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        positionViewModels.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: SubtensorPositionTableViewCell.reuseId,
-            for: indexPath
-        ) as! SubtensorPositionTableViewCell // swiftlint:disable:this force_cast
-        cell.bind(viewModel: positionViewModels[indexPath.row])
-        return cell
-    }
-}
-
-// MARK: - UITableViewDelegate
-
-extension SubtensorStakingViewController: UITableViewDelegate {
-    func tableView(_: UITableView, heightForHeaderInSection _: Int) -> CGFloat {
-        positionViewModels.isEmpty ? 0 : 48
-    }
-
-    func tableView(_: UITableView, viewForHeaderInSection _: Int) -> UIView? {
-        guard !positionViewModels.isEmpty else { return nil }
-        let header = StakingSectionHeaderView()
-        header.titleLabel.text = "Your Stakes"
-        return header
-    }
-
-    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // P1: tap → manage / unstake flow. No-op for now.
-        tableView(rootView.tableView, didDeselectRowAt: indexPath)
-    }
-
-    func tableView(_: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        rootView.tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
-// MARK: - Section header
-
-private final class StakingSectionHeaderView: UIView {
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .semiBoldFootnote
-        label.textColor = R.color.colorTextSecondary()
-        return label
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = R.color.colorSecondaryScreenBackground()
-        addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-    }
-
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) { fatalError() }
 }

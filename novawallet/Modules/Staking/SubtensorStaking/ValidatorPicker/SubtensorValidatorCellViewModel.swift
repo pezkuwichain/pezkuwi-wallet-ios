@@ -35,7 +35,14 @@ struct SubtensorValidatorCellViewModel {
     /// even if `displayName` is set so address visibility is preserved.
     let shortHotkey: String
 
-    /// Pre-formatted commission percent string, e.g. "18.00%".
+    /// Pre-formatted APR percent string, e.g. "45.50%". `"—"` when no APR is
+    /// available (validator missing from the TaoStats sample). APR is reported
+    /// post-commission — what a delegator actually earned over the last
+    /// 30 days — so it already factors in the validator's take.
+    let aprText: String
+
+    /// Pre-formatted commission caption, e.g. "9% commission". Rendered in the
+    /// gray aux slot below APR so the validator's take is still visible.
     let commissionText: String
 
     /// Pre-formatted total stake string, e.g. "1.2M TAO" or "0 TAO". Pre-

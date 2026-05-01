@@ -59,9 +59,14 @@ enum SubtensorStakeConfirmViewFactory {
             return R.string(preferredLanguages: locale.rLanguages).localizable.commonConfirmTitle()
         }
 
+        let localizableValidatorLabel = LocalizableResource { locale in
+            R.string(preferredLanguages: locale.rLanguages).localizable.stakingSubtensorValidator()
+        }
+
         let view = CollatorStakingConfirmViewController(
             presenter: presenter,
             localizableTitle: localizableTitle,
+            localizableCollatorLabel: localizableValidatorLabel,
             localizationManager: localizationManager
         )
 

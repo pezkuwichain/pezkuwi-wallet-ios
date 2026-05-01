@@ -5,13 +5,16 @@ import BigInt
 final class SubtensorStakingService {
     private let validatorProvider: SubtensorValidatorProvider
     private let selectedColdkey: AccountId
+    private let rpcURL: URL
 
     init(
         validatorProvider: SubtensorValidatorProvider,
-        selectedColdkey: AccountId
+        selectedColdkey: AccountId,
+        rpcURL: URL
     ) {
         self.validatorProvider = validatorProvider
         self.selectedColdkey = selectedColdkey
+        self.rpcURL = rpcURL
     }
 
     /// Returns active validators for the given netuid. Pass 0 for root.
@@ -20,9 +23,14 @@ final class SubtensorStakingService {
     }
 
     /// Returns the user's current stake positions across all hotkeys and netuids.
-    /// Queries SubtensorModule.StakingHotkeys + Alpha + TotalHotkeyAlpha/Shares.
+    /// Backed by `StakeInfoRuntimeApi_get_stake_info_for_coldkey` — the
+    /// runtime aggregates everything (root TAO + every subnet, V1 + V2
+    /// alpha storage) and returns resolved amounts.
     func fetchUserStakePositions() async throws -> [SubtensorStakePosition] {
-        let rawPositions = try await SubtensorPositionFetcher.fetchPositions(coldkey: selectedColdkey)
+        let rawPositions = try await SubtensorPositionFetcher.fetchPositions(
+            coldkey: selectedColdkey,
+            rpcURL: rpcURL
+        )
         guard !rawPositions.isEmpty else { return [] }
 
         // Best-effort: load validator identities for display names.
@@ -47,7 +55,11 @@ final class SubtensorStakingService {
     }
 
     /// Returns the runtime minimum delegation amount in RAO (0.01 TAO).
+    /// Hardcoded against the verified-live value for finney mainnet
+    /// (2026-04-13). The Setup screen uses this on its "Minimum stake"
+    /// row; the dashboard surfaces the same value as a static string in
+    /// its info card and does not call this method.
     func fetchMinDelegation() async throws -> BigUInt {
-        10_000_000 // 0.01 TAO in RAO — verified against live chain 2026-04-13
+        10_000_000
     }
 }

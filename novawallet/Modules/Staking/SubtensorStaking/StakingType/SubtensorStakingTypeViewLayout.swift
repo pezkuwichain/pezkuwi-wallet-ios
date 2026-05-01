@@ -11,8 +11,20 @@ final class SubtensorStakingTypeViewLayout: UIView {
         return view
     }()
 
-    let rootBanner = SubtensorStakingTypeBannerView()
-    let subnetBanner = SubtensorStakingTypeBannerView()
+    let rootBanner: SubtensorStakingTypeBannerView = .create {
+        $0.imageView.image = R.image.imageStakingTypeDirect()!
+    }
+
+    let subnetBanner: SubtensorStakingTypeBannerView = .create {
+        $0.imageView.image = R.image.imageStakingTypePool()!
+    }
+
+    let wikiLabel: UILabel = {
+        let label = UILabel(style: .footnoteSecondary)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        return label
+    }()
 
     let continueButton: TriangularedButton = {
         let button = TriangularedButton()
@@ -48,6 +60,8 @@ final class SubtensorStakingTypeViewLayout: UIView {
 
         containerView.stackView.addArrangedSubview(rootBanner)
         containerView.stackView.addArrangedSubview(subnetBanner)
+        containerView.stackView.addArrangedSubview(wikiLabel)
+        containerView.stackView.setCustomSpacing(24, after: subnetBanner)
     }
 }
 
@@ -65,6 +79,12 @@ final class SubtensorStakingTypeBannerView: UIView {
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
     }
+
+    let imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
 
     let borderView: RoundedView = .create { view in
         view.applyStrokedBackgroundStyle()
@@ -98,6 +118,14 @@ final class SubtensorStakingTypeBannerView: UIView {
     private func setupLayout() {
         addSubview(backgroundView)
         backgroundView.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+        backgroundView.addSubview(imageView)
+        imageView.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.width.equalTo(140)
+            $0.height.equalTo(107)
+        }
 
         addSubview(borderView)
         borderView.snp.makeConstraints { $0.edges.equalToSuperview() }

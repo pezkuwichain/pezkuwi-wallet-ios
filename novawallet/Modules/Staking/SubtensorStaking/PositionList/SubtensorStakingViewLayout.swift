@@ -1,7 +1,10 @@
 import UIKit
+import UIKit_iOS
+import SnapKit
 
 /// Layout for the TAO staking dashboard screen.
-/// Manages three mutually exclusive states: loading, empty, and loaded (shows position list).
+/// Three states: loading, empty (no positions on the entry netuid), loaded.
+/// Mirrors the Avail/AZERO main staking screen pattern.
 final class SubtensorStakingViewLayout: UIView {
     // MARK: - Loading state
 
@@ -49,26 +52,44 @@ final class SubtensorStakingViewLayout: UIView {
         return button
     }()
 
+    // MARK: - Background
+
+    let backgroundGradientView = MultigradientView.background
+
     // MARK: - Loaded state
 
-    let tableView: UITableView = {
-        let table = UITableView(frame: .zero, style: .grouped)
-        table.backgroundColor = R.color.colorSecondaryScreenBackground()
-        table.separatorStyle = .singleLine
-        table.separatorColor = R.color.colorContainerBorder()
-        table.rowHeight = 64
-        table.estimatedRowHeight = 64
-        table.estimatedSectionHeaderHeight = 48
-        table.isHidden = true
-        table.tableFooterView = UIView()
-        return table
+    let containerView: ScrollableContainerView = {
+        let view = ScrollableContainerView(axis: .vertical, respectsSafeArea: true)
+        view.stackView.layoutMargins = UIEdgeInsets(top: 16.0, left: 0.0, bottom: 16.0, right: 0.0)
+        view.stackView.isLayoutMarginsRelativeArrangement = true
+        view.stackView.alignment = .fill
+        view.stackView.distribution = .fill
+        view.stackView.spacing = 12.0
+        view.isHidden = true
+        return view
     }()
+
+    let stakeCardView = SubtensorStakeAmountsView()
+
+    let actionsTable: StackTableView = {
+        let view = StackTableView()
+        view.cornerRadius = 12.0
+        view.hasSeparators = true
+        view.contentInsets = UIEdgeInsets(top: 8.0, left: 16.0, bottom: 8.0, right: 16.0)
+        return view
+    }()
+
+    let stakeMoreCell: StackActionCell = makeActionCell()
+    let unstakeCell: StackActionCell = makeActionCell()
+
+    let validatorListView = SubtensorValidatorListView()
+    let stakingInfoView = SubtensorStakingInfoView()
 
     // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = R.color.colorSecondaryScreenBackground()
+        backgroundColor = .clear
         setupLayout()
     }
 
@@ -78,7 +99,11 @@ final class SubtensorStakingViewLayout: UIView {
     // MARK: - Layout
 
     private func setupLayout() {
-        // Loading
+        addSubview(backgroundGradientView)
+        backgroundGradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         addSubview(loadingIndicator)
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -86,17 +111,51 @@ final class SubtensorStakingViewLayout: UIView {
             loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
 
-        // Table (loaded state)
-        addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-        ])
+        addSubview(containerView)
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
-        // Empty state
+        // Stake card — single aggregated total for the entry netuid.
+        let stakeCardWrap = UIView()
+        stakeCardWrap.addSubview(stakeCardView)
+        stakeCardView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+        }
+
+        // Action list — Stake more / Unstake. "Your positions" is gone;
+        // per-validator detail now lives inline in the validators card
+        // below, so there is nothing to drill into.
+        let actionsWrap = UIView()
+        actionsWrap.addSubview(actionsTable)
+        actionsTable.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+        }
+        actionsTable.addArrangedSubview(stakeMoreCell)
+        actionsTable.addArrangedSubview(unstakeCell)
+
+        let validatorWrap = UIView()
+        validatorWrap.addSubview(validatorListView)
+        validatorListView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+        }
+
+        let infoWrap = UIView()
+        infoWrap.addSubview(stakingInfoView)
+        stakingInfoView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(UIConstants.horizontalInset)
+        }
+
+        // Order per UX: stake total → action list → validator detail → info.
+        containerView.stackView.addArrangedSubview(stakeCardWrap)
+        containerView.stackView.addArrangedSubview(actionsWrap)
+        containerView.stackView.addArrangedSubview(validatorWrap)
+        containerView.stackView.addArrangedSubview(infoWrap)
+
         emptyContainer.addArrangedSubview(emptyTitleLabel)
         emptyContainer.addArrangedSubview(emptySubtitleLabel)
         emptyContainer.addArrangedSubview(startStakingButton)
@@ -123,17 +182,27 @@ final class SubtensorStakingViewLayout: UIView {
         switch state {
         case .loading:
             loadingIndicator.startAnimating()
-            tableView.isHidden = true
+            containerView.isHidden = true
             emptyContainer.isHidden = true
         case .empty:
             loadingIndicator.stopAnimating()
-            tableView.isHidden = true
+            containerView.isHidden = true
             emptyContainer.isHidden = false
         case .loaded:
             loadingIndicator.stopAnimating()
-            tableView.isHidden = false
+            containerView.isHidden = false
             emptyContainer.isHidden = true
         }
+    }
+
+    // MARK: - Helpers
+
+    private static func makeActionCell() -> StackActionCell {
+        let cell = StackActionCell()
+        cell.rowContentView.disclosureIndicatorView.image = R.image.iconSmallArrow()?
+            .tinted(with: R.color.colorIconSecondary()!)
+        cell.rowContentView.detailsView.titleLabel.textColor = R.color.colorTextSecondary()
+        return cell
     }
 }
 

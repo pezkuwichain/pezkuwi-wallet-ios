@@ -11,6 +11,15 @@ import Foundation_iOS
 /// delay (design spec §13 open questions + no indexer backend), so those
 /// fields are seeded with hardcoded v1 values from research-tao.md.
 ///
+/// TODO(wiki): The "Find out more" link on this screen currently falls back
+/// to `applicationConfig.websiteURL` (i.e. https://novawallet.io) because
+/// Bittensor's chain entry in nova-utils does not set `additional.stakingWiki`.
+/// When the Nova Wiki page for Bittensor staking is published, add
+/// `"stakingWiki": "<url>"` to the Bittensor chain in `chains.json` and
+/// `chains_dev.json` (and `chains_dev_subtensor.json` for local dev). No iOS
+/// code change is needed — `StartStakingInfoBasePresenter` already prefers
+/// `chain.stakingWiki` over the website fallback.
+///
 /// The max-APR value — unlike the others — is a user-visible headline
 /// number ("Earn up to X%") that benefits from being real as soon as the
 /// network data source can supply it. [TEMP-TAOSTATS] Phase B therefore
@@ -103,20 +112,23 @@ final class StartStakingInfoSubtensorPresenter: StartStakingInfoBasePresenter {
 }
 
 extension StartStakingInfoSubtensorPresenter {
-    /// Hardcoded v1 Subtensor staking state. Values sourced from
-    /// `~/Desktop/tao-ewt-staking/research-tao.md`:
+    /// Hardcoded v1 Subtensor staking state. Values verified against
+    /// finney mainnet (queried 2026-04-30) — research-tao.md's "0.1 TAO
+    /// min stake" was stale; on-chain `NominatorMinRequiredStake` is
+    /// 10_000_000 RAO = 0.01 TAO.
     ///
-    /// - Min stake: 0.1 TAO (100_000_000 RAO) — `nominatorMinRequiredStake`
-    ///   mainnet constant.
+    /// - Min stake: 0.01 TAO (10_000_000 RAO) — verified live.
     /// - Reward time: ~1.2 hours — one Bittensor tempo (360 blocks × ~12s).
     /// - Unstake time: 0 — `removeStakeLimit` is instant, no unbonding queue.
     /// - Reward delay: 0 — rewards accrue from the next tempo after stake.
+    /// - Rewards destination: `.stake` — Bittensor auto-restakes emissions
+    ///   into the same hotkey position at each tempo (no manual claim).
     /// - Max APY: 18% fallback. [TEMP-TAOSTATS] Overwritten with the real
     ///   cross-validator peak APR when the TaoStats fetch lands.
     struct State: StartStakingStateProtocol {
         let chainAsset: ChainAsset
 
-        var minStake: BigUInt? { 100_000_000 }
+        var minStake: BigUInt? { 10_000_000 }
         var rewardTime: TimeInterval? { 4320 }
         var unstakingTime: TimeInterval? { 0 }
         var rewardDelay: TimeInterval? { 0 }
@@ -124,6 +136,6 @@ extension StartStakingInfoSubtensorPresenter {
         var rewardsAutoPayoutThresholdAmount: BigUInt? { nil }
         var govThresholdAmount: BigUInt? { nil }
         var shouldHaveGovInfo: Bool { false }
-        var rewardsDestination: DefaultStakingRewardDestination { .manual }
+        var rewardsDestination: DefaultStakingRewardDestination { .stake }
     }
 }

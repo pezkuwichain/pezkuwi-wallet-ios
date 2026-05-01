@@ -55,7 +55,8 @@ final class SubtensorValidatorCellViewModelFactory {
         let shortHotkey = Self.shorten(address: address)
 
         let displayName = (validator.identity?.isEmpty == false) ? validator.identity : nil
-        let commissionText = formatCommission(validator.commission)
+        let aprText = formatApr(validator.apr)
+        let commissionText = formatCommissionCaption(validator.commission)
         let totalStakeText = formatTotalStake(validator.totalStake)
 
         return SubtensorValidatorCellViewModel(
@@ -64,6 +65,7 @@ final class SubtensorValidatorCellViewModelFactory {
             identicon: identicon,
             displayName: displayName,
             shortHotkey: shortHotkey,
+            aprText: aprText,
             commissionText: commissionText,
             totalStakeText: totalStakeText,
             // v1 root subnet has no badge. Subnet variants would inject
@@ -72,14 +74,26 @@ final class SubtensorValidatorCellViewModelFactory {
         )
     }
 
-    /// Renders commission as a percent with two decimal places, e.g.
-    /// `0.18` -> `"18.00%"`. NumberFormatter is locale-aware to keep the
-    /// separator correct in non-en environments.
-    private func formatCommission(_ commission: Double) -> String {
-        let percent = commission * 100
+    /// Renders APR as a percent with two decimal places, e.g.
+    /// `0.4550` -> `"45.50%"`. Returns `"—"` when APR is unavailable
+    /// (validator absent from the TaoStats sample). APR is post-commission.
+    private func formatApr(_ apr: Double?) -> String {
+        guard let apr else { return "—" }
+        let percent = apr * 100
         let number = NSNumber(value: percent)
         let body = percentFormatter.string(from: number) ?? "0.00"
         return "\(body)%"
+    }
+
+    /// Renders the commission caption, e.g. `0.18` -> `"18% commission"`.
+    /// Used as the gray aux line below APR.
+    private func formatCommissionCaption(_ commission: Double) -> String {
+        let percent = commission * 100
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 0
+        formatter.numberStyle = .decimal
+        let body = formatter.string(from: NSNumber(value: percent)) ?? "0"
+        return "\(body)% commission"
     }
 
     /// Compact total stake formatter. v1 produces strings like

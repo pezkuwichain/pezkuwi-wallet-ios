@@ -137,6 +137,13 @@ final class SubtensorStakeConfirmInteractor {
             case let .success(updateModel):
                 if case .inBlock = updateModel.statusUpdate.extrinsicStatus {
                     self?.cancelExtrinsicSubscriptionIfNeeded()
+                    // Invalidate the shared cache so the multistaking
+                    // dashboard's next sync (every 30s, or sooner if the
+                    // user reopens it) returns the new position instead of
+                    // the pre-stake snapshot.
+                    if let coldkey = self?.selectedAccount.chainAccount.accountId {
+                        Task { await SubtensorPositionCache.shared.invalidate(coldkey: coldkey) }
+                    }
                     self?.presenter?.didCompleteExtrinsicSubmission(
                         for: .success(updateModel.extrinsicSubmittedModel)
                     )

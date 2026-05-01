@@ -10,23 +10,13 @@ import UIKit
 /// All four state views overlap; the controller toggles visibility based on
 /// the current `State`. Hardcoded English strings — see Phase E TODOs.
 final class SubtensorValidatorPickerViewLayout: UIView {
-    let searchBar: UISearchBar = {
-        let bar = UISearchBar()
-        // TODO(phase-e): R.string.localizable.stakingSubtensorSearchPlaceholder(...)
-        bar.placeholder = "Search by name or hotkey"
-        bar.searchBarStyle = .minimal
-        bar.autocapitalizationType = .none
-        bar.autocorrectionType = .no
-        return bar
-    }()
-
     let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.backgroundColor = R.color.colorSecondaryScreenBackground()
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = R.color.colorContainerBorder()
-        tableView.rowHeight = 64
-        tableView.estimatedRowHeight = 64
+        tableView.rowHeight = 56
+        tableView.estimatedRowHeight = 56
         tableView.keyboardDismissMode = .onDrag
         tableView.tableFooterView = UIView()
         return tableView
@@ -93,18 +83,10 @@ final class SubtensorValidatorPickerViewLayout: UIView {
     }
 
     private func setupLayout() {
-        addSubview(searchBar)
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: trailingAnchor)
-        ])
-
         addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)

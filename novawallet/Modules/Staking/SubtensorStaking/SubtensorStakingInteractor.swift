@@ -20,14 +20,9 @@ final class SubtensorStakingInteractor: SubtensorStakingInteractorInputProtocol 
         setupTask = Task { @MainActor [weak self] in
             guard let self else { return }
             do {
-                async let positions = service.fetchUserStakePositions()
-                async let minDelegation = service.fetchMinDelegation()
-
-                let (fetchedPositions, fetchedMin) = try await(positions, minDelegation)
+                let positions = try await service.fetchUserStakePositions()
                 guard !Task.isCancelled else { return }
-
-                presenter?.didReceive(positions: fetchedPositions)
-                presenter?.didReceive(minDelegation: fetchedMin)
+                presenter?.didReceive(positions: positions)
             } catch {
                 guard !Task.isCancelled else { return }
                 presenter?.didReceive(error: error)
