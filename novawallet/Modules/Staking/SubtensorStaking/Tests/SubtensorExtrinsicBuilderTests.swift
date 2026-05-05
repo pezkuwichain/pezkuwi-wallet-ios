@@ -108,6 +108,49 @@ final class SubtensorExtrinsicBuilderTests: XCTestCase {
         XCTAssertEqual(call.args.limitPrice, oneTaoInRao)
     }
 
+    // MARK: - subnet (non-root) limit price — RAO per alpha
+
+    /// Subnet limit_price wire format is u64 RAO per whole alpha (per pallet
+    /// docstring). Earlier code multiplied by 2^32 — too high by ~4.29x —
+    /// which silently relaxed slippage on add_stake_limit and would have
+    /// caused remove_stake_limit to fail because the chain can't deliver
+    /// 4.29x spot.
+    func test_buildAddStakeLimit_onSubnet_limitPriceIsSpotTimesPlusSlippageInRao() throws {
+        let call = SubtensorExtrinsicBuilder.buildAddStakeLimit(
+            hotkey: hotkeyA,
+            netuid: 5,
+            amount: oneTaoInRao,
+            slippage: defaultSlippage,
+            spotPriceTaoPerAlpha: 0.001
+        )
+        // 0.001 (TAO/alpha) * 1.005 * 1_000_000_000 = 1_005_000 RAO/alpha
+        XCTAssertEqual(call.args.limitPrice, 1_005_000)
+    }
+
+    func test_buildRemoveStakeLimit_onSubnet_limitPriceIsSpotTimesMinusSlippageInRao() throws {
+        let call = SubtensorExtrinsicBuilder.buildRemoveStakeLimit(
+            hotkey: hotkeyA,
+            netuid: 5,
+            amount: oneTaoInRao,
+            slippage: defaultSlippage,
+            spotPriceTaoPerAlpha: 0.001
+        )
+        // 0.001 (TAO/alpha) * 0.995 * 1_000_000_000 = 995_000 RAO/alpha
+        XCTAssertEqual(call.args.limitPrice, 995_000)
+    }
+
+    func test_buildRemoveStakeLimit_onSubnet_withMissingSpotPrice_usesConservativeFallback() throws {
+        let call = SubtensorExtrinsicBuilder.buildRemoveStakeLimit(
+            hotkey: hotkeyA,
+            netuid: 5,
+            amount: oneTaoInRao,
+            slippage: defaultSlippage,
+            spotPriceTaoPerAlpha: nil
+        )
+        // fallback spot = 0.001; 0.001 * 0.995 * 1e9 = 995_000
+        XCTAssertEqual(call.args.limitPrice, 995_000)
+    }
+
     // MARK: - move_stake
 
     func test_buildMoveStake_onRoot_usesMoveStakeWithMatchingNetuids() throws {

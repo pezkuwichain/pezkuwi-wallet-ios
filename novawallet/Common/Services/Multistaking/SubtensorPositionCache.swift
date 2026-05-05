@@ -78,9 +78,21 @@ actor SubtensorPositionCache {
     /// the next poll cycle. Letting the in-flight finish on its own is
     /// harmless because the generation bump below makes its result a no-op
     /// for cache writes.
+    ///
+    /// Posts `subtensorPositionsInvalidated` so the per-netuid update
+    /// services can pre-empt their 30s poll and refresh the dashboard
+    /// immediately rather than leaving a stale row up for up to 30s.
     func invalidate(coldkey: AccountId) {
         cache[coldkey] = nil
         generation[coldkey, default: 0] += 1
+
+        Task { @MainActor in
+            NotificationCenter.default.post(
+                name: .subtensorPositionsInvalidated,
+                object: nil,
+                userInfo: ["coldkey": coldkey]
+            )
+        }
     }
 
     // MARK: - Fetch implementation
@@ -128,4 +140,13 @@ actor SubtensorPositionCache {
 
 private enum SubtensorCacheError: Error {
     case invalidResponse
+}
+
+extension Notification.Name {
+    /// Fires from `SubtensorPositionCache.invalidate(coldkey:)`. userInfo
+    /// carries `["coldkey": AccountId]` so per-netuid update services can
+    /// match their own coldkey before triggering an immediate re-sync.
+    static let subtensorPositionsInvalidated = Notification.Name(
+        "io.novafoundation.novawallet.subtensorPositionsInvalidated"
+    )
 }

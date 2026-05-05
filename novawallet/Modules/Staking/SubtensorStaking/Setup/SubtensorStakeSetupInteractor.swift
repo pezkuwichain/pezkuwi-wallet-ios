@@ -7,11 +7,10 @@ import Operation_iOS
 ///     `SubtensorStakingService`)
 ///   - live `AssetBalance` via `WalletLocalSubscriptionFactoryProtocol`
 ///   - live `PriceData` via `PriceProviderFactoryProtocol`
-///
-/// v1 deliberately does NOT estimate extrinsic fees here — that lands in
-/// Phase B alongside confirm / submit. The wallet-local + price subscriptions
-/// match the shape of `ParaStkStakeSetupInteractor` so the presenter can use
-/// Nova's canonical `BalanceViewModelFactory` pipeline.
+///   - extrinsic fee via `ExtrinsicFeeProxy` — re-estimates on validator
+///     selection / amount change with real values, falls back to a
+///     placeholder hotkey + 1 TAO before validator pick so the row
+///     shows a fee from the moment the screen loads.
 final class SubtensorStakeSetupInteractor {
     weak var presenter: SubtensorStakeSetupInteractorOutputProtocol?
 
@@ -21,6 +20,8 @@ final class SubtensorStakeSetupInteractor {
     let priceLocalSubscriptionFactory: PriceProviderFactoryProtocol
     let service: SubtensorStakingService
     let validatorProvider: SubtensorValidatorProvider
+    let extrinsicService: ExtrinsicServiceProtocol
+    let feeProxy: ExtrinsicFeeProxyProtocol
     let netuid: UInt16
 
     private var balanceProvider: StreamableProvider<AssetBalance>?
@@ -36,6 +37,8 @@ final class SubtensorStakeSetupInteractor {
         priceLocalSubscriptionFactory: PriceProviderFactoryProtocol,
         service: SubtensorStakingService,
         validatorProvider: SubtensorValidatorProvider,
+        extrinsicService: ExtrinsicServiceProtocol,
+        feeProxy: ExtrinsicFeeProxyProtocol,
         currencyManager: CurrencyManagerProtocol,
         netuid: UInt16 = SubtensorStakingConstants.rootNetuid
     ) {
@@ -45,6 +48,8 @@ final class SubtensorStakeSetupInteractor {
         self.priceLocalSubscriptionFactory = priceLocalSubscriptionFactory
         self.service = service
         self.validatorProvider = validatorProvider
+        self.extrinsicService = extrinsicService
+        self.feeProxy = feeProxy
         self.netuid = netuid
         self.currencyManager = currencyManager
     }
@@ -98,9 +103,36 @@ final class SubtensorStakeSetupInteractor {
 
 extension SubtensorStakeSetupInteractor: SubtensorStakeSetupInteractorInputProtocol {
     func setup() {
+        feeProxy.delegate = self
+
         performAssetBalanceSubscription()
         performPriceSubscription()
         fetchValidatorsAndMinDelegation()
+        estimateFee(hotkey: nil, amount: nil)
+    }
+
+    /// Estimate add_stake_limit fee. Mirrors Confirm's pattern: pass the
+    /// real selected hotkey + typed amount when available, fall back to
+    /// placeholders (zero hotkey, 1 TAO) so the row shows a fee before
+    /// the user has picked a validator.
+    func estimateFee(hotkey: AccountId?, amount: BigUInt?) {
+        let actualHotkey = hotkey ?? AccountId(repeating: 0, count: 32)
+        let actualAmount = amount ?? 1_000_000_000 // 1 TAO representative
+        let runtimeCall = SubtensorExtrinsicBuilder.buildAddStakeLimit(
+            hotkey: actualHotkey,
+            netuid: netuid,
+            amount: actualAmount,
+            slippage: SubtensorStakingConstants.defaultSlippage
+        )
+        let identifier = "stake-setup-\(netuid)-\(actualHotkey.toHex())-\(actualAmount)"
+
+        feeProxy.estimateFee(
+            using: extrinsicService,
+            reuseIdentifier: identifier,
+            setupBy: { builder in
+                try builder.adding(call: runtimeCall)
+            }
+        )
     }
 
     func refreshValidators() {
@@ -150,6 +182,20 @@ extension SubtensorStakeSetupInteractor: PriceLocalStorageSubscriber, PriceLocal
         case let .success(priceData):
             presenter?.didReceive(price: priceData)
         case let .failure(error):
+            presenter?.didReceive(error: error)
+        }
+    }
+}
+
+// MARK: - Fee proxy delegate
+
+extension SubtensorStakeSetupInteractor: ExtrinsicFeeProxyDelegate {
+    func didReceiveFee(result: Result<ExtrinsicFeeProtocol, Error>, for _: TransactionFeeId) {
+        switch result {
+        case let .success(fee):
+            presenter?.didReceive(fee: fee)
+        case let .failure(error):
+            presenter?.didReceive(fee: nil)
             presenter?.didReceive(error: error)
         }
     }

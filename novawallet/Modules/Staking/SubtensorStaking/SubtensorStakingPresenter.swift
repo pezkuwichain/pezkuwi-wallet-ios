@@ -13,7 +13,7 @@ final class SubtensorStakingPresenter: SubtensorStakingPresenterProtocol {
     /// data for this netuid, so tapping the SN8 card lands on an SN8-only
     /// view.
     private let entryNetuid: UInt16
-    private var hasScopedPositions: Bool = false
+    private var scopedPositions: [SubtensorStakePosition] = []
 
     init(
         interactor: SubtensorStakingInteractorInputProtocol,
@@ -45,8 +45,8 @@ final class SubtensorStakingPresenter: SubtensorStakingPresenterProtocol {
 
     func didTapUnstake() {
         guard let controller = view?.controller else { return }
-        guard hasScopedPositions else { return }
-        wireframe.showUnstakeComingSoon(from: controller)
+        guard !scopedPositions.isEmpty else { return }
+        wireframe.showUnstake(from: controller, positions: scopedPositions)
     }
 }
 
@@ -57,8 +57,7 @@ extension SubtensorStakingPresenter: SubtensorStakingInteractorOutputProtocol {
         // Scope to the entry netuid — the dashboard only ever renders one
         // type of stake at a time (root TAO or one subnet's alpha), even
         // though the underlying position cache holds every netuid.
-        let scopedPositions = positions.filter { $0.netuid == entryNetuid }
-        hasScopedPositions = !scopedPositions.isEmpty
+        scopedPositions = positions.filter { $0.netuid == entryNetuid }
 
         let total: BigUInt = scopedPositions.reduce(BigUInt(0)) { $0 + $1.amount }
 

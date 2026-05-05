@@ -7,13 +7,12 @@ import Foundation_iOS
 /// options that make sense for Bittensor v1:
 ///
 ///   - Show: Having onchain identity, Hide 100% commission
-///   - Sort by: Total stake (desc), Commission (asc)
+///   - Sort by: APR (high to low, default), Total stake (desc)
 ///
 /// Polkadot's "Not slashed" / "Not oversubscribed" / "Limit per identity"
 /// don't apply (no slashing model on Bittensor, no max-nominators concept,
-/// single-select picker). APR sort is intentionally omitted in v1: TaoStats
-/// gives us a single peak APR across the top-N validators, not a per-row
-/// figure, so a stable sort can't be built without Nova's own indexer.
+/// single-select picker). APR sort surfaces the per-validator APR returned
+/// by TaoStats; validators without APR data sink to the bottom.
 final class SubtensorValidatorFilterViewController: UIViewController {
     enum Sort: Int, CaseIterable {
         case totalStakeDesc
@@ -35,7 +34,7 @@ final class SubtensorValidatorFilterViewController: UIViewController {
         static let `default` = State(
             requireIdentity: false,
             hideMaxCommission: false,
-            sort: .totalStakeDesc
+            sort: .aprDesc
         )
     }
 

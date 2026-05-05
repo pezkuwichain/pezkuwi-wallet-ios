@@ -35,11 +35,9 @@ protocol SubtensorStakingWireframeProtocol: AnyObject {
     /// Stake type → setup → confirm flow (existing behaviour).
     func showStakingFlow(from view: UIViewController)
 
-    /// Placeholder until the unstake form ships — surfaces a "Coming soon"
-    /// alert. We keep this routed through the wireframe (instead of just
-    /// showing the alert from the presenter) so swapping in the real flow
-    /// later is a one-file change.
-    func showUnstakeComingSoon(from view: UIViewController)
+    /// Smart-pick: 1 position → push setup pre-filled; multi → action-sheet
+    /// picker, then push setup with chosen position.
+    func showUnstake(from view: UIViewController, positions: [SubtensorStakePosition])
 
     func showError(from view: UIViewController, message: String)
 }

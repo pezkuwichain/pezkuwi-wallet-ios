@@ -67,6 +67,22 @@ enum SubtensorStakeSetupViewFactory {
             rpcURL: rpcURL
         )
 
+        let chainRegistry = ChainRegistryFacade.sharedRegistry
+        guard
+            let runtimeProvider = chainRegistry.getRuntimeProvider(for: chainAsset.chain.chainId),
+            let connection = chainRegistry.getConnection(for: chainAsset.chain.chainId)
+        else {
+            return nil
+        }
+
+        let extrinsicService = ExtrinsicServiceFactory(
+            runtimeRegistry: runtimeProvider,
+            engine: connection,
+            operationQueue: OperationManagerFacade.sharedDefaultQueue,
+            userStorageFacade: UserDataStorageFacade.shared,
+            substrateStorageFacade: SubstrateDataStorageFacade.shared
+        ).createService(account: selectedAccount.chainAccount, chain: chainAsset.chain)
+
         let interactor = SubtensorStakeSetupInteractor(
             chainAsset: chainAsset,
             selectedAccount: selectedAccount,
@@ -74,6 +90,8 @@ enum SubtensorStakeSetupViewFactory {
             priceLocalSubscriptionFactory: PriceProviderFactory.shared,
             service: service,
             validatorProvider: validatorProvider,
+            extrinsicService: extrinsicService,
+            feeProxy: ExtrinsicFeeProxy(),
             currencyManager: currencyManager,
             netuid: netuid
         )

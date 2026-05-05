@@ -30,6 +30,7 @@ final class SubtensorMultistakingUpdateService: ObservableSyncService {
 
     private let rpcURL: URL
     private var fetchTask: Task<Void, Never>?
+    private var invalidationObserver: NSObjectProtocol?
 
     init(
         walletId: MetaAccountModel.Id,
@@ -56,6 +57,30 @@ final class SubtensorMultistakingUpdateService: ObservableSyncService {
         rpcURL = nodeURL
 
         super.init(logger: logger)
+
+        // Wake up immediately when the cache is invalidated for our coldkey
+        // (e.g. right after a stake/unstake `inBlock`) instead of waiting up
+        // to 30s for the next scheduled poll. Pass `ignoreIfSyncing: false`
+        // so a 30s poll that happened to be mid-fetch when the user's
+        // `inBlock` lands gets cancelled and restarted; otherwise the in-
+        // flight task would persist its pre-unstake snapshot to the
+        // dashboard and the next refresh wouldn't run until 30s later.
+        invalidationObserver = NotificationCenter.default.addObserver(
+            forName: .subtensorPositionsInvalidated,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let self else { return }
+            guard let coldkey = notification.userInfo?["coldkey"] as? AccountId else { return }
+            guard coldkey == self.accountId else { return }
+            self.syncUp(afterDelay: 0, ignoreIfSyncing: false)
+        }
+    }
+
+    deinit {
+        if let invalidationObserver {
+            NotificationCenter.default.removeObserver(invalidationObserver)
+        }
     }
 
     // MARK: - ObservableSyncService

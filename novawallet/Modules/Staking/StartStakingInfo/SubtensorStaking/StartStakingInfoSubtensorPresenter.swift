@@ -109,6 +109,19 @@ final class StartStakingInfoSubtensorPresenter: StartStakingInfoBasePresenter {
     private static func makeV1State(chainAsset: ChainAsset) -> State {
         State(chainAsset: chainAsset)
     }
+
+    /// Suppress the base "You already have staking in %@" alert. The base
+    /// implementation fires it whenever stake state flips on while the
+    /// StartStakingInfo screen is alive — and Subtensor's `SharedOperation`
+    /// is not plumbed through the stake confirm flow to call `markSent()`,
+    /// so `isComposing` stays `true` forever and the alert misfires every
+    /// time the user's own stake confirm tx lands. For Bittensor (single
+    /// coldkey, signed locally) there is no realistic "external party
+    /// staked for you" case to warn about — just dismiss the modal so the
+    /// user lands back on the multistaking dashboard with the new stake.
+    override func didReceiveStakingEnabled() {
+        wireframe.complete(from: view)
+    }
 }
 
 extension StartStakingInfoSubtensorPresenter {

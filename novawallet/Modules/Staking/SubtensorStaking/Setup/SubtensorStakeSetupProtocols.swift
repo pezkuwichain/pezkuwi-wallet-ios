@@ -29,6 +29,9 @@ protocol SubtensorStakeSetupPresenterProtocol: AnyObject {
 protocol SubtensorStakeSetupInteractorInputProtocol: AnyObject {
     func setup()
     func refreshValidators()
+    /// Re-estimate the add_stake_limit fee with the user's selected validator
+    /// and typed amount. Pass nil to use placeholder (zero hotkey + 1 TAO).
+    func estimateFee(hotkey: AccountId?, amount: BigUInt?)
 }
 
 protocol SubtensorStakeSetupInteractorOutputProtocol: AnyObject {
@@ -36,6 +39,7 @@ protocol SubtensorStakeSetupInteractorOutputProtocol: AnyObject {
     func didReceive(minDelegation: BigUInt)
     func didReceive(assetBalance: AssetBalance?)
     func didReceive(price: PriceData?)
+    func didReceive(fee: ExtrinsicFeeProtocol?)
     func didReceive(error: Error)
 }
 

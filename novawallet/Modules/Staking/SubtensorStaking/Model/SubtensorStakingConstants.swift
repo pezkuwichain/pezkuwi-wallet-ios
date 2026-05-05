@@ -29,6 +29,10 @@ enum SubtensorStakingConstants {
     /// AssetId for the native TAO asset on the Bittensor chain. Subnet
     /// alpha assets are 10001+ in chain config; TAO is always 0.
     static let taoAssetId: AssetModel.Id = 0
+
+    /// nova-utils chains.json convention: subnet alpha assets use
+    /// `assetId = subnetAssetIdBase + netuid`. TAO root is `taoAssetId = 0`.
+    static let subnetAssetIdBase: AssetModel.Id = 10000
 }
 
 extension ChainAsset {

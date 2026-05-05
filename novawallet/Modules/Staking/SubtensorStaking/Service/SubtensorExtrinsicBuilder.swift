@@ -17,7 +17,7 @@ enum SubtensorExtrinsicBuilder {
     ///
     /// For subnet staking (`netuid != 0`), pass `spotPriceTaoPerAlpha` from
     /// the live AMM reserves (`SubnetTAO / SubnetAlphaIn`). The limit price
-    /// is encoded as I96F32 (`value * 2^32`).
+    /// is u64 RAO per whole alpha (per pallet docstring).
     static func buildAddStakeLimit(
         hotkey: AccountId,
         netuid: UInt16,
@@ -98,13 +98,13 @@ enum SubtensorExtrinsicBuilder {
     /// **Root (netuid=0):** alpha==TAO at 1:1. Baseline is 1 TAO =
     /// 1_000_000_000 RAO. The limit_price is in RAO (cosmetic, no AMM).
     ///
-    /// **Subnets (netuid!=0):** The limit_price is encoded as **I96F32**
-    /// fixed-point: `raw_bits = price_tao_per_alpha * 2^32`. The spot
-    /// price is queried from `SubnetTAO / SubnetAlphaIn` and passed in
-    /// via `spotPriceTaoPerAlpha`.
+    /// **Subnets (netuid!=0):** The limit_price is u64 in **RAO per
+    /// whole alpha** (per pallet docstring at add_stake.rs:99).
+    /// spot_price is `SubnetTAO / SubnetAlphaIn` (TAO per alpha);
+    /// we multiply by 1e9 RAO/TAO.
     ///
-    /// Stake cushions upward (max price willing to pay); unstake cushions
-    /// downward (min price willing to accept).
+    /// Stake cushions upward (max RAO/alpha willing to pay); unstake
+    /// cushions downward (min RAO/alpha willing to accept).
     private static func computeLimitPrice(
         netuid: UInt16,
         slippage: Double,
@@ -129,11 +129,15 @@ enum SubtensorExtrinsicBuilder {
                 ?? SubtensorStakingConstants.rawPerTao
         }
 
-        // Subnet: I96F32 encoding. price_raw = spot_price * (1 ± slippage) * 2^32
+        // Subnet: limit_price is u64 RAO per whole alpha. adjustedPrice
+        // is TAO/alpha; multiply by 1e9 RAO/TAO. Stake rounds up, unstake
+        // rounds down (matches root branch) so FP drift never tightens
+        // the cushion below the configured slippage.
         let spot = spotPriceTaoPerAlpha ?? 0.001 // conservative fallback
         let adjustedPrice = isStake ? spot * (1 + slippage) : spot * (1 - slippage)
-        let i96f32Bits = adjustedPrice * Double(UInt64(1) << 32)
-        let rawBits = UInt64(max(1, i96f32Bits)) // floor to 1 minimum
+        let raoPerAlpha = adjustedPrice * 1_000_000_000.0
+        let cushioned = isStake ? raoPerAlpha.rounded(.up) : raoPerAlpha.rounded(.down)
+        let rawBits = UInt64(max(1, cushioned)) // floor to 1 minimum
 
         return BigUInt(rawBits)
     }

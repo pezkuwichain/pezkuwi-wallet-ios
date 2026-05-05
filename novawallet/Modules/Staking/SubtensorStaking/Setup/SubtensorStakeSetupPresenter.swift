@@ -8,16 +8,13 @@ import SubstrateSdk
 ///   - amount input state (typed by user / Max button / accessory)
 ///   - cached fetched validators (used to populate the picker without a refetch)
 ///   - cached min-delegation runtime constant
-///   - live `AssetBalance` + `PriceData` from the interactor
+///   - live `AssetBalance` + `PriceData` + extrinsic `fee` from the interactor
 ///
 /// Binding uses Nova's `BalanceViewModelFactory` so the flow lines up with
 /// parachain / Mythos staking. Max / percentage buttons are wired via
 /// `AmountInputResult` so they can target a rate (e.g. 1.0) regardless of
-/// the current absolute amount.
-///
-/// Phase A intentionally skips remote fee estimation: real extrinsic fee
-/// quoting lands in Phase B alongside confirm / submit. Until then the
-/// min-stake + balance rows still update live.
+/// the current absolute amount. Fee re-estimates whenever validator or
+/// amount changes (matching the Confirm flow's pattern).
 final class SubtensorStakeSetupPresenter {
     weak var view: SubtensorStakeSetupViewProtocol?
     let interactor: SubtensorStakeSetupInteractorInputProtocol
@@ -37,6 +34,7 @@ final class SubtensorStakeSetupPresenter {
 
     private var assetBalance: AssetBalance?
     private var price: PriceData?
+    private var fee: ExtrinsicFeeProtocol?
     private var inputResult: AmountInputResult?
 
     init(
@@ -79,11 +77,13 @@ final class SubtensorStakeSetupPresenter {
         ) ?? 0
     }
 
-    /// Available amount for the Max button. Mirrors ParaStk's `balanceMinusFee()`
-    /// but with `fee = 0` for Phase A. Phase B will subtract real fee + gas
-    /// reserve once extrinsic fee quoting is wired.
+    /// Available amount for the Max button. Currently returns the full
+    /// transferable balance — does NOT subtract the estimated fee or a
+    /// gas reserve. A user tapping Max + Continue can hit
+    /// `InsufficientBalance` at submit if the displayed fee + gas would
+    /// push the total over their balance. Switching to the equivalent
+    /// of ParaStk's `balanceMinusFee()` is the right next step.
     private func availableForMax() -> Decimal {
-        // v1: reserve zero until fee estimation is wired in Phase B.
         transferableBalance()
     }
 
@@ -137,9 +137,17 @@ final class SubtensorStakeSetupPresenter {
     }
 
     private func provideFeeViewModel() {
-        // Phase A: no remote fee quoting. Show nil so the row spins a placeholder
-        // instead of lying. Phase B wires real ExtrinsicFeeProxy.
-        view?.didReceiveFee(viewModel: nil)
+        let viewModel: BalanceViewModelProtocol? = fee.flatMap { fee in
+            guard let amountDecimal = Decimal.fromSubstrateAmount(
+                fee.amount,
+                precision: chainAsset.assetDisplayInfo.assetPrecision
+            ) else { return nil }
+            return balanceViewModelFactory.balanceFromPrice(
+                amountDecimal,
+                priceData: price
+            ).value(for: selectedLocale)
+        }
+        view?.didReceiveFee(viewModel: viewModel)
     }
 
     private func provideValidatorViewModel() {
@@ -203,6 +211,7 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupPresenterProtocol {
         inputResult = newValue.map { .absolute($0) }
 
         provideAssetViewModel()
+        refreshFee()
     }
 
     func selectAmountPercentage(_ percentage: Float) {
@@ -210,6 +219,7 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupPresenterProtocol {
 
         provideAmountInputViewModel()
         provideAssetViewModel()
+        refreshFee()
     }
 
     func proceed() {
@@ -231,6 +241,16 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupPresenterProtocol {
     private func handleValidatorSelected(_ validator: SubtensorValidator) {
         selectedValidator = validator
         provideValidatorViewModel()
+        refreshFee()
+    }
+
+    private func refreshFee() {
+        let amountInPlank: BigUInt? = currentInputAmount() > 0
+            ? currentInputAmount().toSubstrateAmount(
+                precision: chainAsset.assetDisplayInfo.assetPrecision
+            )
+            : nil
+        interactor.estimateFee(hotkey: selectedValidator?.hotkey, amount: amountInPlank)
     }
 }
 
@@ -258,6 +278,12 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupInteractorOutputProto
 
         provideAssetViewModel()
         provideMinStakeViewModel()
+        provideFeeViewModel()
+    }
+
+    func didReceive(fee: ExtrinsicFeeProtocol?) {
+        self.fee = fee
+        provideFeeViewModel()
     }
 
     func didReceive(error: Error) {
