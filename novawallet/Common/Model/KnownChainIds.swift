@@ -20,10 +20,11 @@ enum KnowChainId {
     static let moonbeam = "fe58ea77779b7abda7da4ec526d14db9b1e9cd40a217c34892af80a9b332b76d"
     static let moonriver = "401a1f9dca3da46f5c4091016c8a2f26dcea05865116b286f60f668207d1474b"
     static let alephZero = "70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e"
-    static let ternoa = "6859c81ca95ef624c9dfe4dc6e3381c33e5d6509e35e147092bfbc780f777c4e"
+    static let ternoa = "6859c81ca95ef624c9dfe4dc6e3381c33e5d6ce4ef5d70c1d18e8256330d0ea2"
     static let polkadex = "3920bcb4960a1eef5580cd5367ff3f430eef052774f78468852f7b9cb39f8a3c"
     static let calamari = "4ac80c99289841dd946ef92765bf659a307d39189b3ce374a92b5f0415ee17a1"
     static let zeitgeist = "1bf2a2ecb4a868de66ea8610f2ce7c8c43706561b6476031315f6640fe38e060"
+    static let mantaAtlantic = "f3c7ad88f6a80f366c4be216691411ef0622e8b809b1c4b2599b87487420976a"
     static let ethereum = "eip155:1"
     static let rococo = "a84b46a3e602245284bb9a72c4abd58ee979aa7a5d7f8c4dfdddfaaf0665a4ae"
     static let westend = "e143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e"
@@ -33,7 +34,7 @@ enum KnowChainId {
     static let avail = "b91746b45e0346cc2f815a520b9c6cb4d5c0902af848db0a80f85932d2e8276a"
 
     static let availTuringTestnet = "d3d2f3a3495dc597434a99d7d449ebad6616db45e4e4f178f31cc6fa14378b70"
-    static let vara = "fe1b4c55fd4d668101126434206571a7838a8b6b93a6d1b95d607e78e6c53763"
+    static let vara = "fe1b4c55fd4d668101126434206571a7838a8b6b93a6d1b95d607e4eda8b2812"
     static let mythos = "f6ee56e9c5277df5b4ce6ae9983ee88f3cbed27d31beeb98f9f84f997a1ab0b9"
 
     static var kiltOnEnviroment: String {
