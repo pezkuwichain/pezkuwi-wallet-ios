@@ -3,6 +3,7 @@ import BigInt
 protocol StartStakingInfoViewProtocol: AnyObject, ControllerBackedProtocol {
     func didReceive(viewModel: LoadableViewModelState<StartStakingViewModel>)
     func didReceive(balance: String)
+    func didReceiveNotice(_ model: StakingNoticeBlockView.Model?)
 }
 
 protocol StartStakingInfoPresenterProtocol: AnyObject {
@@ -21,6 +22,7 @@ protocol StartStakingInfoInteractorOutputProtocol: AnyObject {
     func didReceive(baseError: BaseStartStakingInfoError)
     func didReceive(wallet: MetaAccountModel, chainAccountId: AccountId?)
     func didReceiveStakingEnabled()
+    func didReceiveNoticesUpdate()
 }
 
 protocol StartStakingInfoRelaychainInteractorInputProtocol: StartStakingInfoInteractorInputProtocol {
