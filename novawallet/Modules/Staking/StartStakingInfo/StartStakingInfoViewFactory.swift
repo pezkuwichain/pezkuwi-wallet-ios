@@ -10,11 +10,8 @@ struct StartStakingInfoViewFactory {
         }.first
 
         guard let mainStakingType = optMainStakingType else {
-            NSLog("[EWT-DEBUG] StartStakingInfoViewFactory: no staking type for %@", chainAsset.chain.name)
             return nil
         }
-
-        NSLog("[EWT-DEBUG] StartStakingInfoViewFactory: chain=%@ type=%@", chainAsset.chain.name, mainStakingType.rawValue)
 
         switch mainStakingType {
         case .relaychain:

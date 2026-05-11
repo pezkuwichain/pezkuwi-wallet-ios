@@ -571,9 +571,11 @@ extension StakingSharedStateFactory: StakingSharedStateFactoryProtocol {
         let repositoryFactory = SubstrateRepositoryFactory()
         let repository = repositoryFactory.createChainStorageItemRepository()
 
-        // Use EWX-specific account subscription that queries NominatorState
-        // instead of Moonbeam's DelegatorState
-        let stakingAccountService = ParachainStaking.AccountSubscriptionService(
+        // EWX-specific account subscription that queries NominatorState +
+        // NominationScheduledRequests (Moonbeam's class subscribes to
+        // DelegatorState / DelegationScheduledRequests, which don't exist
+        // in EWX runtime metadata).
+        let stakingAccountService = ParachainAvn.AccountSubscriptionService(
             chainRegistry: chainRegistry,
             repository: repository,
             syncOperationManager: OperationManager(operationQueue: syncOperationQueue),

@@ -70,7 +70,13 @@ extension StakingMainPresenterFactory {
             blockTimeOperationFactory: blockTimeFactory
         )
 
-        let identityOperationFactory = IdentityOperationFactory(requestFactory: storageRequestFactory)
+        // EWX has no `pallet-identity` — without this flag the operation
+        // factory throws when storage isn't found. No-op on chains where
+        // the pallet exists.
+        let identityOperationFactory = IdentityOperationFactory(
+            requestFactory: storageRequestFactory,
+            emptyIdentitiesWhenNoStorage: true
+        )
         let identityProxyFactory = IdentityProxyFactory(
             originChain: chainAsset.chain,
             chainRegistry: state.chainRegistry,

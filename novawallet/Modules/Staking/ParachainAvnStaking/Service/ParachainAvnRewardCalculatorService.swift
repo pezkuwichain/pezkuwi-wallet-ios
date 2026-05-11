@@ -12,11 +12,19 @@ struct ParachainAvnRewardSnapshot {
 
 /// Reward calculator service for Energy Web X.
 ///
-/// Fetches the `Growth` storage for the current growth period and
-/// computes APR from: (totalStakerReward / totalStakeAccumulated) *
-/// (365 / numberOfAccumulations). Falls back to the `Total` storage
-/// item and annual inflation constants if growth data is unavailable.
+/// Fetches the `Growth` storage for the latest completed growth period
+/// and computes APR from
+/// `(totalStakerReward / totalStakeAccumulated) * (365 / numberOfAccumulations)`.
+/// Falls back to a 2M EWT annual-rewards estimate divided by total
+/// staked when Growth data isn't available (e.g. before period 1).
 final class ParachainAvnRewardCalculatorService: CollatorStakingRewardService<ParachainAvnRewardSnapshot> {
+    /// EWX runs one era per day, so a year = 365 accumulation eras.
+    private static let erasPerYear: Decimal = 365
+    /// Last-resort APR estimate when Growth storage hasn't accumulated yet.
+    private static let fallbackAnnualRewardsEwt: Decimal = 2_000_000
+    /// Last-resort commission when `DefaultCollatorCommission` can't be decoded.
+    private static let fallbackCommissionPerbill: BigUInt = 100_000_000
+
     let chainId: ChainModel.Id
     let collatorsService: ParachainStakingCollatorServiceProtocol
     let connection: JSONRPCEngine
@@ -52,7 +60,6 @@ final class ParachainAvnRewardCalculatorService: CollatorStakingRewardService<Pa
     }
 
     override func start() {
-        NSLog("[EWT-DEBUG] ParachainAvnRewardCalculatorService start() called for chain %@", chainId)
         fetchGrowthData()
     }
 
@@ -100,55 +107,56 @@ final class ParachainAvnRewardCalculatorService: CollatorStakingRewardService<Pa
     private func fetchGrowthData() {
         fetchCancellable.cancel()
 
+        let operationManager = OperationManager(operationQueue: operationQueue)
+
         let requestFactory = StorageRequestFactory(
             remoteFactory: StorageKeyFactory(),
-            operationManager: OperationManager(operationQueue: operationQueue),
+            operationManager: operationManager,
             timeout: JSONRPCTimeout.hour
         )
 
         let codingFactoryOperation = runtimeCodingService.fetchCoderFactoryOperation()
 
-        // Query total staked (u128 → BigUInt)
-        let totalWrapper: CompoundOperationWrapper<StorageResponse<StringScaleMapper<BigUInt>>>
-        totalWrapper = requestFactory.queryItem(
-            engine: connection,
-            factory: { try codingFactoryOperation.extractNoCancellableResultData() },
+        let totalWrapper = makeQueryWrapper(
+            requestFactory: requestFactory,
+            codingFactoryOperation: codingFactoryOperation,
             storagePath: ParachainAvn.totalPath,
-            at: nil
+            type: StringScaleMapper<BigUInt>.self
         )
-        totalWrapper.addDependency(operations: [codingFactoryOperation])
+        let commissionWrapper = makeQueryWrapper(
+            requestFactory: requestFactory,
+            codingFactoryOperation: codingFactoryOperation,
+            storagePath: ParachainAvn.defaultCollatorCommissionPath,
+            type: ParachainAvn.CommissionSetting.self
+        )
+        let growthPeriodWrapper = makeQueryWrapper(
+            requestFactory: requestFactory,
+            codingFactoryOperation: codingFactoryOperation,
+            storagePath: ParachainAvn.growthPeriodPath,
+            type: ParachainAvn.GrowthPeriod.self
+        )
+        let growthInfoWrapper = makeGrowthInfoWrapper(
+            requestFactory: requestFactory,
+            operationManager: operationManager,
+            codingFactoryOperation: codingFactoryOperation,
+            growthPeriodWrapper: growthPeriodWrapper
+        )
 
-        // NOTE: DefaultCollatorCommission is CommissionSetting (struct),
-        // not a bare Perbill. Use the known mainnet value (10%) directly.
-        let commissionPerbill: BigUInt = 100_000_000
-
-        let mergeOperation = ClosureOperation<ParachainAvnRewardSnapshot> {
-            // Use try? so a decode failure still produces a usable snapshot
-            let totalResponse = try? totalWrapper.targetOperation.extractNoCancellableResultData()
-            let totalStaked = totalResponse?.value?.value ?? 0
-
-            let commission = Decimal.fromSubstratePerbill(value: commissionPerbill) ?? Decimal(0.10)
-
-            // Estimate APR from known EWX economics:
-            // 2M EWT annual growth rewards / total staked EWT
-            let precision: Int16 = 18
-            let totalStakedDecimal = Decimal.fromSubstrateAmount(
-                totalStaked, precision: precision
-            ) ?? 1
-
-            let annualRewards: Decimal = 2_000_000
-            let grossApr = totalStakedDecimal > 0 ? annualRewards / totalStakedDecimal : 0
-
-            return ParachainAvnRewardSnapshot(
-                annualApr: grossApr,
-                commission: commission,
-                totalStaked: totalStaked
-            )
-        }
+        let mergeOperation = makeMergeOperation(
+            totalWrapper: totalWrapper,
+            commissionWrapper: commissionWrapper,
+            growthInfoWrapper: growthInfoWrapper
+        )
 
         mergeOperation.addDependency(totalWrapper.targetOperation)
+        mergeOperation.addDependency(commissionWrapper.targetOperation)
+        mergeOperation.addDependency(growthInfoWrapper.targetOperation)
 
-        let allDependencies = [codingFactoryOperation] + totalWrapper.allOperations
+        let allDependencies = [codingFactoryOperation]
+            + totalWrapper.allOperations
+            + commissionWrapper.allOperations
+            + growthPeriodWrapper.allOperations
+            + growthInfoWrapper.allOperations
         let fullWrapper = CompoundOperationWrapper(
             targetOperation: mergeOperation,
             dependencies: allDependencies
@@ -163,13 +171,132 @@ final class ParachainAvnRewardCalculatorService: CollatorStakingRewardService<Pa
             guard let self = self else { return }
             switch result {
             case let .success(snapshot):
-                let apr = NSDecimalNumber(decimal: snapshot.annualApr).doubleValue
-                NSLog("[EWT-DEBUG] Reward snapshot: apr=%.4f total=%@", apr, snapshot.totalStaked.description)
                 self.updateSnapshotAndNotify(snapshot, chainId: self.chainId)
             case let .failure(error):
-                NSLog("[EWT-DEBUG] Reward fetch FAILED: %@", error.localizedDescription)
                 self.logger.error("ParachainAvn growth data fetch error: \(error)")
             }
         }
+    }
+
+    private func makeQueryWrapper<T: Decodable>(
+        requestFactory: StorageRequestFactoryProtocol,
+        codingFactoryOperation: BaseOperation<RuntimeCoderFactoryProtocol>,
+        storagePath: StorageCodingPath,
+        type _: T.Type
+    ) -> CompoundOperationWrapper<StorageResponse<T>> {
+        let wrapper: CompoundOperationWrapper<StorageResponse<T>> = requestFactory.queryItem(
+            engine: connection,
+            factory: { try codingFactoryOperation.extractNoCancellableResultData() },
+            storagePath: storagePath,
+            at: nil
+        )
+        wrapper.addDependency(operations: [codingFactoryOperation])
+        return wrapper
+    }
+
+    /// Query `Growth(period.index - 1)` once `GrowthPeriod` is resolved.
+    /// We use the previous (completed) period because the current one is
+    /// still accumulating and would understate APR.
+    private func makeGrowthInfoWrapper(
+        requestFactory: StorageRequestFactoryProtocol,
+        operationManager: OperationManagerProtocol,
+        codingFactoryOperation: BaseOperation<RuntimeCoderFactoryProtocol>,
+        growthPeriodWrapper: CompoundOperationWrapper<StorageResponse<ParachainAvn.GrowthPeriod>>
+    ) -> CompoundOperationWrapper<[StorageResponse<ParachainAvn.GrowthInfo>]> {
+        let connection = self.connection
+        let wrapper: CompoundOperationWrapper<[StorageResponse<ParachainAvn.GrowthInfo>]>
+        wrapper = OperationCombiningService.compoundNonOptionalWrapper(
+            operationManager: operationManager
+        ) {
+            let codingFactory = try codingFactoryOperation.extractNoCancellableResultData()
+            let periodResponse = try growthPeriodWrapper.targetOperation.extractNoCancellableResultData()
+
+            guard let period = periodResponse.value, period.index > 0 else {
+                let emptyOp = ClosureOperation<[StorageResponse<ParachainAvn.GrowthInfo>]> { [] }
+                return CompoundOperationWrapper(targetOperation: emptyOp)
+            }
+
+            let prevIndex = period.index - 1
+
+            return requestFactory.queryItems(
+                engine: connection,
+                keyParams: { [StringScaleMapper(value: UInt32(prevIndex))] },
+                factory: { codingFactory },
+                storagePath: ParachainAvn.growthPath,
+                at: nil
+            )
+        }
+        wrapper.addDependency(operations: [
+            growthPeriodWrapper.targetOperation,
+            codingFactoryOperation
+        ])
+        return wrapper
+    }
+
+    private func makeMergeOperation(
+        totalWrapper: CompoundOperationWrapper<StorageResponse<StringScaleMapper<BigUInt>>>,
+        commissionWrapper: CompoundOperationWrapper<StorageResponse<ParachainAvn.CommissionSetting>>,
+        growthInfoWrapper: CompoundOperationWrapper<[StorageResponse<ParachainAvn.GrowthInfo>]>
+    ) -> ClosureOperation<ParachainAvnRewardSnapshot> {
+        let assetPrecision = self.assetPrecision
+        return ClosureOperation<ParachainAvnRewardSnapshot> {
+            let totalResponse = try? totalWrapper.targetOperation.extractNoCancellableResultData()
+            let totalStaked = totalResponse?.value?.value ?? 0
+
+            let commissionResponse = try? commissionWrapper.targetOperation.extractNoCancellableResultData()
+            let commissionPerbill = commissionResponse?.value?.current ?? Self.fallbackCommissionPerbill
+            let commission = Decimal.fromSubstratePerbill(value: commissionPerbill) ?? Decimal(0.10)
+
+            // Use 0 (not 1) so a conversion failure surfaces as 0% APR via
+            // the `totalStakedDecimal > 0` guard inside `computeApr`. With
+            // a `?? 1` fallback a precision misconfig would compute APR as
+            // `2_000_000 / 1 = 200_000_000%`.
+            let totalStakedDecimal = Decimal.fromSubstrateAmount(
+                totalStaked, precision: assetPrecision
+            ) ?? 0
+
+            let grossApr = Self.computeApr(
+                growthInfoResponses: try? growthInfoWrapper.targetOperation.extractNoCancellableResultData(),
+                totalStakedDecimal: totalStakedDecimal,
+                assetPrecision: assetPrecision
+            )
+
+            return ParachainAvnRewardSnapshot(
+                annualApr: grossApr,
+                commission: commission,
+                totalStaked: totalStaked
+            )
+        }
+    }
+
+    private static func computeApr(
+        growthInfoResponses: [StorageResponse<ParachainAvn.GrowthInfo>]?,
+        totalStakedDecimal: Decimal,
+        assetPrecision: Int16
+    ) -> Decimal {
+        let fallback: Decimal = totalStakedDecimal > 0
+            ? fallbackAnnualRewardsEwt / totalStakedDecimal
+            : 0
+
+        guard
+            let growthInfo = growthInfoResponses?.first?.value,
+            growthInfo.numberOfAccumulations > 0,
+            growthInfo.totalStakeAccumulated > 0
+        else {
+            return fallback
+        }
+
+        let stakerRewardDecimal = Decimal.fromSubstrateAmount(
+            growthInfo.totalStakerReward, precision: assetPrecision
+        ) ?? 0
+        let stakeAccumulatedDecimal = Decimal.fromSubstrateAmount(
+            growthInfo.totalStakeAccumulated, precision: assetPrecision
+        ) ?? 0
+
+        guard stakeAccumulatedDecimal > 0 else { return fallback }
+
+        let perPeriod = stakerRewardDecimal / stakeAccumulatedDecimal
+        let accumulations = Decimal(growthInfo.numberOfAccumulations)
+        return accumulations > 0 ? perPeriod * (erasPerYear / accumulations) : fallback
     }
 }
