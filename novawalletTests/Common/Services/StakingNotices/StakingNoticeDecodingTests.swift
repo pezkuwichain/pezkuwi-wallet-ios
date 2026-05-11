@@ -1,0 +1,95 @@
+import XCTest
+@testable import novawallet
+
+final class StakingNoticeDecodingTests: XCTestCase {
+    private let decoder = JSONDecoder()
+
+    func testDecodesV1PlainStringSchema() throws {
+        let json = """
+        {
+          "chainId": "f3c7ad88f6a80f366c4be216691411ef0622e8b809b1c4b2599b87487420976a",
+          "severity": "critical",
+          "shortText": "Migrate by Aug 1, 2026",
+          "longText": "The Manta Atlantic parachain slot expires August 1, 2026.",
+          "endDate": "2026-08-01"
+        }
+        """.data(using: .utf8)!
+
+        let notice = try decoder.decode(StakingNotice.self, from: json)
+
+        XCTAssertEqual(notice.severity, .critical)
+        XCTAssertEqual(notice.shortText, "Migrate by Aug 1, 2026")
+        XCTAssertEqual(notice.longText, "The Manta Atlantic parachain slot expires August 1, 2026.")
+        XCTAssertNotNil(notice.endDate)
+    }
+
+    func testDecodesV2LocaleMapSchemaFallsBackToEnglish() throws {
+        let json = """
+        {
+          "chainId": "70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e",
+          "severity": "info",
+          "shortText": {"en": "Validator program update", "ru": "Обновление программы валидаторов"},
+          "longText": {"en": "Rewards may pause briefly.", "ru": "Награды могут приостановиться."}
+        }
+        """.data(using: .utf8)!
+
+        let notice = try decoder.decode(StakingNotice.self, from: json)
+
+        XCTAssertEqual(notice.shortText, "Validator program update")
+        XCTAssertEqual(notice.longText, "Rewards may pause briefly.")
+    }
+
+    func testEndDateIsOptional() throws {
+        let json = """
+        {
+          "chainId": "70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e",
+          "severity": "info",
+          "shortText": "x",
+          "longText": "y"
+        }
+        """.data(using: .utf8)!
+
+        let notice = try decoder.decode(StakingNotice.self, from: json)
+        XCTAssertNil(notice.endDate)
+    }
+
+    func testRejectsLocaleMapWithoutEnglishFallback() {
+        let json = """
+        {
+          "chainId": "70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e",
+          "severity": "info",
+          "shortText": {"ru": "Привет"},
+          "longText": "y"
+        }
+        """.data(using: .utf8)!
+
+        XCTAssertThrowsError(try decoder.decode(StakingNotice.self, from: json))
+    }
+
+    func testRejectsInvalidEndDate() {
+        let json = """
+        {
+          "chainId": "70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e",
+          "severity": "info",
+          "shortText": "x",
+          "longText": "y",
+          "endDate": "next Friday"
+        }
+        """.data(using: .utf8)!
+
+        XCTAssertThrowsError(try decoder.decode(StakingNotice.self, from: json))
+    }
+
+    func testRejectsUnknownSeverity() {
+        let json = """
+        {
+          "chainId": "70255b4d28de0fc4e1a193d7e175ad1ccef431598211c55538f1018651a0344e",
+          "severity": "urgent",
+          "shortText": "x",
+          "longText": "y"
+        }
+        """.data(using: .utf8)!
+
+        XCTAssertThrowsError(try decoder.decode(StakingNotice.self, from: json))
+    }
+}
