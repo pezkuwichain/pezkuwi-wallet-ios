@@ -11,7 +11,7 @@ enum StakingMainViewFactory {
     ) -> StakingMainViewProtocol? {
         let settings = SettingsManager.shared
 
-        let noticesProvider = StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
+        let noticesProvider = StakingNoticesFacade.sharedProvider
 
         let interactor = createInteractor(
             with: settings,

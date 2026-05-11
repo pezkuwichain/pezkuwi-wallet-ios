@@ -1555,6 +1555,7 @@
 		270C21973CB61F0BF3D2D1E3 /* CrowdloanListProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02ACCC85B2CCF3D9392CA9B4 /* CrowdloanListProtocols.swift */; };
 		2736BAABAE1389260A0B28D6 /* AssetListViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B754B68D6F1D1ED5C8577A5 /* AssetListViewFactory.swift */; };
 		27B7E98E6C41791F0DB7812F /* StakingNoticesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3372CF3A8A4C1B619AE35177 /* StakingNoticesProvider.swift */; };
+		AE4505AE363A49849F75E088 /* StakingNoticesFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED08394BFC7A40E781DD8133 /* StakingNoticesFacade.swift */; };
 		27B8E1662E12A34D00EB1F5B /* UniqueNftSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8E15A2E12A34D00EB1F5B /* UniqueNftSyncService.swift */; };
 		27B8E16A2E12A5FA00EB1F5B /* UniqueDetailsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8E1692E12A5F600EB1F5B /* UniqueDetailsInteractor.swift */; };
 		27B8E16C2E12B04400EB1F5B /* UniqueNftOperationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B8E16B2E12B04200EB1F5B /* UniqueNftOperationFactory.swift */; };
@@ -9017,6 +9018,7 @@
 		335E8C17DCB794733476AAE3 /* CollatorStakingConfirmViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollatorStakingConfirmViewController.swift; sourceTree = "<group>"; };
 		336395FFC4B2104A9651A2DE /* StakingRewardPayoutsViewFactory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StakingRewardPayoutsViewFactory.swift; sourceTree = "<group>"; };
 		3372CF3A8A4C1B619AE35177 /* StakingNoticesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StakingNoticesProvider.swift; sourceTree = "<group>"; };
+		ED08394BFC7A40E781DD8133 /* StakingNoticesFacade.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StakingNoticesFacade.swift; sourceTree = "<group>"; };
 		337EC62037D657258BCBC02F /* DAppWalletAuthInteractor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DAppWalletAuthInteractor.swift; sourceTree = "<group>"; };
 		33A3AA54AA204AE7A1D71881 /* CustomNetworkViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CustomNetworkViewController.swift; sourceTree = "<group>"; };
 		33DFAA0EEEA7F99C6D1CF4B1 /* ReferendumFullDetailsPresenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReferendumFullDetailsPresenter.swift; sourceTree = "<group>"; };
@@ -19957,6 +19959,7 @@
 				7D5A431B31A14A4340E059AB /* StakingNotice.swift */,
 				CBF099C2ABFD38C77D6133B8 /* StakingNoticesProviderProtocol.swift */,
 				3372CF3A8A4C1B619AE35177 /* StakingNoticesProvider.swift */,
+				ED08394BFC7A40E781DD8133 /* StakingNoticesFacade.swift */,
 			);
 			path = StakingNotices;
 			sourceTree = "<group>";
@@ -36933,6 +36936,7 @@
 				B615CBEDC7E7A5DE545A86D2 /* StakingNotice.swift in Sources */,
 				335EFDB7D2137F266E13B6B8 /* StakingNoticesProviderProtocol.swift in Sources */,
 				27B7E98E6C41791F0DB7812F /* StakingNoticesProvider.swift in Sources */,
+				AE4505AE363A49849F75E088 /* StakingNoticesFacade.swift in Sources */,
 				6039E27966BEC34A604AA853 /* StartStakingCriticalNoticeSheetProtocols.swift in Sources */,
 				1C8977A706F69B75E0FE0A49 /* StartStakingCriticalNoticeSheetViewLayout.swift in Sources */,
 				E360DB6581DF55686BF6B570 /* StartStakingCriticalNoticeSheetViewController.swift in Sources */,

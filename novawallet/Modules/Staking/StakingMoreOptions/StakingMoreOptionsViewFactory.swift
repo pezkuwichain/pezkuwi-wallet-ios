@@ -12,7 +12,7 @@ struct StakingMoreOptionsViewFactory {
         let dAppProvider: AnySingleValueProvider<DAppList> = JsonDataProviderFactory.shared.getJson(
             for: dAppsUrl
         )
-        let noticesProvider = StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
+        let noticesProvider = StakingNoticesFacade.sharedProvider
         let interactor = StakingMoreOptionsInteractor(
             dAppProvider: dAppProvider,
             stakingStateObserver: stateObserver,

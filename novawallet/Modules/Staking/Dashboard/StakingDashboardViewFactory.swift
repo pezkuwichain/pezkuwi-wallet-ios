@@ -8,7 +8,7 @@ struct StakingDashboardViewFactory {
     ) -> StakingDashboardViewProtocol? {
         let stateObserver = Observable(state: StakingDashboardModel())
 
-        let noticesProvider = StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
+        let noticesProvider = StakingNoticesFacade.sharedProvider
 
         guard
             let interactor = createInteractor(

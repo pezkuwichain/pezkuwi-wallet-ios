@@ -79,7 +79,7 @@ struct StartStakingInfoViewFactory {
             return nil
         }
 
-        let noticesProvider = StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
+        let noticesProvider = StakingNoticesFacade.sharedProvider
 
         let interactor = createRelaychainInteractor(
             state: state,
@@ -182,7 +182,7 @@ struct StartStakingInfoViewFactory {
             return nil
         }
 
-        let noticesProvider = StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
+        let noticesProvider = StakingNoticesFacade.sharedProvider
 
         let interactor = createParachainInteractor(
             state: state,

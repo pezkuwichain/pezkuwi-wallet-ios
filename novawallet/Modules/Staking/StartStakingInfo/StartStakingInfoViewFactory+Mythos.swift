@@ -24,7 +24,7 @@ extension StartStakingInfoViewFactory {
             return nil
         }
 
-        let noticesProvider = StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
+        let noticesProvider = StakingNoticesFacade.sharedProvider
 
         let interactor = createMythosInteractor(
             state: state,
