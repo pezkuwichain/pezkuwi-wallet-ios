@@ -1,9 +1,8 @@
 import XCTest
+import BigInt
 @testable import novawallet
 
 final class StakingDashboardBuilderDemotionTests: XCTestCase {
-    var resultModel: StakingDashboardModel?
-
     func testDemotedChainRoutesToMoreOptions() {
         // given
         let alephZeroChain = ChainModelGenerator.generateChain(
@@ -16,33 +15,38 @@ final class StakingDashboardBuilderDemotionTests: XCTestCase {
         let asset = alephZeroChain.assets.first!
         let chainAsset = ChainAsset(chain: alephZeroChain, asset: asset)
 
+        let expectation = XCTestExpectation(description: "result closure called")
+        var resultModel: StakingDashboardModel?
+
+        let callbackQueue = DispatchQueue(label: "test.callback")
         let builder = StakingDashboardBuilder(
-            callbackQueue: .main,
-            resultClosure: { [weak self] result in
-                self?.resultModel = result.model
+            callbackQueue: callbackQueue,
+            resultClosure: { result in
+                resultModel = result.model
+                expectation.fulfill()
             }
         )
 
         builder.applyAssets(models: [chainAsset])
 
         // when
+        wait(for: [expectation], timeout: 5)
         let model = resultModel
 
         // then
         XCTAssertNotNil(model, "Model should be generated")
 
-        let moreChainIds = Set(model?.more.compactMap { item in
-            item.chainAsset.chain.chainId
-        } ?? [])
+        let moreChainIds = Set(model?.more.map(\.chainAsset.chain.chainId) ?? [])
+        let inactiveChainIds = Set(model?.inactive.map(\.chainAsset.chain.chainId) ?? [])
 
-        let inactiveChainIds = Set(model?.inactive.compactMap { item in
-            item.chainAsset.chain.chainId
-        } ?? [])
-
-        XCTAssertTrue(moreChainIds.contains(KnowChainId.alephZero),
-                      "Aleph Zero should be in more options")
-        XCTAssertFalse(inactiveChainIds.contains(KnowChainId.alephZero),
-                       "Aleph Zero should NOT be in inactive section")
+        XCTAssertTrue(
+            moreChainIds.contains(KnowChainId.alephZero),
+            "Aleph Zero should be in more options"
+        )
+        XCTAssertFalse(
+            inactiveChainIds.contains(KnowChainId.alephZero),
+            "Aleph Zero should NOT be in inactive section"
+        )
     }
 
     func testNonDemotedChainRoutesToInactiveSection() {
@@ -57,33 +61,38 @@ final class StakingDashboardBuilderDemotionTests: XCTestCase {
         let asset = polkadotChain.assets.first!
         let chainAsset = ChainAsset(chain: polkadotChain, asset: asset)
 
+        let expectation = XCTestExpectation(description: "result closure called")
+        var resultModel: StakingDashboardModel?
+
+        let callbackQueue = DispatchQueue(label: "test.callback")
         let builder = StakingDashboardBuilder(
-            callbackQueue: .main,
-            resultClosure: { [weak self] result in
-                self?.resultModel = result.model
+            callbackQueue: callbackQueue,
+            resultClosure: { result in
+                resultModel = result.model
+                expectation.fulfill()
             }
         )
 
         builder.applyAssets(models: [chainAsset])
 
         // when
+        wait(for: [expectation], timeout: 5)
         let model = resultModel
 
         // then
         XCTAssertNotNil(model, "Model should be generated")
 
-        let moreChainIds = Set(model?.more.compactMap { item in
-            item.chainAsset.chain.chainId
-        } ?? [])
+        let moreChainIds = Set(model?.more.map(\.chainAsset.chain.chainId) ?? [])
+        let inactiveChainIds = Set(model?.inactive.map(\.chainAsset.chain.chainId) ?? [])
 
-        let inactiveChainIds = Set(model?.inactive.compactMap { item in
-            item.chainAsset.chain.chainId
-        } ?? [])
-
-        XCTAssertTrue(inactiveChainIds.contains(KnowChainId.polkadot),
-                      "Polkadot should be in inactive section")
-        XCTAssertFalse(moreChainIds.contains(KnowChainId.polkadot),
-                       "Polkadot should NOT be in more options")
+        XCTAssertTrue(
+            inactiveChainIds.contains(KnowChainId.polkadot),
+            "Polkadot should be in inactive section"
+        )
+        XCTAssertFalse(
+            moreChainIds.contains(KnowChainId.polkadot),
+            "Polkadot should NOT be in more options"
+        )
     }
 
     func testDemotedChainWithActiveStakeStillAppearsInActive() {
@@ -98,39 +107,7 @@ final class StakingDashboardBuilderDemotionTests: XCTestCase {
         let asset = alephZeroChain.assets.first!
         let chainAsset = ChainAsset(chain: alephZeroChain, asset: asset)
 
-        // Create a mock wallet
-        let account = AccountModel(
-            address: "test_address",
-            cryptoType: .sr25519,
-            publicKey: Data(repeating: 0, count: 32),
-            username: "Test User"
-        )
-
-        let chainAccountRequest = ChainAccountRequest(
-            networkType: alephZeroChain.chainNetworkType,
-            cryptoType: .sr25519
-        )
-
-        let walletModel = MetaAccountModel(
-            metaId: "test_meta_id",
-            name: "Test Wallet",
-            substratePublicKey: Data(repeating: 0, count: 32),
-            substrateAccountId: account.accountId,
-            ethereumAddress: nil,
-            ethereumPublicKey: nil,
-            chainAccounts: [
-                ChainAccount(
-                    chainId: alephZeroChain.chainId,
-                    accountId: account.accountId,
-                    publicKey: account.publicKey,
-                    cryptoType: account.cryptoType,
-                    username: account.username
-                )
-            ],
-            type: .substrate,
-            googleBackupName: nil,
-            isBackedUp: false
-        )
+        let walletModel = AccountGenerator.generateMetaAccount()
 
         let dashboardItem = Multistaking.DashboardItem(
             stakingOption: .init(
@@ -140,27 +117,47 @@ final class StakingDashboardBuilderDemotionTests: XCTestCase {
                     type: .relaychain
                 )
             ),
-            onchainState: .bonded,
+            onchainState: .active,
             hasAssignedStake: true,
-            stake: BigUInt(1000000000000),
+            stake: BigUInt(1_000_000_000_000),
             totalRewards: nil,
             maxApy: nil
         )
 
+        let expectationWallet = XCTestExpectation(description: "wallet result closure called")
+        let expectationAssets = XCTestExpectation(description: "assets result closure called")
+        let expectationDashboard = XCTestExpectation(description: "dashboard result closure called")
+
+        var callCount = 0
+        var resultModel: StakingDashboardModel?
+
+        let callbackQueue = DispatchQueue(label: "test.callback")
         let builder = StakingDashboardBuilder(
-            callbackQueue: .main,
-            resultClosure: { [weak self] result in
-                self?.resultModel = result.model
+            callbackQueue: callbackQueue,
+            resultClosure: { result in
+                callCount += 1
+                resultModel = result.model
+                switch callCount {
+                case 1:
+                    expectationWallet.fulfill()
+                case 2:
+                    expectationAssets.fulfill()
+                case 3:
+                    expectationDashboard.fulfill()
+                default:
+                    break
+                }
             }
         )
 
         builder.applyWallet(model: walletModel)
+        wait(for: [expectationWallet], timeout: 5)
+
         builder.applyAssets(models: [chainAsset])
-        builder.applyDashboardItem(
-            changes: [
-                .insert(dashboardItem)
-            ]
-        )
+        wait(for: [expectationAssets], timeout: 5)
+
+        builder.applyDashboardItem(changes: [.insert(newItem: dashboardItem)])
+        wait(for: [expectationDashboard], timeout: 5)
 
         // when
         let model = resultModel
@@ -168,17 +165,16 @@ final class StakingDashboardBuilderDemotionTests: XCTestCase {
         // then
         XCTAssertNotNil(model, "Model should be generated")
 
-        let activeChainIds = Set(model?.active.compactMap { item in
-            item.chainAsset.chain.chainId
-        } ?? [])
+        let activeChainIds = Set(model?.active.map(\.stakingOption.chainAsset.chain.chainId) ?? [])
+        let moreChainIds = Set(model?.more.map(\.chainAsset.chain.chainId) ?? [])
 
-        let moreChainIds = Set(model?.more.compactMap { item in
-            item.chainAsset.chain.chainId
-        } ?? [])
-
-        XCTAssertTrue(activeChainIds.contains(KnowChainId.alephZero),
-                      "Aleph Zero with active stake should be in active section")
-        XCTAssertFalse(moreChainIds.contains(KnowChainId.alephZero),
-                       "Aleph Zero with active stake should NOT be in more options")
+        XCTAssertTrue(
+            activeChainIds.contains(KnowChainId.alephZero),
+            "Aleph Zero with active stake should be in active section"
+        )
+        XCTAssertFalse(
+            moreChainIds.contains(KnowChainId.alephZero),
+            "Aleph Zero with active stake should NOT be in more options"
+        )
     }
 }
