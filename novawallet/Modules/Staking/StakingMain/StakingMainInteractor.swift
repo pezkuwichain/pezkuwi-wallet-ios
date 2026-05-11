@@ -84,6 +84,7 @@ final class StakingMainInteractor: AnyProviderAutoCleaning {
         noticesProvider.subscribe(self) { [weak self] in
             self?.handleNoticesChanged()
         }
+        noticesProvider.refresh()
     }
 
     private func handleNoticesChanged() {
