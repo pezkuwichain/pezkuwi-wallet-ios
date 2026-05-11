@@ -20,12 +20,12 @@ final class NoticeStripView: UIView {
             return
         }
         isHidden = false
-        let (bg, fg) = banner.severity == .critical
+        let (background, foreground) = banner.severity == .critical
             ? (R.color.colorErrorBlockBackground()!, R.color.colorTextNegative()!)
             : (R.color.colorWarningBlockBackground()!, R.color.colorTextWarning()!)
-        backgroundColor = bg
-        dot.backgroundColor = fg
-        label.textColor = fg
+        backgroundColor = background
+        dot.backgroundColor = foreground
+        label.textColor = foreground
         label.text = banner.text
     }
 
