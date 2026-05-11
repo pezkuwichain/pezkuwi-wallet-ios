@@ -19933,7 +19933,7 @@
 			children = (
 				E70949B5D9B0DE71569F3884 /* StakingDashboardBuilderDemotionTests.swift */,
 			);
-			name = Dashboard;
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 		71E66F0C5FF36EBFFEA3D807 /* DelegationReferendumVoters */ = {
