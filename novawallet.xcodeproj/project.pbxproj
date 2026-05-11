@@ -4362,6 +4362,7 @@
 		847449512891F3B00042FD80 /* WalletSwitchControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847449502891F3B00042FD80 /* WalletSwitchControl.swift */; };
 		84744953289268770042FD80 /* WalletSwitchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84744952289268770042FD80 /* WalletSwitchViewModel.swift */; };
 		84744955289284F50042FD80 /* StakingMainViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84744954289284F50042FD80 /* StakingMainViewLayout.swift */; };
+		C1C65F63ABA4EA410BA9A98B /* StakingNoticeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6521517DD9A8185C032DFB /* StakingNoticeBlockView.swift */; };
 		84746B3028153E4C002642F4 /* GradientBannerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84746B2F28153E4C002642F4 /* GradientBannerModel.swift */; };
 		84754C852510A1A400854599 /* ModalAlertPresenting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84754C842510A1A400854599 /* ModalAlertPresenting.swift */; };
 		84754C882510BAFE00854599 /* ModalAlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84754C872510BAFE00854599 /* ModalAlertFactory.swift */; };
@@ -10636,6 +10637,7 @@
 		847449502891F3B00042FD80 /* WalletSwitchControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSwitchControl.swift; sourceTree = "<group>"; };
 		84744952289268770042FD80 /* WalletSwitchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSwitchViewModel.swift; sourceTree = "<group>"; };
 		84744954289284F50042FD80 /* StakingMainViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakingMainViewLayout.swift; sourceTree = "<group>"; };
+		6B6521517DD9A8185C032DFB /* StakingNoticeBlockView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StakingNoticeBlockView.swift; sourceTree = "<group>"; };
 		84746B2F28153E4C002642F4 /* GradientBannerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBannerModel.swift; sourceTree = "<group>"; };
 		84754C842510A1A400854599 /* ModalAlertPresenting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAlertPresenting.swift; sourceTree = "<group>"; };
 		84754C872510BAFE00854599 /* ModalAlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAlertFactory.swift; sourceTree = "<group>"; };
@@ -29147,9 +29149,26 @@
 			path = AssetOperationNetworkList;
 			sourceTree = "<group>";
 		};
+		1FDD840983ED062936C0279F /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				21F3B1AC0F656C99BC4699B7 /* Views */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		21F3B1AC0F656C99BC4699B7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6B6521517DD9A8185C032DFB /* StakingNoticeBlockView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		B7B0681CCE8F8F0127E8676C /* StakingMain */ = {
 			isa = PBXGroup;
 			children = (
+				1FDD840983ED062936C0279F /* Common */,
 				8F7A1E3EDBEE67AC353B846D /* Mythos */,
 				0C9C642E2A8D675B004DC078 /* NominationPools */,
 				841E5543282D78ED00C8438F /* Parachain */,
@@ -35207,6 +35226,7 @@
 				2BBA744323AA0BF6FE53C212 /* CollatorStakingSelectProtocols.swift in Sources */,
 				880059E128EF0A5C00E87B9B /* VotingProgressView.swift in Sources */,
 				84744955289284F50042FD80 /* StakingMainViewLayout.swift in Sources */,
+				C1C65F63ABA4EA410BA9A98B /* StakingNoticeBlockView.swift in Sources */,
 				88D02FF229431FC900E26390 /* AssetDetailsLocksViewModel.swift in Sources */,
 				2D54215F2EAB69BC0020E64B /* GiftTransferInteractor.swift in Sources */,
 				84ABB3382A16164200B5E95A /* HistoryRewardContext.swift in Sources */,
