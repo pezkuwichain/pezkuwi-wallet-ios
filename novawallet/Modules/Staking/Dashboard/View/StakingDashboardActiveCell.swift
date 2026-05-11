@@ -58,6 +58,8 @@ final class StakingDashboardActiveCellView: UIView {
         view.spacing = 6
     }
 
+    let noticeStrip = NoticeStripView()
+
     var skeletonView: SkrullableView?
 
     private var loadingState: LoadingState = .none
@@ -82,6 +84,8 @@ final class StakingDashboardActiveCellView: UIView {
     }
 
     func bind(viewModel: StakingDashboardEnabledViewModel, locale: Locale) {
+        noticeStrip.bind(to: viewModel.notice)
+
         assetView.bind(
             viewModel: viewModel.chainAssetViewModel.assetViewModel.imageViewModel,
             size: Constants.assetIconSize
@@ -169,6 +173,12 @@ final class StakingDashboardActiveCellView: UIView {
         }
 
         assetView.setContentCompressionResistancePriority(.low, for: .horizontal)
+
+        addSubview(noticeStrip)
+        noticeStrip.isHidden = true
+        noticeStrip.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
     }
 }
 

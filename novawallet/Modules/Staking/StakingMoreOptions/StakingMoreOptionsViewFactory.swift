@@ -24,7 +24,8 @@ struct StakingMoreOptionsViewFactory {
             assetFormatterFactory: AssetBalanceFormatterFactory(),
             priceAssetInfoFactory: priceAssetInfoFactory,
             chainAssetViewModelFactory: ChainAssetViewModelFactory(),
-            estimatedEarningsFormatter: NumberFormatter.percentBase.localizableResource()
+            estimatedEarningsFormatter: NumberFormatter.percentBase.localizableResource(),
+            noticesProvider: StakingNoticesProvider(url: ApplicationConfig.shared.stakingNoticesURL)
         )
 
         let wallet: MetaAccountModel = SelectedWalletSettings.shared.value

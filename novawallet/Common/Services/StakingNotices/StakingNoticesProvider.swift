@@ -157,3 +157,18 @@ enum StakingNoticesProviderError: Error {
     case httpStatus(Int)
     case emptyResponse
 }
+
+#if F_DEV
+    extension StakingNoticesProvider {
+        /// Inject hardcoded notices for visual testing without a real network fetch.
+        /// Caller responsibility: call from the main thread.
+        func injectStubForTesting(_ stub: [ChainModel.Id: StakingNotice]) {
+            mutex.lock()
+            let changed = (stub != noticesState.state)
+            if changed {
+                noticesState.state = stub
+            }
+            mutex.unlock()
+        }
+    }
+#endif
