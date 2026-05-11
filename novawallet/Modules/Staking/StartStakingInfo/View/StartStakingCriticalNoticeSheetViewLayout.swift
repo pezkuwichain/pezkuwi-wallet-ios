@@ -31,7 +31,9 @@ final class StartStakingCriticalNoticeSheetViewLayout: UIView {
         view.applySecondaryDefaultStyle()
     }
 
-    let timerButton: TimerButton = .create { _ in }
+    let timerButton: TimerButton = .create { view in
+        view.activeColor = R.color.colorButtonBackgroundReject()!
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

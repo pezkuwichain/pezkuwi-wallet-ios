@@ -9,7 +9,6 @@ final class StartStakingCriticalNoticeSheetViewController: UIViewController, Vie
 
     private let noticeTitle: String
     private let body: String
-    private var confirmTitle: String = ""
 
     init(
         presenter: StartStakingCriticalNoticeSheetPresenterProtocol,
@@ -43,7 +42,6 @@ final class StartStakingCriticalNoticeSheetViewController: UIViewController, Vie
         let languages = locale.rLanguages
         let localizedStrings = R.string(preferredLanguages: languages).localizable
         rootView.cancelButton.imageWithTitleView?.title = localizedStrings.commonCancel()
-        confirmTitle = localizedStrings.commonContinue()
 
         setupHandlers()
         presenter.setup()
