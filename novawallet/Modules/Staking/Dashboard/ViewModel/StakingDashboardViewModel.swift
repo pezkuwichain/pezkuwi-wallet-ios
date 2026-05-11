@@ -44,6 +44,7 @@ struct StakingDashboardDisabledViewModel {
     let estimatedEarnings: LoadableViewModelState<String?>
     let balance: SecuredViewModel<BalanceViewModelProtocol?>
     let stakingType: TitleIconViewModel?
+    let notice: StakingNoticeBanner?
 }
 
 struct StakingDashboardViewModel {

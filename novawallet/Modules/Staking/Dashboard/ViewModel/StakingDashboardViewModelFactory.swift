@@ -246,11 +246,21 @@ extension StakingDashboardViewModelFactory: StakingDashboardViewModelFactoryProt
 
         let stakingType = createStakingType(for: model, locale: locale)
 
+        let notice: StakingNoticeBanner? = noticesProvider.notice(
+            for: chainAsset.chain.chainId
+        ).map { stakingNotice in
+            StakingNoticeBanner(
+                severity: stakingNotice.severity == .critical ? .critical : .info,
+                text: stakingNotice.shortText
+            )
+        }
+
         return .init(
             chainAssetViewModel: loadableChainAsset,
             estimatedEarnings: estimatedEarnings,
             balance: .wrapped(balance, with: privacyModeEnabled),
-            stakingType: stakingType
+            stakingType: stakingType,
+            notice: notice
         )
     }
 
