@@ -1,28 +1,25 @@
 import Foundation
 
-final class StakingNoticesProvider: StakingNoticesProviding {
-    private struct Observer {
-        weak var target: AnyObject?
-        let callback: () -> Void
-    }
-
+final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
     private let url: URL
     private let session: URLSession
     private let cacheURL: URL
-    private let queue = DispatchQueue(label: "com.nova.staking-notices", qos: .userInitiated)
 
-    private var notices: [ChainModel.Id: StakingNotice] = [:]
-    private var observers: [Observer] = []
+    private let noticesState = Observable<[ChainModel.Id: StakingNotice]>(state: [:])
+    // inFlight is always accessed while mutex is held (performSyncUp and stopSyncUp
+    // are both invoked by BaseSyncService while holding mutex).
     private var inFlight: URLSessionTask?
 
     init(
         url: URL,
         session: URLSession = .shared,
-        cacheURL: URL = StakingNoticesProvider.defaultCacheURL()
+        cacheURL: URL = StakingNoticesProvider.defaultCacheURL(),
+        logger: LoggerProtocol = Logger.shared
     ) {
         self.url = url
         self.session = session
         self.cacheURL = cacheURL
+        super.init(logger: logger)
         loadFromDisk()
     }
 
@@ -31,53 +28,102 @@ final class StakingNoticesProvider: StakingNoticesProviding {
         return dir.appendingPathComponent("staking_notices.json")
     }
 
+    // MARK: - StakingNoticesProviding
+
     func notice(for chainId: ChainModel.Id) -> StakingNotice? {
-        queue.sync { notices[chainId] }
+        mutex.lock()
+        defer { mutex.unlock() }
+        return noticesState.state[chainId]
     }
 
     var allNotices: [ChainModel.Id: StakingNotice] {
-        queue.sync { notices }
+        mutex.lock()
+        defer { mutex.unlock() }
+        return noticesState.state
     }
 
     func refresh() {
-        queue.async { [weak self] in
-            guard let self else { return }
-            if self.inFlight != nil { return }
-            var request = URLRequest(url: self.url)
-            request.cachePolicy = .reloadIgnoringLocalCacheData
-            self.inFlight = self.session.dataTask(with: request) { [weak self] data, _, _ in
-                guard let self else { return }
-                self.queue.async {
-                    self.inFlight = nil
-                    guard let data else { return }
-                    self.applyData(data, persistToDisk: true)
-                }
-            }
-            self.inFlight?.resume()
-        }
+        if !getIsActive() { setup() }
+        syncUp()
     }
 
     func subscribe(_ observer: AnyObject, callback: @escaping () -> Void) {
-        queue.async { [weak self] in
-            guard let self else { return }
-            self.observers.removeAll { $0.target === observer }
-            self.observers.append(Observer(target: observer, callback: callback))
+        mutex.lock()
+        defer { mutex.unlock() }
+        // addObserver with queue: .main → notifications dispatched async to main queue.
+        noticesState.addObserver(with: observer, queue: .main) { _, _ in
+            callback()
         }
     }
 
     func unsubscribe(_ observer: AnyObject) {
-        queue.async { [weak self] in
-            self?.observers.removeAll { $0.target === observer || $0.target == nil }
+        mutex.lock()
+        defer { mutex.unlock() }
+        noticesState.removeObserver(by: observer)
+    }
+
+    // MARK: - BaseSyncService
+
+    // Called by BaseSyncService while mutex is already held — do NOT re-lock mutex here.
+    override func performSyncUp() {
+        var request = URLRequest(url: url)
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+
+        let task = session.dataTask(with: request) { [weak self] data, response, error in
+            guard let self else { return }
+            if let error {
+                self.clearAndComplete(error)
+                return
+            }
+            if let http = response as? HTTPURLResponse, !(200 ..< 300).contains(http.statusCode) {
+                self.clearAndComplete(StakingNoticesProviderError.httpStatus(http.statusCode))
+                return
+            }
+            guard let data else {
+                self.clearAndComplete(StakingNoticesProviderError.emptyResponse)
+                return
+            }
+            self.applyAndPersist(data)
+            self.clearAndComplete(nil)
         }
+
+        // mutex is already held by caller; store directly.
+        inFlight = task
+        task.resume()
+    }
+
+    // Called by BaseSyncService while mutex is already held — do NOT re-lock mutex here.
+    override func stopSyncUp() {
+        let task = inFlight
+        inFlight = nil
+        task?.cancel()
+    }
+
+    deinit {
+        inFlight?.cancel()
+    }
+
+    // MARK: - Private
+
+    private func clearAndComplete(_ error: Error?) {
+        mutex.lock()
+        inFlight = nil
+        mutex.unlock()
+        complete(error)
     }
 
     private func loadFromDisk() {
         guard let data = try? Data(contentsOf: cacheURL) else { return }
-        applyData(data, persistToDisk: false)
+        applyAndPersist(data, persistToDisk: false)
     }
 
-    /// Parse + commit + notify. Errors on a single entry skip that entry; the rest still apply.
-    private func applyData(_ data: Data, persistToDisk: Bool) {
+    /// Parse + commit + optionally persist. Errors on individual entries skip that entry.
+    ///
+    /// `applyAndPersist` acquires `mutex` internally (it is NOT called while mutex is held,
+    /// except via `loadFromDisk` during `init`, at which point no other thread can reach `self`).
+    /// When `noticesState.state` is assigned, `Observable<T>` calls `dispatchInQueueWhenPossible`
+    /// which async-dispatches to `.main` — so the observer closures run after mutex is released.
+    private func applyAndPersist(_ data: Data, persistToDisk: Bool = true) {
         guard let array = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
             return
         }
@@ -92,16 +138,22 @@ final class StakingNoticesProvider: StakingNoticesProviding {
             newNotices[notice.chainId] = notice
         }
 
-        guard newNotices != notices else { return }
-        notices = newNotices
+        mutex.lock()
+        let stateChanged = (newNotices != noticesState.state)
+        if stateChanged {
+            // Safe to assign under mutex: notificiation closures are async-dispatched to .main
+            // by dispatchInQueueWhenPossible, so they don't run until after unlock.
+            noticesState.state = newNotices
+        }
+        mutex.unlock()
 
-        if persistToDisk {
+        if stateChanged, persistToDisk {
             try? data.write(to: cacheURL, options: .atomic)
         }
-
-        let snapshot = observers
-        DispatchQueue.main.async {
-            snapshot.forEach { $0.callback() }
-        }
     }
+}
+
+enum StakingNoticesProviderError: Error {
+    case httpStatus(Int)
+    case emptyResponse
 }

@@ -37,11 +37,7 @@ final class StakingNoticesProviderTests: XCTestCase {
             cacheURL: tempCacheURL
         )
 
-        // Drain the queue so init's loadFromDisk completes.
-        let exp = expectation(description: "load")
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-        wait(for: [exp], timeout: 1)
-
+        // loadFromDisk() is synchronous in init — no drain needed.
         XCTAssertEqual(provider.allNotices.count, 1)
     }
 
@@ -63,10 +59,8 @@ final class StakingNoticesProviderTests: XCTestCase {
             url: URL(string: "https://example.com/x.json")!,
             cacheURL: tempCacheURL
         )
-        let exp = expectation(description: "load")
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) { exp.fulfill() }
-        wait(for: [exp], timeout: 1)
 
+        // loadFromDisk() is synchronous in init — no drain needed.
         XCTAssertEqual(provider.allNotices.count, 1)
     }
 }
