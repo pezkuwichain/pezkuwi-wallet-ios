@@ -9,6 +9,7 @@ protocol StartStakingInfoViewProtocol: AnyObject, ControllerBackedProtocol {
 protocol StartStakingInfoPresenterProtocol: AnyObject {
     func setup()
     func startStaking()
+    func checkForCriticalNotice()
 }
 
 protocol StartStakingInfoInteractorInputProtocol: AnyObject {
@@ -63,6 +64,13 @@ protocol StartStakingInfoWireframeProtocol: CommonRetryable, AlertPresentable, N
     func showWalletDetails(from view: ControllerBackedProtocol?, wallet: MetaAccountModel)
     func showSetupAmount(from view: ControllerBackedProtocol?)
     func complete(from view: ControllerBackedProtocol?)
+    func presentCriticalNoticeSheet(
+        from view: StartStakingInfoViewProtocol?,
+        title: String,
+        body: String,
+        onCancel: @escaping () -> Void,
+        onContinue: @escaping () -> Void
+    )
 }
 
 enum BaseStartStakingInfoError: Error {

@@ -76,6 +76,8 @@ final class StartStakingInfoViewController: UIViewController, ViewHolder {
             rootView.updateLoadingState()
             rootView.skeletonView?.restartSkrulling()
         }
+
+        presenter.checkForCriticalNotice()
     }
 
     @objc private func startStakingAction() {
