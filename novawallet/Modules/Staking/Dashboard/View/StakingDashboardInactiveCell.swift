@@ -2,7 +2,7 @@ import UIKit
 import UIKit_iOS
 
 private final class PaddedLabel: UILabel {
-    var textInsets = UIEdgeInsets(top: 4, left: 7, bottom: 4, right: 7)
+    var textInsets = UIEdgeInsets(top: 2, left: 7, bottom: 2, right: 7)
 
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: textInsets))
@@ -206,6 +206,7 @@ final class StakingDashboardInactiveCellView: GenericTitleValueView<
         titleView.sView.fView.spacing = 4
 
         titleView.sView.fView.stackView.addArrangedSubview(noticeChip)
+        titleView.sView.fView.stackView.setCustomSpacing(6, after: titleView.sView.fView.fView)
         titleView.sView.fView.stackView.setCustomSpacing(6, after: titleView.sView.fView.sView)
         titleView.sView.fView.stackView.alignment = .center
 
