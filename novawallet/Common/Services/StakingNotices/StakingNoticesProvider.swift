@@ -1,9 +1,11 @@
 import Foundation
+import Foundation_iOS
 
 final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
     private let url: URL
     private let session: URLSession
     private let cacheURL: URL
+    private let localizationManager: LocalizationManagerProtocol
 
     private let noticesState = Observable<[ChainModel.Id: StakingNotice]>(state: [:])
     // inFlight is always accessed while mutex is held (performSyncUp and stopSyncUp
@@ -14,13 +16,21 @@ final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
         url: URL,
         session: URLSession = .shared,
         cacheURL: URL = StakingNoticesProvider.defaultCacheURL(),
+        localizationManager: LocalizationManagerProtocol = LocalizationManager.shared,
         logger: LoggerProtocol = Logger.shared
     ) {
         self.url = url
         self.session = session
         self.cacheURL = cacheURL
+        self.localizationManager = localizationManager
         super.init(logger: logger)
         loadFromDisk()
+
+        // Re-decode the cached JSON whenever the user switches app language so that
+        // notice text updates without waiting for the next network fetch.
+        localizationManager.addObserver(with: self, queue: .main) { [weak self] _, _ in
+            self?.loadFromDisk()
+        }
     }
 
     static func defaultCacheURL() -> URL {
@@ -118,11 +128,11 @@ final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
     }
 
     /// Parse + commit + optionally persist. Errors on individual entries skip that entry.
+    /// Notices whose `endDate` has passed are filtered out so users never see stale warnings.
     ///
-    /// `applyAndPersist` acquires `mutex` internally (it is NOT called while mutex is held,
-    /// except via `loadFromDisk` during `init`, at which point no other thread can reach `self`).
-    /// When `noticesState.state` is assigned, `Observable<T>` calls `dispatchInQueueWhenPossible`
-    /// which async-dispatches to `.main` — so the observer closures run after mutex is released.
+    /// Always acquires `mutex`. Callers must NOT hold `mutex` before invoking this — call
+    /// paths: network callback (URLSession bg thread), locale observer (main queue), and
+    /// `loadFromDisk` during `init` (no other threads yet).
     private func applyAndPersist(_ data: Data, persistToDisk: Bool = true) {
         guard let array = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
             return
@@ -130,10 +140,18 @@ final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
 
         var newNotices: [ChainModel.Id: StakingNotice] = [:]
         let decoder = JSONDecoder()
-        decoder.userInfo[.stakingNoticePreferredLocale] = Locale.current.identifier
+        // Use Nova's own localization manager — it stores the user's in-app language
+        // choice in SharedSettings and is the sole authority for the selected locale.
+        // iOS-level APIs (Locale.preferredLanguages, Bundle.main.preferredLocalizations)
+        // are NOT updated by Nova's language picker and must not be used here.
+        decoder.userInfo[.stakingNoticePreferredLocale] = localizationManager.selectedLocalization
+        let now = Date()
         for entry in array {
             guard let entryData = try? JSONSerialization.data(withJSONObject: entry),
                   let notice = try? decoder.decode(StakingNotice.self, from: entryData) else {
+                continue
+            }
+            if let endDate = notice.endDate, endDate <= now {
                 continue
             }
             newNotices[notice.chainId] = notice
@@ -142,7 +160,7 @@ final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
         mutex.lock()
         let stateChanged = (newNotices != noticesState.state)
         if stateChanged {
-            // Safe to assign under mutex: notificiation closures are async-dispatched to .main
+            // Safe to assign under mutex: notification closures are async-dispatched to .main
             // by dispatchInQueueWhenPossible, so they don't run until after unlock.
             noticesState.state = newNotices
         }
@@ -158,18 +176,3 @@ enum StakingNoticesProviderError: Error {
     case httpStatus(Int)
     case emptyResponse
 }
-
-#if F_DEV
-    extension StakingNoticesProvider {
-        /// Inject hardcoded notices for visual testing without a real network fetch.
-        /// Caller responsibility: call from the main thread.
-        func injectStubForTesting(_ stub: [ChainModel.Id: StakingNotice]) {
-            mutex.lock()
-            let changed = (stub != noticesState.state)
-            if changed {
-                noticesState.state = stub
-            }
-            mutex.unlock()
-        }
-    }
-#endif
