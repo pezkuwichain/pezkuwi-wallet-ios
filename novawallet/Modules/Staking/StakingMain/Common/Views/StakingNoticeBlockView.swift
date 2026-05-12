@@ -1,7 +1,7 @@
 import UIKit
 
 /// Expanded notice block shown at the top of the stake-details screen.
-/// Shows severity-coloured background, a dot + bold title row, and the full longText body.
+/// Severity-coloured background with a centred bold title and a high-contrast body.
 final class StakingNoticeBlockView: UIView {
     struct Model: Equatable {
         enum Severity: Equatable { case info; case critical }
@@ -11,7 +11,6 @@ final class StakingNoticeBlockView: UIView {
     }
 
     private let containerView = UIView()
-    private let headDot = UIView()
     private let headLabel = UILabel()
     private let bodyLabel = UILabel()
 
@@ -44,7 +43,6 @@ final class StakingNoticeBlockView: UIView {
 
         containerView.backgroundColor = background
         containerView.layer.borderColor = border.cgColor
-        headDot.backgroundColor = foreground
         headLabel.textColor = foreground
         headLabel.text = model.title
         bodyLabel.text = model.body
@@ -56,16 +54,19 @@ final class StakingNoticeBlockView: UIView {
         containerView.layer.cornerRadius = 12
         containerView.layer.borderWidth = 1
 
-        [headDot, headLabel, bodyLabel].forEach {
+        [headLabel, bodyLabel].forEach {
             containerView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
-        headDot.layer.cornerRadius = 3
-        headLabel.font = .systemFont(ofSize: 13, weight: .semibold)
-        bodyLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        headLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        headLabel.textAlignment = .center
+        headLabel.numberOfLines = 0
+
+        bodyLabel.font = .systemFont(ofSize: 14, weight: .regular)
         bodyLabel.numberOfLines = 0
-        bodyLabel.textColor = R.color.colorTextSecondary()!
+        bodyLabel.textAlignment = .center
+        bodyLabel.textColor = R.color.colorTextPrimary()!
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
@@ -73,16 +74,11 @@ final class StakingNoticeBlockView: UIView {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            headDot.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 14),
-            headDot.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
-            headDot.widthAnchor.constraint(equalToConstant: 6),
-            headDot.heightAnchor.constraint(equalToConstant: 6),
-
-            headLabel.leadingAnchor.constraint(equalTo: headDot.trailingAnchor, constant: 8),
-            headLabel.centerYAnchor.constraint(equalTo: headDot.centerYAnchor),
+            headLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            headLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 14),
             headLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -14),
 
-            bodyLabel.topAnchor.constraint(equalTo: headLabel.bottomAnchor, constant: 6),
+            bodyLabel.topAnchor.constraint(equalTo: headLabel.bottomAnchor, constant: 8),
             bodyLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 14),
             bodyLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -14),
             bodyLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -14)

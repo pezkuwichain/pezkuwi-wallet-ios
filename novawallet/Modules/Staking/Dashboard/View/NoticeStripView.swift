@@ -1,7 +1,8 @@
 import UIKit
 
 final class NoticeStripView: UIView {
-    private let dot = UIView()
+    static let stripHeight: CGFloat = 28
+
     private let label = UILabel()
 
     override init(frame: CGRect) {
@@ -14,6 +15,14 @@ final class NoticeStripView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var isHidden: Bool {
+        didSet { invalidateIntrinsicContentSize() }
+    }
+
+    override var intrinsicContentSize: CGSize {
+        CGSize(width: UIView.noIntrinsicMetric, height: isHidden ? 0 : Self.stripHeight)
+    }
+
     func bind(to banner: StakingNoticeBanner?) {
         guard let banner else {
             isHidden = true
@@ -24,28 +33,20 @@ final class NoticeStripView: UIView {
             ? (R.color.colorErrorBlockBackground()!, R.color.colorTextNegative()!)
             : (R.color.colorWarningBlockBackground()!, R.color.colorTextWarning()!)
         backgroundColor = background
-        dot.backgroundColor = foreground
         label.textColor = foreground
         label.text = banner.text
     }
 
     private func configure() {
-        addSubview(dot)
         addSubview(label)
-        dot.translatesAutoresizingMaskIntoConstraints = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        dot.layer.cornerRadius = 3
-        label.font = .systemFont(ofSize: 12, weight: .regular)
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.numberOfLines = 1
+        label.textAlignment = .center
         NSLayoutConstraint.activate([
-            dot.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
-            dot.centerYAnchor.constraint(equalTo: centerYAnchor),
-            dot.widthAnchor.constraint(equalToConstant: 6),
-            dot.heightAnchor.constraint(equalToConstant: 6),
-            label.leadingAnchor.constraint(equalTo: dot.trailingAnchor, constant: 8),
-            label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14),
             label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14),
-            heightAnchor.constraint(equalToConstant: 28)
+            label.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 }

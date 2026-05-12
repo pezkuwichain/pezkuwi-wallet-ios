@@ -20,7 +20,7 @@ final class StartStakingCriticalNoticeSheetViewController: UIViewController, Vie
         self.body = body
         super.init(nibName: nil, bundle: nil)
 
-        preferredContentSize = CGSize(width: 0.0, height: 400.0)
+        preferredContentSize = CGSize(width: 0.0, height: 340.0)
     }
 
     @available(*, unavailable)

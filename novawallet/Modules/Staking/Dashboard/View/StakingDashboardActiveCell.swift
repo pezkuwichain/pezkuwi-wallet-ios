@@ -150,10 +150,17 @@ final class StakingDashboardActiveCellView: UIView {
     }
 
     private func setupLayout() {
+        addSubview(noticeStrip)
+        noticeStrip.isHidden = true
+        noticeStrip.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
+
         addSubview(detailsView)
 
         detailsView.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview().inset(4)
+            make.top.equalTo(noticeStrip.snp.bottom).offset(4)
+            make.bottom.trailing.equalToSuperview().inset(4)
             make.width.equalTo(130)
         }
 
@@ -161,7 +168,7 @@ final class StakingDashboardActiveCellView: UIView {
 
         assetContainerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(Constants.assetIconLeadingOffset)
-            make.top.equalToSuperview().inset(Constants.assetIconTopOffset)
+            make.top.equalTo(noticeStrip.snp.bottom).offset(Constants.assetIconTopOffset)
             make.trailing.lessThanOrEqualTo(detailsView.snp.leading).offset(-8)
         }
 
@@ -173,12 +180,6 @@ final class StakingDashboardActiveCellView: UIView {
         }
 
         assetView.setContentCompressionResistancePriority(.low, for: .horizontal)
-
-        addSubview(noticeStrip)
-        noticeStrip.isHidden = true
-        noticeStrip.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-        }
     }
 }
 
