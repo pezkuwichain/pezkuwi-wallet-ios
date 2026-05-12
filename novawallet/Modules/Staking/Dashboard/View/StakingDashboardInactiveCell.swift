@@ -37,7 +37,6 @@ final class StakingDashboardInactiveCellView: GenericTitleValueView<
 > {
     private let noticeChip: PaddedLabel = {
         let label = PaddedLabel()
-        label.text = "Notice"
         label.font = .systemFont(ofSize: 10, weight: .semibold)
         label.textAlignment = .center
         label.layer.cornerRadius = 5
@@ -96,6 +95,9 @@ final class StakingDashboardInactiveCellView: GenericTitleValueView<
 
         if let notice = viewModel.notice {
             noticeChip.isHidden = false
+            noticeChip.text = R.string.localizable.stakingNoticeChip(
+                preferredLanguages: locale.rLanguages
+            )
             let (background, foreground): (UIColor, UIColor) = notice.severity == .critical
                 ? (R.color.colorErrorBlockBackground()!, R.color.colorTextNegative()!)
                 : (R.color.colorWarningBlockBackground()!, R.color.colorTextWarning()!)
