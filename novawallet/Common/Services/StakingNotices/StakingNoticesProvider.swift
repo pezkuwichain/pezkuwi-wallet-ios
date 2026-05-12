@@ -130,6 +130,7 @@ final class StakingNoticesProvider: BaseSyncService, StakingNoticesProviding {
 
         var newNotices: [ChainModel.Id: StakingNotice] = [:]
         let decoder = JSONDecoder()
+        decoder.userInfo[.stakingNoticePreferredLocale] = Locale.current.identifier
         for entry in array {
             guard let entryData = try? JSONSerialization.data(withJSONObject: entry),
                   let notice = try? decoder.decode(StakingNotice.self, from: entryData) else {
