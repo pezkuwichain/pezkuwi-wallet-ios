@@ -215,22 +215,6 @@ class StartStakingInfoBasePresenter: StartStakingInfoInteractorOutputProtocol, S
         provideNoticeModel()
     }
 
-    func checkForCriticalNotice() {
-        guard let notice = noticesProvider.notice(for: chainAsset.chain.chainId),
-              notice.severity == .critical else {
-            return
-        }
-        wireframe.presentCriticalNoticeSheet(
-            from: view,
-            title: notice.shortText,
-            body: notice.longText,
-            onCancel: { [weak self] in
-                self?.wireframe.complete(from: self?.view)
-            },
-            onContinue: { /* sheet auto-dismisses; no further action */ }
-        )
-    }
-
     func showNoAccountAlert() {
         guard let view = view,
               let wallet = wallet else {
@@ -261,6 +245,23 @@ class StartStakingInfoBasePresenter: StartStakingInfoInteractorOutputProtocol, S
     }
 
     func startStaking() {
+        if let notice = noticesProvider.notice(for: chainAsset.chain.chainId),
+           notice.severity == .critical {
+            wireframe.presentCriticalNoticeSheet(
+                from: view,
+                title: notice.shortText,
+                body: notice.longText,
+                onCancel: {},
+                onContinue: { [weak self] in
+                    self?.proceedToStakingSetup()
+                }
+            )
+        } else {
+            proceedToStakingSetup()
+        }
+    }
+
+    private func proceedToStakingSetup() {
         guard let view = view,
               let accountExistense = accountExistense else {
             return
