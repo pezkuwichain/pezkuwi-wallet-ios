@@ -4,7 +4,7 @@ import Foundation_iOS
 import SubstrateSdk
 
 final class SubtensorStakeConfirmPresenter {
-    weak var view: CollatorStakingConfirmViewProtocol?
+    weak var view: SubtensorStakingConfirmViewProtocol?
     let wireframe: SubtensorStakeConfirmWireframeProtocol
     let interactor: SubtensorStakeConfirmInteractorInputProtocol
 
@@ -19,6 +19,8 @@ final class SubtensorStakeConfirmPresenter {
     private(set) var fee: ExtrinsicFeeProtocol?
     private(set) var price: PriceData?
     private(set) var alphaEstimate: Double?
+    /// Nova service fee in plank. Zero until `didReceiveCommission` fires (or when fee is N/A).
+    private(set) var commissionAmount: BigUInt = 0
 
     private lazy var walletViewModelFactory = WalletAccountViewModelFactory()
     private lazy var displayAddressViewModelFactory = DisplayAddressViewModelFactory()
@@ -92,6 +94,32 @@ final class SubtensorStakeConfirmPresenter {
         view?.didReceiveFee(viewModel: viewModel)
     }
 
+    private func provideNovaFeeViewModel() {
+        guard commissionAmount > 0,
+              let feeDecimal = Decimal.fromSubstrateAmount(
+                  commissionAmount,
+                  precision: chainAsset.assetDisplayInfo.assetPrecision
+              ) else {
+            view?.didReceiveNovaFee(viewModel: nil)
+            return
+        }
+
+        let viewModel = balanceViewModelFactory.balanceFromPrice(
+            feeDecimal,
+            priceData: price
+        ).value(for: selectedLocale)
+
+        view?.didReceiveNovaFee(viewModel: viewModel)
+    }
+
+    private func provideNovaFeeDisclaimer() {
+        // "Includes 0.3% Nova Wallet fee." caption — shown whenever the fee applies
+        // (subnet with a fee address set), independent of the typed amount.
+        let feeApplies = validator.netuid != SubtensorStakingConstants.rootNetuid
+            && SubtensorStakingConstants.novaFeeAccountId != nil
+        view?.didReceiveNovaFeeDisclaimer(visible: feeApplies)
+    }
+
     private func provideValidatorViewModel() {
         let address = (try? validator.hotkey.toAddress(using: chainAsset.chain.chainFormat)) ?? validator.hotkey.toHex()
         let displayName = validator.identity
@@ -133,6 +161,8 @@ final class SubtensorStakeConfirmPresenter {
         provideWalletViewModel()
         provideAccountViewModel()
         provideFeeViewModel()
+        provideNovaFeeViewModel()
+        provideNovaFeeDisclaimer()
         provideValidatorViewModel()
         provideHintsViewModel()
     }
@@ -185,6 +215,11 @@ extension SubtensorStakeConfirmPresenter: CollatorStakingConfirmPresenterProtoco
             return
         }
 
+        // No "amount ≤ fee" guard is needed: the Nova fee is
+        // floor(amount * 30 / 10000), which is strictly less than the amount for
+        // any positive amount (0.3% < 100%), so the staked remainder is always
+        // positive and the interactor's BigUInt subtraction never underflows.
+
         let transferable = balance?.transferable ?? 0
         let feeAmount = fee?.amount ?? 0
 
@@ -215,6 +250,12 @@ extension SubtensorStakeConfirmPresenter: SubtensorStakeConfirmInteractorOutputP
 
         provideAmountViewModel()
         provideFeeViewModel()
+        provideNovaFeeViewModel()
+    }
+
+    func didReceiveCommission(_ amount: BigUInt) {
+        commissionAmount = amount
+        provideNovaFeeViewModel()
     }
 
     func didReceiveFee(_ result: Result<ExtrinsicFeeProtocol, Error>) {
@@ -290,6 +331,7 @@ extension SubtensorStakeConfirmPresenter: Localizable {
         if let view = view, view.isSetup {
             provideAmountViewModel()
             provideFeeViewModel()
+            provideNovaFeeViewModel()
             provideHintsViewModel()
         }
     }

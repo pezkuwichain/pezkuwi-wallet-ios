@@ -9,7 +9,7 @@ enum SubtensorUnstakeConfirmViewFactory {
         chainAsset: ChainAsset,
         position: SubtensorStakePosition,
         amount: Decimal
-    ) -> CollatorStakingConfirmViewProtocol? {
+    ) -> SubtensorStakingConfirmViewProtocol? {
         guard
             let selectedMetaAccount = SelectedWalletSettings.shared.value,
             let currencyManager = CurrencyManager.shared,
@@ -39,12 +39,25 @@ enum SubtensorUnstakeConfirmViewFactory {
             priceAssetInfoFactory: priceAssetInfoFactory
         )
 
+        // This screen is alpha-denominated (chainAsset is the subnet token), but the
+        // Nova fee is charged in TAO (0.3% of the TAO received). Render it with a TAO
+        // factory so the row shows "TAO", not the subnet symbol.
+        let novaFeeBalanceViewModelFactory: BalanceViewModelFactoryProtocol? = chainAsset
+            .subtensorTaoAsset()
+            .map {
+                BalanceViewModelFactory(
+                    targetAssetInfo: $0.assetDisplayInfo,
+                    priceAssetInfoFactory: priceAssetInfoFactory
+                )
+            }
+
         let presenter = SubtensorUnstakeConfirmPresenter(
             interactor: interactor,
             wireframe: wireframe,
             chainAsset: chainAsset,
             selectedAccount: selectedAccount,
             balanceViewModelFactory: balanceViewModelFactory,
+            novaFeeBalanceViewModelFactory: novaFeeBalanceViewModelFactory,
             position: position,
             amount: amount,
             localizationManager: localizationManager,
@@ -63,7 +76,7 @@ enum SubtensorUnstakeConfirmViewFactory {
             R.string(preferredLanguages: locale.rLanguages).localizable.stakingSubtensorValidator()
         }
 
-        let view = CollatorStakingConfirmViewController(
+        let view = SubtensorStakingConfirmViewController(
             presenter: presenter,
             localizableTitle: localizableTitle,
             localizableCollatorLabel: localizableValidatorLabel,
@@ -122,6 +135,7 @@ enum SubtensorUnstakeConfirmViewFactory {
             extrinsicService: extrinsicService,
             feeProxy: ExtrinsicFeeProxy(),
             signer: signer,
+            callFactory: SubstrateCallFactory(),
             currencyManager: currencyManager,
             operationQueue: OperationManagerFacade.sharedDefaultQueue
         )

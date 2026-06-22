@@ -40,6 +40,36 @@ final class SubtensorUnstakeSetupViewLayout: UIView {
 
     let networkFeeView = UIFactory.default.createNetworkFeeView()
 
+    /// Nova Wallet service-fee row. Same `MultilineAmountView` component as
+    /// `networkFeeView`, styled identically (compact footnote fonts, no bottom
+    /// border) so it lines up beneath it. This screen is alpha-denominated, so
+    /// the row previews 0.3% of the unstaked amount in SN<netuid> terms; the
+    /// confirm screen shows the exact TAO figure. Hidden on root / no fee
+    /// address; otherwise always visible — see `didReceiveNovaFee`.
+    let novaFeeView: SubtensorNovaFeeView = {
+        let view = SubtensorNovaFeeView()
+        view.borderType = []
+        view.style = MultilineAmountView.ViewStyle(
+            titleColor: R.color.colorTextSecondary()!,
+            titleFont: .regularFootnote,
+            tokenColor: R.color.colorTextPrimary()!,
+            tokenFont: .regularFootnote,
+            fiatColor: R.color.colorTextSecondary()!,
+            fiatFont: .caption1
+        )
+        return view
+    }()
+
+    /// Swap-style fee disclosure caption ("Includes 0.3% Nova Wallet fee."), shown
+    /// beneath the fees only when the fee applies. Mirrors the Hydration swap
+    /// screens' `novaFeeDisclaimerLabel`.
+    let novaFeeDisclaimerLabel: UILabel = .create {
+        $0.apply(style: .caption1Secondary)
+        $0.textAlignment = .center
+        $0.numberOfLines = 0
+        $0.isHidden = true
+    }
+
     let actionButton: TriangularedButton = {
         let button = TriangularedButton()
         button.applyDefaultStyle()
@@ -96,5 +126,11 @@ final class SubtensorUnstakeSetupViewLayout: UIView {
         containerView.stackView.addArrangedSubview(positionView)
 
         containerView.stackView.addArrangedSubview(networkFeeView)
+
+        containerView.stackView.addArrangedSubview(novaFeeView)
+        novaFeeView.isHidden = true
+
+        containerView.stackView.setCustomSpacing(8.0, after: novaFeeView)
+        containerView.stackView.addArrangedSubview(novaFeeDisclaimerLabel)
     }
 }

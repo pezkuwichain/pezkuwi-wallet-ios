@@ -2073,4 +2073,6 @@ Do you want to continue?";
 "staking.subtensor.select.validator" = "Select validator";
 "staking.subtensor.hint.select.validator" = "Select validator…";
 "staking.subtensor.subnet.picker.title" = "Select subnet";
+"subtensor.nova.fee.title" = "Nova Wallet fee";
+"subtensor.nova.fee.disclaimer" = "Includes %@%% Nova Wallet fee.";
 "staking.start.unstake.instant" = "Unstake anytime — funds are available immediately with no waiting period";

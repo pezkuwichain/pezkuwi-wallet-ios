@@ -15,6 +15,8 @@ protocol SubtensorStakeSetupViewProtocol: ControllerBackedProtocol {
     func didReceiveFee(viewModel: BalanceViewModelProtocol?)
     func didReceiveAmount(inputViewModel: AmountInputViewModelProtocol)
     func didReceiveMinStake(viewModel: BalanceViewModelProtocol?)
+    func didReceiveNovaFee(viewModel: BalanceViewModelProtocol?)
+    func didReceiveNovaFeeDisclaimer(visible: Bool)
 }
 
 protocol SubtensorStakeSetupPresenterProtocol: AnyObject {

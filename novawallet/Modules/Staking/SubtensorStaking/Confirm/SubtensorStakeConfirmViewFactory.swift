@@ -9,7 +9,7 @@ enum SubtensorStakeConfirmViewFactory {
         chainAsset: ChainAsset,
         validator: SubtensorValidator,
         amount: Decimal
-    ) -> CollatorStakingConfirmViewProtocol? {
+    ) -> SubtensorStakingConfirmViewProtocol? {
         guard
             let selectedMetaAccount = SelectedWalletSettings.shared.value,
             let currencyManager = CurrencyManager.shared,
@@ -63,7 +63,7 @@ enum SubtensorStakeConfirmViewFactory {
             R.string(preferredLanguages: locale.rLanguages).localizable.stakingSubtensorValidator()
         }
 
-        let view = CollatorStakingConfirmViewController(
+        let view = SubtensorStakingConfirmViewController(
             presenter: presenter,
             localizableTitle: localizableTitle,
             localizableCollatorLabel: localizableValidatorLabel,
@@ -122,6 +122,7 @@ enum SubtensorStakeConfirmViewFactory {
             extrinsicService: extrinsicService,
             feeProxy: ExtrinsicFeeProxy(),
             signer: signer,
+            callFactory: SubstrateCallFactory(),
             currencyManager: currencyManager,
             operationQueue: OperationManagerFacade.sharedDefaultQueue
         )

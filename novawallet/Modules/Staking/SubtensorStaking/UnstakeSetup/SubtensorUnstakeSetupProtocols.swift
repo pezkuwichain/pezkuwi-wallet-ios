@@ -8,6 +8,8 @@ protocol SubtensorUnstakeSetupViewProtocol: ControllerBackedProtocol {
     func didReceiveFee(viewModel: BalanceViewModelProtocol?)
     func didReceiveAmount(inputViewModel: AmountInputViewModelProtocol)
     func didReceiveAssetBalance(viewModel: AssetBalanceViewModelProtocol)
+    func didReceiveNovaFee(viewModel: BalanceViewModelProtocol?)
+    func didReceiveNovaFeeDisclaimer(visible: Bool)
 }
 
 protocol SubtensorUnstakeSetupPresenterProtocol: AnyObject {

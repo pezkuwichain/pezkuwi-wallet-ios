@@ -150,6 +150,50 @@ final class SubtensorStakeSetupPresenter {
         view?.didReceiveFee(viewModel: viewModel)
     }
 
+    /// Live Nova Wallet service-fee preview shown beneath the network fee.
+    /// Uses the exact same `novaFeeAmount(from:)` the stake extrinsic skims,
+    /// so the previewed figure matches what is charged on Confirm.
+    ///
+    /// The row is always visible on a subnet with a fee address set: until an
+    /// amount is entered it surfaces a loading spinner (nil view model), then
+    /// shows the live 0.3% figure. On the root subnet, or with no fee address
+    /// configured, the fee does not apply — we leave the row hidden (its layout
+    /// default) by not calling the view at all.
+    private func provideNovaFeeViewModel() {
+        guard netuid != SubtensorStakingConstants.rootNetuid,
+              SubtensorStakingConstants.novaFeeAccountId != nil else {
+            return
+        }
+
+        let precision = chainAsset.assetDisplayInfo.assetPrecision
+        let amountInPlank = currentInputAmount().toSubstrateAmount(precision: precision) ?? 0
+        let feePlank = SubtensorStakingConstants.novaFeeAmount(from: amountInPlank)
+
+        // Spinner only while no amount has been entered yet. Once an amount is in,
+        // show the computed fee — including "0" for dust amounts where 0.3% floors
+        // to zero (a clearer signal than a spinner that never resolves).
+        guard amountInPlank > 0,
+              let feeDecimal = Decimal.fromSubstrateAmount(feePlank, precision: precision) else {
+            view?.didReceiveNovaFee(viewModel: nil)
+            return
+        }
+
+        let viewModel = balanceViewModelFactory.balanceFromPrice(
+            feeDecimal,
+            priceData: price
+        ).value(for: selectedLocale)
+
+        view?.didReceiveNovaFee(viewModel: viewModel)
+    }
+
+    private func provideNovaFeeDisclaimer() {
+        // "Includes 0.3% Nova Wallet fee." caption — shown whenever the fee applies
+        // (subnet with a fee address set); the netuid is fixed for this screen.
+        let feeApplies = netuid != SubtensorStakingConstants.rootNetuid
+            && SubtensorStakingConstants.novaFeeAccountId != nil
+        view?.didReceiveNovaFeeDisclaimer(visible: feeApplies)
+    }
+
     private func provideValidatorViewModel() {
         guard let validator = selectedValidator else {
             view?.didReceiveValidator(viewModel: nil)
@@ -191,6 +235,8 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupPresenterProtocol {
         provideAssetViewModel()
         provideMinStakeViewModel()
         provideFeeViewModel()
+        provideNovaFeeViewModel()
+        provideNovaFeeDisclaimer()
 
         interactor.setup()
     }
@@ -211,6 +257,7 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupPresenterProtocol {
         inputResult = newValue.map { .absolute($0) }
 
         provideAssetViewModel()
+        provideNovaFeeViewModel()
         refreshFee()
     }
 
@@ -219,6 +266,7 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupPresenterProtocol {
 
         provideAmountInputViewModel()
         provideAssetViewModel()
+        provideNovaFeeViewModel()
         refreshFee()
     }
 
@@ -271,6 +319,7 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupInteractorOutputProto
 
         provideAssetViewModel()
         provideAmountInputViewModel()
+        provideNovaFeeViewModel()
     }
 
     func didReceive(price: PriceData?) {
@@ -279,6 +328,7 @@ extension SubtensorStakeSetupPresenter: SubtensorStakeSetupInteractorOutputProto
         provideAssetViewModel()
         provideMinStakeViewModel()
         provideFeeViewModel()
+        provideNovaFeeViewModel()
     }
 
     func didReceive(fee: ExtrinsicFeeProtocol?) {

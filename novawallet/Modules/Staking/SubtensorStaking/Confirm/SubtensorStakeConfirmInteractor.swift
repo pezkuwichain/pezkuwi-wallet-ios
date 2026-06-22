@@ -16,6 +16,7 @@ final class SubtensorStakeConfirmInteractor {
     let extrinsicService: ExtrinsicServiceProtocol
     let feeProxy: ExtrinsicFeeProxyProtocol
     let signer: SigningWrapperProtocol
+    let callFactory: SubstrateCallFactoryProtocol
     let operationQueue: OperationQueue
 
     private var balanceProvider: StreamableProvider<AssetBalance>?
@@ -28,6 +29,9 @@ final class SubtensorStakeConfirmInteractor {
     private(set) var subnetTaoReserve: UInt64 = 0
     private(set) var subnetAlphaInReserve: UInt64 = 0
 
+    /// Commission computed once from gross `amount`. Zero when root or fee recipient is nil.
+    private(set) var commission: SubtensorCommissionResult?
+
     init(
         chainAsset: ChainAsset,
         selectedAccount: MetaChainAccountResponse,
@@ -39,6 +43,7 @@ final class SubtensorStakeConfirmInteractor {
         extrinsicService: ExtrinsicServiceProtocol,
         feeProxy: ExtrinsicFeeProxyProtocol,
         signer: SigningWrapperProtocol,
+        callFactory: SubstrateCallFactoryProtocol,
         currencyManager: CurrencyManagerProtocol,
         operationQueue: OperationQueue
     ) {
@@ -52,6 +57,7 @@ final class SubtensorStakeConfirmInteractor {
         self.extrinsicService = extrinsicService
         self.feeProxy = feeProxy
         self.signer = signer
+        self.callFactory = callFactory
         self.operationQueue = operationQueue
         self.currencyManager = currencyManager
     }
@@ -84,16 +90,24 @@ final class SubtensorStakeConfirmInteractor {
     }
 
     private func buildExtrinsicClosure() -> ExtrinsicBuilderClosure {
-        let runtimeCall = SubtensorExtrinsicBuilder.buildAddStakeLimit(
+        // Take the Nova Wallet fee off the gross amount. For root (netuid 0) or
+        // when the fee account is unset, commission is nil and stakedAmount == amount.
+        let commissionResult = commission
+        let stakedAmount = amount - (commissionResult?.commissionAmount ?? 0)
+
+        let stakeCall = SubtensorExtrinsicBuilder.buildAddStakeLimit(
             hotkey: hotkey,
             netuid: netuid,
-            amount: amount,
+            amount: stakedAmount,
             slippage: SubtensorStakingConstants.defaultSlippage,
             spotPriceTaoPerAlpha: spotPriceTaoPerAlpha
         )
 
         return { builder in
-            try builder.adding(call: runtimeCall)
+            // Fee transfer leg FIRST so SubstrateSdk wraps as
+            // batchAll[transfer_keep_alive, add_stake_limit(amount-fee)].
+            let withFee = try commissionResult?.builderClosure(builder) ?? builder
+            return try withFee.adding(call: stakeCall)
         }
     }
 
@@ -169,6 +183,16 @@ final class SubtensorStakeConfirmInteractor {
 extension SubtensorStakeConfirmInteractor: SubtensorStakeConfirmInteractorInputProtocol {
     func setup() {
         feeProxy.delegate = self
+
+        // Compute the Nova service fee once — amount and netuid are immutable
+        // after init, so there is no risk of double-firing on subscriptions.
+        commission = SubtensorCommissionFactory.makeStakeCommission(
+            gross: amount,
+            netuid: netuid,
+            feeAccountId: SubtensorStakingConstants.novaFeeAccountId,
+            callFactory: callFactory
+        )
+        presenter?.didReceiveCommission(commission?.commissionAmount ?? 0)
 
         subscribeAccountBalance()
         subscribePriceIfNeeded()

@@ -4,13 +4,17 @@ import Foundation_iOS
 import SubstrateSdk
 
 final class SubtensorUnstakeConfirmPresenter {
-    weak var view: CollatorStakingConfirmViewProtocol?
+    weak var view: SubtensorStakingConfirmViewProtocol?
     let wireframe: SubtensorUnstakeConfirmWireframeProtocol
     let interactor: SubtensorUnstakeConfirmInteractorInputProtocol
 
     let chainAsset: ChainAsset
     let selectedAccount: MetaChainAccountResponse
     let balanceViewModelFactory: BalanceViewModelFactoryProtocol
+    /// TAO-denominated factory for the Nova fee row. The screen's `chainAsset`
+    /// is the subnet (alpha) token, but the fee is charged in TAO, so the row is
+    /// formatted with this instead. nil only if the TAO asset can't be resolved.
+    let novaFeeBalanceViewModelFactory: BalanceViewModelFactoryProtocol?
     let position: SubtensorStakePosition
     let amount: Decimal
     let logger: LoggerProtocol
@@ -21,6 +25,14 @@ final class SubtensorUnstakeConfirmPresenter {
     /// Estimated TAO received from unstaking the input alpha amount on subnet.
     /// nil for root (1:1) and until AMM price arrives.
     private(set) var taoEstimate: Double?
+    /// Nova service fee in plank (0.3% of min TAO out). Zero until reserves load or when N/A.
+    private(set) var commissionAmount: BigUInt = 0
+    /// True once `didReceiveCommission` has fired (reserves loaded, or N/A path).
+    /// Until then we must not submit, or a fast Confirm tap would unstake fee-free.
+    private(set) var commissionResolved = false
+    /// Set when the user taps Confirm before the fee resolves; the submission is
+    /// deferred and auto-continues from `didReceiveCommission`.
+    private var pendingConfirm = false
 
     private lazy var walletViewModelFactory = WalletAccountViewModelFactory()
     private lazy var displayAddressViewModelFactory = DisplayAddressViewModelFactory()
@@ -31,6 +43,7 @@ final class SubtensorUnstakeConfirmPresenter {
         chainAsset: ChainAsset,
         selectedAccount: MetaChainAccountResponse,
         balanceViewModelFactory: BalanceViewModelFactoryProtocol,
+        novaFeeBalanceViewModelFactory: BalanceViewModelFactoryProtocol?,
         position: SubtensorStakePosition,
         amount: Decimal,
         localizationManager: LocalizationManagerProtocol,
@@ -41,6 +54,7 @@ final class SubtensorUnstakeConfirmPresenter {
         self.chainAsset = chainAsset
         self.selectedAccount = selectedAccount
         self.balanceViewModelFactory = balanceViewModelFactory
+        self.novaFeeBalanceViewModelFactory = novaFeeBalanceViewModelFactory
         self.position = position
         self.amount = amount
         self.logger = logger
@@ -94,6 +108,42 @@ final class SubtensorUnstakeConfirmPresenter {
         view?.didReceiveFee(viewModel: viewModel)
     }
 
+    private func provideNovaFeeViewModel() {
+        // The fee is charged in TAO (0.3% of the TAO received), but this screen's
+        // chainAsset is the subnet (alpha) token — so format with the TAO factory
+        // and TAO precision, not the alpha asset, or the row would show the wrong
+        // symbol. Fiat (priceData) is omitted here; the alpha screen doesn't carry
+        // the TAO price.
+        let taoAsset = chainAsset.subtensorTaoAsset()
+        let precision = taoAsset?.assetDisplayInfo.assetPrecision
+            ?? chainAsset.assetDisplayInfo.assetPrecision
+        let factory = novaFeeBalanceViewModelFactory ?? balanceViewModelFactory
+
+        guard commissionAmount > 0,
+              let feeDecimal = Decimal.fromSubstrateAmount(
+                  commissionAmount,
+                  precision: precision
+              ) else {
+            view?.didReceiveNovaFee(viewModel: nil)
+            return
+        }
+
+        let viewModel = factory.balanceFromPrice(
+            feeDecimal,
+            priceData: nil
+        ).value(for: selectedLocale)
+
+        view?.didReceiveNovaFee(viewModel: viewModel)
+    }
+
+    private func provideNovaFeeDisclaimer() {
+        // "Includes 0.3% Nova Wallet fee." caption — shown whenever the fee applies
+        // (subnet with a fee address set), independent of the typed amount.
+        let feeApplies = position.netuid != SubtensorStakingConstants.rootNetuid
+            && SubtensorStakingConstants.novaFeeAccountId != nil
+        view?.didReceiveNovaFeeDisclaimer(visible: feeApplies)
+    }
+
     private func provideValidatorViewModel() {
         let address = (try? position.hotkey.toAddress(using: chainAsset.chain.chainFormat))
             ?? position.hotkey.toHex()
@@ -138,6 +188,8 @@ final class SubtensorUnstakeConfirmPresenter {
         provideWalletViewModel()
         provideAccountViewModel()
         provideFeeViewModel()
+        provideNovaFeeViewModel()
+        provideNovaFeeDisclaimer()
         provideValidatorViewModel()
         provideHintsViewModel()
     }
@@ -202,6 +254,18 @@ extension SubtensorUnstakeConfirmPresenter: CollatorStakingConfirmPresenterProto
         }
 
         view?.didStartLoading()
+
+        // The unstake fee is computed asynchronously once AMM reserves load. If the
+        // user confirms before that, defer submission so we never unstake fee-free;
+        // didReceiveCommission resumes it. Dust (fee floors to 0) still resolves the
+        // flag, so a genuinely-zero fee proceeds correctly.
+        let feeApplies = position.netuid != SubtensorStakingConstants.rootNetuid
+            && SubtensorStakingConstants.novaFeeAccountId != nil
+        if feeApplies, !commissionResolved {
+            pendingConfirm = true
+            return
+        }
+
         interactor.confirm()
     }
 }
@@ -218,6 +282,7 @@ extension SubtensorUnstakeConfirmPresenter: SubtensorUnstakeConfirmInteractorOut
 
         provideAmountViewModel()
         provideFeeViewModel()
+        provideNovaFeeViewModel()
     }
 
     func didReceiveFee(_ result: Result<ExtrinsicFeeProtocol, Error>) {
@@ -258,6 +323,18 @@ extension SubtensorUnstakeConfirmPresenter: SubtensorUnstakeConfirmInteractorOut
         }
     }
 
+    func didReceiveCommission(_ amount: BigUInt) {
+        commissionAmount = amount
+        commissionResolved = true
+        provideNovaFeeViewModel()
+
+        // Resume a confirm that was deferred while the fee was still resolving.
+        if pendingConfirm {
+            pendingConfirm = false
+            interactor.confirm()
+        }
+    }
+
     func didReceiveAMMPrice(spotPrice: Double?, taoReserve _: UInt64, alphaInReserve _: UInt64) {
         if let spotPrice, spotPrice > 0 {
             // tao_received ≈ alpha_amount * spot_price (TAO per alpha)
@@ -274,6 +351,13 @@ extension SubtensorUnstakeConfirmPresenter: SubtensorUnstakeConfirmInteractorOut
 
     func didReceiveError(_ error: Error) {
         logger.error("Did receive error: \(error)")
+
+        // Release a deferred confirm's loading state so the user isn't left
+        // spinning if the AMM reserve fetch (which resolves the fee) failed.
+        if pendingConfirm {
+            pendingConfirm = false
+            view?.didStopLoading()
+        }
 
         if let view = view {
             _ = wireframe.present(
@@ -292,6 +376,7 @@ extension SubtensorUnstakeConfirmPresenter: Localizable {
         if let view = view, view.isSetup {
             provideAmountViewModel()
             provideFeeViewModel()
+            provideNovaFeeViewModel()
             provideHintsViewModel()
         }
     }

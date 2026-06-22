@@ -83,6 +83,11 @@ final class SubtensorStakeSetupViewController: UIViewController, ViewHolder {
         ).localizable.stakingMainMinimumStakeTitle()
 
         rootView.networkFeeView.locale = selectedLocale
+        rootView.novaFeeView.locale = selectedLocale
+
+        rootView.novaFeeDisclaimerLabel.text = R.string(
+            preferredLanguages: selectedLocale.rLanguages
+        ).localizable.subtensorNovaFeeDisclaimer(SubtensorStakingConstants.novaFeePercentDisplay)
 
         updateActionButtonState()
     }
@@ -222,6 +227,20 @@ extension SubtensorStakeSetupViewController: SubtensorStakeSetupViewProtocol {
 
     func didReceiveMinStake(viewModel: BalanceViewModelProtocol?) {
         rootView.minStakeView.bind(viewModel: viewModel)
+    }
+
+    func didReceiveNovaFee(viewModel: BalanceViewModelProtocol?) {
+        // The presenter only calls this on a subnet with a fee address set, so
+        // the row is always shown here. A nil view model means "amount not yet
+        // entered" and surfaces the row's built-in loading spinner. Root /
+        // no-address screens never call this, so the row stays hidden (its
+        // layout default).
+        rootView.novaFeeView.isHidden = false
+        rootView.novaFeeView.bind(viewModel: viewModel)
+    }
+
+    func didReceiveNovaFeeDisclaimer(visible: Bool) {
+        rootView.novaFeeDisclaimerLabel.isHidden = !visible
     }
 }
 
