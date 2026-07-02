@@ -84,6 +84,9 @@ jobs:
 
       - name: Build for Simulator (no signing required)
         env:
+          # SwiftFormat/SwiftLint build phases already check this and exit early — matches
+          # the real pull_request.yml/push_develop.yml workflows, not something invented here.
+          RUN_IN_CI: true
           # Compile-only check — these feed Scripts/inject-keys.sh (Sourcery-generated
           # CIKeys.generated.swift). Real values aren't needed to prove the code compiles,
           # but the script runs under `set -u` and errors on any unset var.
