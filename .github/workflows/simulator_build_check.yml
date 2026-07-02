@@ -31,5 +31,7 @@ jobs:
             -scheme novawallet \
             -configuration Debug \
             -destination 'generic/platform=iOS Simulator' \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO
