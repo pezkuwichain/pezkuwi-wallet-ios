@@ -24,6 +24,25 @@ jobs:
             -project novawallet.xcodeproj \
             -scheme novawallet
 
+      - name: Set MINT_PATH
+        run: echo "MINT_PATH=$GITHUB_WORKSPACE/.mint" >> "$GITHUB_ENV"
+
+      - name: Restore Mint cache
+        id: mint-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.mint
+          key: ${{ runner.os }}-xcode-mint-${{ hashFiles('**/CIMintfile', '**/Mintfile') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-mint-
+
+      - name: Install Mint
+        run: brew install mint
+
+      - name: Mint bootstrap (installs Sourcery, etc.)
+        if: steps.mint-cache.outputs.cache-hit != 'true'
+        run: mint bootstrap --mintfile CIMintfile
+
       - name: Build for Simulator (no signing required)
         env:
           # Compile-only check — these feed Scripts/inject-keys.sh (Sourcery-generated
