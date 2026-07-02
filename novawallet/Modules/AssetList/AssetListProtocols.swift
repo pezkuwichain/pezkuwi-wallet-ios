@@ -15,6 +15,7 @@ protocol AssetListCollectionManagerProtocol {
     func updateHeaderViewModel(with model: AssetListHeaderViewModel?)
     func updateOrganizerViewModel(with model: AssetListOrganizerViewModel?)
     func updateBanners(available: Bool)
+    func updatePezkuwiDashboard(available: Bool)
     func updateSelectedLocale(with locale: Locale)
 
     func updateTokensGroupLayout()
@@ -75,6 +76,8 @@ protocol AssetListViewProtocol: ControllerBackedProtocol {
     func didReceiveGroups(viewModel: AssetListViewModel)
     func didReceiveOrganizer(viewModel: AssetListOrganizerViewModel?)
     func didReceiveBanners(available: Bool)
+    func didReceivePezkuwiDashboard(available: Bool)
+    func didReceivePezkuwiDashboardHeightChange()
     func didCompleteRefreshing()
     func didReceiveAssetListStyle(_ style: AssetListGroupsStyle)
 }

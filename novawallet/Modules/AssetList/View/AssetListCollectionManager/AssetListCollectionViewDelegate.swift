@@ -106,7 +106,7 @@ extension AssetListCollectionViewDelegate: UICollectionViewDelegateFlowLayout {
                 width: collectionView.frame.width,
                 height: AssetListMeasurement.assetHeaderHeight
             )
-        case .summary, .settings, .organizer, .banners, .assetGroup:
+        case .summary, .settings, .organizer, .banners, .assetGroup, .pezkuwiDashboard:
             .zero
         }
     }
@@ -117,7 +117,7 @@ extension AssetListCollectionViewDelegate: UICollectionViewDelegateFlowLayout {
         let cellType = AssetListFlowLayout.CellType(indexPath: indexPath, in: collectionView)
 
         switch cellType {
-        case .account, .settings, .emptyState, .totalBalance, .banner, .alert:
+        case .account, .settings, .emptyState, .totalBalance, .banner, .alert, .pezkuwiDashboard:
             break
         case let .organizerItem(itemIndex: itemIndex):
             selectionDelegate?.selectOrganizerItem(at: itemIndex)

@@ -17,6 +17,9 @@ class AssetListFlowLayout: UICollectionViewFlowLayout {
     private var organizerInsets: UIEdgeInsets = .zero
     private var alertInsets: UIEdgeInsets = .zero
 
+    private var pezkuwiDashboardHeight: CGFloat = PezkuwiDashboardMeasurement.collapsedHeight
+    private var pezkuwiDashboardInsets: UIEdgeInsets = .zero
+
     private let attributesFactory = AssetDecorationAttributesFactory()
 
     private var itemsDecorationAttributes: [IndexPath: UICollectionViewLayoutAttributes] = [:]
@@ -180,6 +183,14 @@ private extension AssetListFlowLayout {
 
         initialY += CGFloat(numberOfOrganizerItems) * AssetListMeasurement.organizerItemHeight
 
+        initialY += pezkuwiDashboardInsets.top + pezkuwiDashboardInsets.bottom
+
+        let hasPezkuwiDashboard = collectionView.numberOfItems(inSection: SectionType.pezkuwiDashboard.index) > 0
+
+        if hasPezkuwiDashboard {
+            initialY += pezkuwiDashboardHeight
+        }
+
         initialY += bannersInsets.top + bannersInsets.bottom
 
         let hasPromotion = collectionView.numberOfItems(inSection: SectionType.banners.index) > 0
@@ -289,6 +300,30 @@ extension AssetListFlowLayout {
         bannersInsets = newInsets
     }
 
+    func activatePezkuwiDashboardWithHeight(_ height: CGFloat) {
+        let newInsets = PezkuwiDashboardMeasurement.cardInsets
+
+        guard height != pezkuwiDashboardHeight || pezkuwiDashboardInsets != newInsets else {
+            return
+        }
+
+        pezkuwiDashboardHeight = height
+        pezkuwiDashboardInsets = newInsets
+        invalidateLayout()
+    }
+
+    func deactivatePezkuwiDashboard() {
+        let newInsets = UIEdgeInsets.zero
+
+        guard pezkuwiDashboardInsets != newInsets else {
+            return
+        }
+
+        pezkuwiDashboardHeight = .zero
+        pezkuwiDashboardInsets = newInsets
+        invalidateLayout()
+    }
+
     func setOrganizerActive(_ isActive: Bool) {
         let newInsets = isActive ? AssetListMeasurement.organizerInsets : .zero
 
@@ -323,6 +358,8 @@ extension AssetListFlowLayout {
             alertHeight
         case .totalBalance:
             totalBalanceHeight
+        case .pezkuwiDashboard:
+            pezkuwiDashboardHeight
         case .organizerItem:
             AssetListMeasurement.organizerItemHeight
         case .banner:
@@ -343,6 +380,8 @@ extension AssetListFlowLayout {
         switch type {
         case .summary:
             totalBalanceInsets
+        case .pezkuwiDashboard:
+            pezkuwiDashboardInsets
         case .organizer:
             organizerInsets
         case .banners:

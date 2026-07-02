@@ -1,6 +1,11 @@
 import Foundation
 
 enum KnowChainId {
+    // Pezkuwi chains
+    static let pezkuwi = "1aa94987791a5544e9667ec249d2cef1b8fdd6083c85b93fc37892d54a1156ca"
+    static let pezkuwiAssetHub = "e7c15092dcbe3f320260ddbbc685bfceed9125a3b3d8436db2766201dec3b949"
+    static let pezkuwiPeople = "69a8d025ab7b63363935d7d9397e0f652826c94271c1bc55c4fdfe72cccf1cfa"
+
     static let kusama = "b0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe"
     static let kusamaAssetHub = "48239ef607d7928874027a43a67689209727dfb3d3dc5e5b03a39bdc2eda771a"
     static let polkadot = "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"

@@ -3,12 +3,14 @@ import UIKit
 final class AssetListCollectionViewDataSource: NSObject {
     weak var view: ControllerBackedProtocol?
     let bannersViewProvider: BannersViewProviderProtocol
+    let pezkuwiDashboardViewProvider: PezkuwiDashboardViewProviderProtocol
 
     var alertViewModel: InlinableAlertView.Model?
     var groupsViewModel: AssetListViewModel
     var headerViewModel: AssetListHeaderViewModel?
     var organizerViewModel: AssetListOrganizerViewModel?
     var bannersAvailable: Bool?
+    var pezkuwiDashboardAvailable: Bool?
 
     var selectedLocale: Locale
 
@@ -18,6 +20,7 @@ final class AssetListCollectionViewDataSource: NSObject {
     init(
         view: ControllerBackedProtocol,
         bannersViewProvider: BannersViewProviderProtocol,
+        pezkuwiDashboardViewProvider: PezkuwiDashboardViewProviderProtocol,
         alertViewModel: InlinableAlertView.Model?,
         groupsViewModel: AssetListViewModel,
         selectedLocale: Locale,
@@ -26,6 +29,7 @@ final class AssetListCollectionViewDataSource: NSObject {
     ) {
         self.view = view
         self.bannersViewProvider = bannersViewProvider
+        self.pezkuwiDashboardViewProvider = pezkuwiDashboardViewProvider
         self.alertViewModel = alertViewModel
         self.groupsViewModel = groupsViewModel
         self.selectedLocale = selectedLocale
@@ -393,6 +397,26 @@ private extension AssetListCollectionViewDataSource {
         return cell
     }
 
+    func providePezkuwiDashboardCell(
+        _ collectionView: UICollectionView,
+        indexPath: IndexPath
+    ) -> PezkuwiDashboardContainerCollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithType(
+            PezkuwiDashboardContainerCollectionViewCell.self,
+            for: indexPath
+        )!
+
+        pezkuwiDashboardViewProvider.setupPezkuwiDashboard(
+            on: view,
+            view: cell.view
+        )
+
+        cell.contentInsets.left = UIConstants.horizontalInset
+        cell.contentInsets.right = UIConstants.horizontalInset
+
+        return cell
+    }
+
     func numberOfItemsForAssetGroup(_ section: Int) -> Int {
         if let groupIndex = AssetListFlowLayout.SectionType.assetsGroupIndexFromSection(section) {
             switch groupsViewModel.listState.groups[groupIndex] {
@@ -488,6 +512,8 @@ extension AssetListCollectionViewDataSource: UICollectionViewDataSource {
             if headerViewModel != nil { itemsCount += 2 }
 
             return itemsCount
+        case .pezkuwiDashboard:
+            return pezkuwiDashboardAvailable == true ? 1 : 0
         case .organizer:
             return organizerViewModel?.items.count ?? 0
         case .banners:
@@ -510,6 +536,8 @@ extension AssetListCollectionViewDataSource: UICollectionViewDataSource {
             provideAlertCell(collectionView, indexPath: indexPath)
         case .totalBalance:
             provideTotalBalanceCell(collectionView, indexPath: indexPath)
+        case .pezkuwiDashboard:
+            providePezkuwiDashboardCell(collectionView, indexPath: indexPath)
         case .organizerItem:
             provideOrganizerCell(collectionView, indexPath: indexPath)
         case .banner:

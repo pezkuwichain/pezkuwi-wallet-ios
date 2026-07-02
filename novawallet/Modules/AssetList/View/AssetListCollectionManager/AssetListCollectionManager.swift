@@ -18,6 +18,7 @@ final class AssetListCollectionManager {
     init(
         viewController: AssetListViewController,
         bannersViewProvider: BannersViewProviderProtocol,
+        pezkuwiDashboardViewProvider: PezkuwiDashboardViewProviderProtocol,
         alertViewModel: InlinableAlertView.Model? = nil,
         groupsViewModel: AssetListViewModel,
         delegate: AssetListCollectionManagerDelegate? = nil,
@@ -30,6 +31,7 @@ final class AssetListCollectionManager {
         collectionViewDataSource = AssetListCollectionViewDataSource(
             view: viewController,
             bannersViewProvider: bannersViewProvider,
+            pezkuwiDashboardViewProvider: pezkuwiDashboardViewProvider,
             alertViewModel: alertViewModel,
             groupsViewModel: groupsViewModel,
             selectedLocale: selectedLocale
@@ -98,6 +100,7 @@ extension AssetListCollectionManager: AssetListCollectionManagerProtocol {
         viewController?.rootView.collectionView.registerCellClass(AssetListNftsCell.self)
         viewController?.rootView.collectionView.registerCellClass(AssetListMultisigOperationsCell.self)
         viewController?.rootView.collectionView.registerCellClass(BannersContainerCollectionViewCell.self)
+        viewController?.rootView.collectionView.registerCellClass(PezkuwiDashboardContainerCollectionViewCell.self)
         viewController?.rootView.collectionView.registerClass(
             AssetListNetworkView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
@@ -193,6 +196,10 @@ extension AssetListCollectionManager: AssetListCollectionManagerProtocol {
 
     func updateBanners(available: Bool) {
         collectionViewDataSource.bannersAvailable = available
+    }
+
+    func updatePezkuwiDashboard(available: Bool) {
+        collectionViewDataSource.pezkuwiDashboardAvailable = available
     }
 
     func updateSelectedLocale(with locale: Locale) {

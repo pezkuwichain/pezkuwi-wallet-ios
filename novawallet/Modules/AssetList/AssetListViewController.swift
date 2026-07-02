@@ -6,6 +6,7 @@ final class AssetListViewController: UIViewController, ViewHolder {
 
     let presenter: AssetListPresenterProtocol
     let bannersViewProvider: BannersViewProviderProtocol
+    let pezkuwiDashboardViewProvider: PezkuwiDashboardViewProviderProtocol
 
     var collectionViewLayout: UICollectionViewFlowLayout? {
         rootView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
@@ -15,6 +16,7 @@ final class AssetListViewController: UIViewController, ViewHolder {
         AssetListCollectionManager(
             viewController: self,
             bannersViewProvider: bannersViewProvider,
+            pezkuwiDashboardViewProvider: pezkuwiDashboardViewProvider,
             groupsViewModel: groupsViewModel,
             delegate: self,
             selectedLocale: selectedLocale
@@ -30,10 +32,12 @@ final class AssetListViewController: UIViewController, ViewHolder {
     init(
         presenter: AssetListPresenterProtocol,
         bannersViewProvider: BannersViewProviderProtocol,
+        pezkuwiDashboardViewProvider: PezkuwiDashboardViewProviderProtocol,
         localizationManager: LocalizationManagerProtocol
     ) {
         self.presenter = presenter
         self.bannersViewProvider = bannersViewProvider
+        self.pezkuwiDashboardViewProvider = pezkuwiDashboardViewProvider
 
         super.init(nibName: nil, bundle: nil)
 
@@ -80,6 +84,14 @@ private extension AssetListViewController {
 
     func deactivatePromotion() {
         rootView.collectionViewLayout.deactivatePromotion()
+    }
+
+    func activatePezkuwiDashboardWithHeight(_ height: CGFloat) {
+        rootView.collectionViewLayout.activatePezkuwiDashboardWithHeight(height)
+    }
+
+    func deactivatePezkuwiDashboard() {
+        rootView.collectionViewLayout.deactivatePezkuwiDashboard()
     }
 
     func setOrganizerActive(_ isActive: Bool) {
@@ -196,6 +208,32 @@ extension AssetListViewController: AssetListViewProtocol {
                 [AssetListFlowLayout.SectionType.banners.index]
             )
         }
+    }
+
+    func didReceivePezkuwiDashboard(available: Bool) {
+        collectionViewManager.updatePezkuwiDashboard(available: available)
+
+        let height = pezkuwiDashboardViewProvider.getCardHeight()
+
+        if available {
+            activatePezkuwiDashboardWithHeight(height)
+        } else {
+            deactivatePezkuwiDashboard()
+        }
+
+        rootView.collectionView.performBatchUpdates {
+            self.rootView.collectionView.reloadSections(
+                [AssetListFlowLayout.SectionType.pezkuwiDashboard.index]
+            )
+        }
+    }
+
+    func didReceivePezkuwiDashboardHeightChange() {
+        let height = pezkuwiDashboardViewProvider.getCardHeight()
+
+        activatePezkuwiDashboardWithHeight(height)
+
+        rootView.collectionView.performBatchUpdates(nil, completion: nil)
     }
 
     func didReceiveAssetListStyle(_ style: AssetListGroupsStyle) {
