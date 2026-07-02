@@ -42,7 +42,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>novawallet</string>
+				<string>pezkuwiwallet</string>
 			</array>
 		</dict>
 		<dict>
@@ -92,7 +92,7 @@
 	<string>Photo library access is used to allow selection of QR code with addresses, Polkadot Vault transactions, or connect via WalletConnect</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
-		<key>iCloud.io.novafoundation.novawallet.Documents</key>
+		<key>iCloud.io.pezkuwichain.wallet.Documents</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
@@ -101,7 +101,7 @@
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>ANY</string>
 		</dict>
-		<key>iCloud.io.novafoundation.novawallet.dev.Documents</key>
+		<key>iCloud.io.pezkuwichain.wallet.dev.Documents</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
