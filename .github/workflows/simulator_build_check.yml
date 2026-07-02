@@ -43,6 +43,12 @@ jobs:
         if: steps.mint-cache.outputs.cache-hit != 'true'
         run: mint bootstrap --mintfile CIMintfile
 
+      - name: Install Ruby gems (xcodeproj, for the fix-up script below)
+        run: bundle install
+
+      - name: Add PezkuwiDashboard files to the Xcode project
+        run: bundle exec ruby Scripts/ci_add_pezkuwi_dashboard_files.rb
+
       - name: Create dummy GoogleService-Info-Dev.plist
         run: |
           cat > novawallet/GoogleService-Info-Dev.plist << 'EOF'
@@ -115,3 +121,10 @@ jobs:
             EXCLUDED_ARCHS=x86_64 \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO
+
+      - name: Upload fixed project.pbxproj
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fixed-project-pbxproj
+          path: novawallet.xcodeproj/project.pbxproj
