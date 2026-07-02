@@ -18,7 +18,7 @@ extension WalletConnectMetadata {
     static func nova(with projectId: String) -> WalletConnectMetadata {
         .init(
             projectId: projectId,
-            name: "Nova wallet",
+            name: "Pezkuwi Wallet",
             description: "Next-gen wallet for Polkadot and Kusama ecosystem",
             website: "https://novawallet.io",
             icon: "https://raw.githubusercontent.com/novasamatech/branding/master/logos/Nova_Wallet_Star_Color.png",

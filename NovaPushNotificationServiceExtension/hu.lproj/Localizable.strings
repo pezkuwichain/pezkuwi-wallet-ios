@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🗳️ A referendum státusza megváltozott";
 "push.notification.referendum.status.updated.subtitle" = "%@ Referendum #%@ státusza megváltozott: \"%@\" helyett \"%@\"";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ Referendum #%@ státusza megváltozott: %@";
-"push.notification.new.release.title" = "Új frissítés érhető el a Nova Wallet-hez!";
-"push.notification.new.release.subtitle" = "Töltsd le a Nova Wallet v%@ verzióját, hogy elérd az összes új funkciót!";
+"push.notification.new.release.title" = "Új frissítés érhető el a Pezkuwi Wallet-hez!";
+"push.notification.new.release.subtitle" = "Töltsd le a Pezkuwi Wallet v%@ verzióját, hogy elérd az összes új funkciót!";
 "push.notification.new.referendum.title" = "🗳️ Új Referendum";
 "push.notification.new.referendum.subtitle" = "%@ Referendum #%@ szavazása elindult!";
 "push.notification.referendum.killed" = "Elpusztított";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "Jóváhagyott";
 "push.notification.referendum.deciding" = "Döntés alatt";
 "push.notification.referendum.created" = "Előkészítés";
-"push.notification.default.title" = "Nova Wallet";
+"push.notification.default.title" = "Pezkuwi Wallet";
 "push.notification.unsupported.body" = "Nem támogatott üzenettartalom";
 "push.notification.sent.tokens.subtitle" = "%@ %@ elküldve %@ címre, %@ láncon";
 "push.notification.receive.tokens.subtitle" = "%@ %@ érkezett %@ láncra";

@@ -37194,7 +37194,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 10.7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-dev-extension-levan";
@@ -37234,7 +37234,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 10.7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "nova-wallet-dev-extension";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-dev-extension-levan";
@@ -37272,7 +37272,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 10.7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.notificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.notificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-extension-appstore-levan";
@@ -37309,7 +37309,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 10.7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.staging.NovaPushNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.staging.NovaPushNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Ruslan't M2 Dev";
@@ -37333,7 +37333,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletIntegrationTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletIntegrationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -37354,7 +37354,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletIntegrationTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletIntegrationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -37375,7 +37375,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletIntegrationTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletIntegrationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -37525,7 +37525,7 @@
 				);
 				MARKETING_VERSION = 10.7.0;
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Ruslan't M2 Dev";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-dev-levan";
@@ -37560,7 +37560,7 @@
 				);
 				MARKETING_VERSION = 10.7.0;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "nova-wallet-appstore";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-appstore-levan";
@@ -37586,7 +37586,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -37611,7 +37611,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -37706,7 +37706,7 @@
 				);
 				MARKETING_VERSION = 10.7.0;
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "nova-wallet-dev";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "nova-wallet-dev";
@@ -37730,7 +37730,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -37819,7 +37819,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS)",
 				);
 				MARKETING_VERSION = 10.7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.novafoundation.novawallet.staging;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.wallet.staging;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "nova-wallet-staging";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Ruslan't M2 Dev";
@@ -37843,7 +37843,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -37864,7 +37864,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.nova.novawalletIntegrationTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.pezkuwichain.walletIntegrationTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🗳️ Trạng thái trưng cầu dân ý đã thay đổi";
 "push.notification.referendum.status.updated.subtitle" = "%@ Trưng cầu dân ý #%@ đã thay đổi trạng thái từ %@ sang %@";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ Trưng cầu dân ý #%@ đã thay đổi trạng thái thành %@";
-"push.notification.new.release.title" = "Có bản cập nhật mới của Nova Wallet!";
-"push.notification.new.release.subtitle" = "Tải xuống Nova Wallet v%@ để nhận tất cả các tính năng mới!";
+"push.notification.new.release.title" = "Có bản cập nhật mới của Pezkuwi Wallet!";
+"push.notification.new.release.subtitle" = "Tải xuống Pezkuwi Wallet v%@ để nhận tất cả các tính năng mới!";
 "push.notification.new.referendum.title" = "🗳️ Trưng cầu dân ý mới";
 "push.notification.new.referendum.subtitle" = "%@ Trưng cầu dân ý #%@ đã trực tiếp!";
 "push.notification.referendum.killed" = "Đã xóa";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "Đã chấp thuận";
 "push.notification.referendum.deciding" = "Đang quyết định";
 "push.notification.referendum.created" = "Chuẩn bị";
-"push.notification.default.title" = "Nova Wallet";
+"push.notification.default.title" = "Pezkuwi Wallet";
 "push.notification.unsupported.body" = "Nội dung tin nhắn không được hỗ trợ";
 "push.notification.sent.tokens.subtitle" = "Đã gửi %@ %@ đến %@ trên %@";
 "push.notification.receive.tokens.subtitle" = "Đã nhận %@ %@ trên %@";

@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🗳️ 国民投票のステータスが変更されました";
 "push.notification.referendum.status.updated.subtitle" = "%@ 国民投票 #%@ のステータスが %@ から %@ に変更されました";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ 国民投票 #%@ がステータス %@ に変更されました";
-"push.notification.new.release.title" = "Nova Wallet の新しい更新が利用可能です！";
-"push.notification.new.release.subtitle" = "すべての新機能を得るために Nova Wallet v%@ をダウンロードしてください！";
+"push.notification.new.release.title" = "Pezkuwi Wallet の新しい更新が利用可能です！";
+"push.notification.new.release.subtitle" = "すべての新機能を得るために Pezkuwi Wallet v%@ をダウンロードしてください！";
 "push.notification.new.referendum.title" = "🗳️ 新しい国民投票";
 "push.notification.new.referendum.subtitle" = "%@ 国民投票 #%@ がライブになりました！";
 "push.notification.referendum.killed" = "削除されました";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "承認されました";
 "push.notification.referendum.deciding" = "決定中";
 "push.notification.referendum.created" = "準備中";
-"push.notification.default.title" = "Nova Wallet";
+"push.notification.default.title" = "Pezkuwi Wallet";
 "push.notification.unsupported.body" = "サポートされていないメッセージ内容";
 "push.notification.sent.tokens.subtitle" = "送信 %@ %@ から %@ で %@";
 "push.notification.receive.tokens.subtitle" = "受け取った %@ %@ で %@";

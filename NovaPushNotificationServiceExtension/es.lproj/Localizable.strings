@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🗳️ Estado del Referendum cambiado";
 "push.notification.referendum.status.updated.subtitle" = "%@ Referéndum #%@ cambio de status de %@ a %@";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ Referéndum #%@ cambió su estado a %@";
-"push.notification.new.release.title" = "¡Un nuevo update de Nova Wallet está disponible!";
-"push.notification.new.release.subtitle" = "Descarga Nova Wallet v%@ para obtener todas las nuevas funciones!";
+"push.notification.new.release.title" = "¡Un nuevo update de Pezkuwi Wallet está disponible!";
+"push.notification.new.release.subtitle" = "Descarga Pezkuwi Wallet v%@ para obtener todas las nuevas funciones!";
 "push.notification.new.referendum.title" = "🗳️ Nuevo referéndum";
 "push.notification.new.referendum.subtitle" = "%@ Referéndum #%@ está en vivo ahora!";
 "push.notification.referendum.killed" = "Eliminado";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "Aprobado";
 "push.notification.referendum.deciding" = "Decidiendo";
 "push.notification.referendum.created" = "Preparando";
-"push.notification.default.title" = "Nova Wallet";
+"push.notification.default.title" = "Pezkuwi Wallet";
 "push.notification.unsupported.body" = "Contenido del mensaje no compatible";
 "push.notification.sent.tokens.subtitle" = "Enviado %@ %@ a %@ en %@";
 "push.notification.receive.tokens.subtitle" = "Recibidos %@ %@ en %@";
