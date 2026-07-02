@@ -30,7 +30,7 @@ jobs:
             -project novawallet.xcodeproj \
             -scheme novawallet \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
             -skipPackagePluginValidation \
             -skipMacroValidation \
             ONLY_ACTIVE_ARCH=YES \
