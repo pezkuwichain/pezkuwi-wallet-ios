@@ -1,0 +1,35 @@
+name: Simulator build check (no signing)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'redesign/**'
+
+jobs:
+  build:
+    name: Build for iOS Simulator (compile-only, no code signing)
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show available Xcode versions
+        run: ls /Applications | grep Xcode
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project novawallet.xcodeproj \
+            -scheme novawallet
+
+      - name: Build for Simulator (no signing required)
+        run: |
+          xcodebuild build \
+            -project novawallet.xcodeproj \
+            -scheme novawallet \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
