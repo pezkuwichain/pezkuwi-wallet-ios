@@ -25,6 +25,23 @@ jobs:
             -scheme novawallet
 
       - name: Build for Simulator (no signing required)
+        env:
+          # Compile-only check — these feed Scripts/inject-keys.sh (Sourcery-generated
+          # CIKeys.generated.swift). Real values aren't needed to prove the code compiles,
+          # but the script runs under `set -u` and errors on any unset var.
+          MERCURYO_PRODUCTION_SECRET: dummy
+          MERCURYO_TEST_SECRET: dummy
+          ACALA_AUTH_TOKEN: dummy
+          MOONBEAM_HISTORY_API_KEY: dummy
+          MOONRIVER_HISTORY_API_KEY: dummy
+          ETHERSCAN_HISTORY_API_KEY: dummy
+          ACALA_TEST_AUTH_TOKEN: dummy
+          MOONBEAM_API_KEY: dummy
+          MOONBEAM_TEST_API_KEY: dummy
+          INFURA_API_KEY: dummy
+          WC_PROJECT_ID: dummy
+          DWELLIR_API_KEY: dummy
+          POLKASSEMBLY_SUMMARY_API_KEY: dummy
         run: |
           xcodebuild build \
             -project novawallet.xcodeproj \
