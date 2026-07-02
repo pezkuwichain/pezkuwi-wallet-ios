@@ -6,10 +6,10 @@ on:
       - 'develop'
 
 env:
-  IOS_BUNDLE_ID: "io.novafoundation.novawallet.dev"
-  IOS_EXTENSION_BUNDLE_ID: "io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
-  PROVISIONING_PROFILE_SPECIFIER: "match AdHoc io.novafoundation.novawallet.dev"
-  EXTENSION_PROVISIONING_PROFILE_SPECIFIER: "match AdHoc io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
+  IOS_BUNDLE_ID: "io.pezkuwichain.wallet.dev"
+  IOS_EXTENSION_BUNDLE_ID: "io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"
+  PROVISIONING_PROFILE_SPECIFIER: "match AdHoc io.pezkuwichain.wallet.dev"
+  EXTENSION_PROVISIONING_PROFILE_SPECIFIER: "match AdHoc io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"
   CODE_SIGN_IDENTITY: "Apple Distribution"
   EXPORT_METHOD: "ad-hoc"
   FASTLANE_CONFIGURATION: "Dev"

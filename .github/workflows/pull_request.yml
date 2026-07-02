@@ -8,10 +8,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IOS_BUNDLE_ID: "io.novafoundation.novawallet.dev"
-  IOS_EXTENSION_BUNDLE_ID: "io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
-  PROVISIONING_PROFILE_SPECIFIER: "match Development io.novafoundation.novawallet.dev"
-  EXTENSION_PROVISIONING_PROFILE_SPECIFIER: "match Development io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
+  IOS_BUNDLE_ID: "io.pezkuwichain.wallet.dev"
+  IOS_EXTENSION_BUNDLE_ID: "io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"
+  PROVISIONING_PROFILE_SPECIFIER: "match Development io.pezkuwichain.wallet.dev"
+  EXTENSION_PROVISIONING_PROFILE_SPECIFIER: "match Development io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"
   CODE_SIGN_IDENTITY: "Apple Development"
   EXPORT_METHOD: "development"
   BUILD_NUMBER: ${{ github.run_number }}

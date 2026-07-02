@@ -1,4 +1,4 @@
-git_url("https://github.com/novasamatech/match_security_management_nova_foundation")
+git_url("https://github.com/pezkuwichain/match-security-pezkuwi-wallet-ios")
 storage_mode("git")
 type("adhoc")
-app_identifier(["io.novafoundation.novawallet", "io.novafoundation.novawallet.dev", "io.novafoundation.novawallet.notificationServiceExtension", "io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"])
+app_identifier(["io.pezkuwichain.wallet", "io.pezkuwichain.wallet.dev", "io.pezkuwichain.wallet.notificationServiceExtension", "io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"])

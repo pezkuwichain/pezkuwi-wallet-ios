@@ -3,7 +3,7 @@ desc "Example usage: fastlane upload_testflight"
 lane :upload_testflight do |options|
   upload_to_testflight(
     skip_waiting_for_build_processing: true,
-    apple_id: "1597119355",
+    apple_id: ENV["ASC_APP_ID"] || raise("Missing ASC_APP_ID environment variable — set once the app record exists in App Store Connect"),
   )
 end
 

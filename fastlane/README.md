@@ -37,7 +37,7 @@ Parameters:
 
  
 
-Example usage: fastlane build_app scheme:'novawallet' target: 'novawallet' configuration: 'Release' notification_service_identifier: 'io.novafoundation.novawallet.notificationServiceExtension' app_identifier: 'io.novafoundation.novawallet' 
+Example usage: fastlane build_app scheme:'novawallet' target: 'novawallet' configuration: 'Release' notification_service_identifier: 'io.pezkuwichain.wallet.notificationServiceExtension' app_identifier: 'io.pezkuwichain.wallet' 
 
 ### ios test_build
 
@@ -141,7 +141,7 @@ Parameters:
 
  
 
-Example usage: fastlane update_signing app_identifiers:['io.novafoundation.novawallet', 'io.novafoundation.novawallet.notificationServiceExtension'] notification_service_identifier: 'io.novafoundation.novawallet.notificationServiceExtension' 
+Example usage: fastlane update_signing app_identifiers:['io.pezkuwichain.wallet', 'io.pezkuwichain.wallet.notificationServiceExtension'] notification_service_identifier: 'io.pezkuwichain.wallet.notificationServiceExtension' 
 
 ### ios run_unit_tests
 
