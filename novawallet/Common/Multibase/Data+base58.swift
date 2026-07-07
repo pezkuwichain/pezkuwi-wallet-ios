@@ -37,4 +37,37 @@ extension Data {
         let leadingZeros: [UInt8] = Array(repeating: 0, count: leadingOnes.count)
         return leadingZeros + bytes
     }
+
+    static let base58btcAlphabet = [UInt8]("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".utf8)
+
+    /// Encodes `self` as a Base58 string using the given alphabet (defaults to the standard
+    /// Bitcoin/Tron "base58btc" alphabet). This is the encode-direction counterpart of
+    /// `decodeBase58(input:alphabet:)` above, which only supported decoding.
+    func base58EncodedString(alphabet: [UInt8] = Data.base58btcAlphabet) -> String {
+        guard !isEmpty else {
+            return ""
+        }
+
+        var value = BigUInt(self)
+        let base = BigUInt(alphabet.count)
+
+        var reversedEncodedBytes: [UInt8] = []
+
+        while value > 0 {
+            let (quotient, remainder) = value.quotientAndRemainder(dividingBy: base)
+            reversedEncodedBytes.append(alphabet[Int(remainder)])
+            value = quotient
+        }
+
+        // For every leading zero byte on the input we need to add a leading alphabet[0]
+        // ("1" for base58btc) character on the output.
+        let leadingZerosCount = prefix(while: { $0 == 0 }).count
+        let leadingOnes = [UInt8](repeating: alphabet[0], count: leadingZerosCount)
+
+        let encodedBytes = leadingOnes + reversedEncodedBytes.reversed()
+
+        // Safe force-unwrap: every byte in `encodedBytes` comes from `alphabet`, which is
+        // constructed from an ASCII Swift string literal, so this can never fail to decode as UTF-8.
+        return String(bytes: encodedBytes, encoding: .utf8)!
+    }
 }

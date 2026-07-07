@@ -41,7 +41,7 @@ final class SubstrateAssetsUpdatingService: AssetBalanceBatchBaseUpdatingService
         switch AssetType(rawValue: typeString) {
         case .statemine, .orml:
             return true
-        case .evmAsset, .evmNative, .equilibrium, .ormlHydrationEvm, .none:
+        case .evmAsset, .evmNative, .equilibrium, .ormlHydrationEvm, .none, .tronNative, .trc20:
             return false
         }
     }

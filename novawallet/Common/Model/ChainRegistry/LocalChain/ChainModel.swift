@@ -156,6 +156,10 @@ struct ChainModel: Equatable, Hashable {
         options?.contains(.ethereumBased) ?? false
     }
 
+    var isTronBased: Bool {
+        options?.contains(.tronBased) ?? false
+    }
+
     var isTestnet: Bool {
         options?.contains(.testnet) ?? false
     }
@@ -397,6 +401,7 @@ extension ChainModel: Identifiable {
 
 enum LocalChainOptions: String, Codable, Equatable {
     case ethereumBased
+    case tronBased
     case testnet
     case crowdloans
     case governance
@@ -653,7 +658,7 @@ extension ChainModel {
     }
 
     var genesisHash: Data? {
-        guard !isPureEvm else {
+        guard !isPureEvm, !isPureTron else {
             return nil
         }
 
@@ -696,6 +701,14 @@ extension ChainNodeConnectable {
 
     var isPureEvm: Bool {
         isEthereumBased && !hasSubstrateRuntime
+    }
+
+    var isTronBased: Bool {
+        options?.contains(.tronBased) ?? false
+    }
+
+    var isPureTron: Bool {
+        isTronBased && !hasSubstrateRuntime
     }
 }
 

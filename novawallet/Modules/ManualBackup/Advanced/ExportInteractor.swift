@@ -18,7 +18,13 @@ extension ExportInteractor: ExportInteractorInputProtocol {
     ) {
         var exportSubstrate: Bool {
             if let chain {
-                !chain.isEthereumBased
+                // Tron chain-accounts are not exportable through this generic substrate/ethereum
+                // flow (Phase 1, read-only support - their secrets live under their own
+                // `tronSecretKeyTagForMetaId`/etc. tags, which this screen's substrate/ethereum
+                // tag lookups don't know about). Excluding it here means the user simply sees no
+                // export option for a Tron chain, rather than an incorrect "substrate" export
+                // that silently finds nothing.
+                !chain.isEthereumBased && !chain.isTronBased
             } else {
                 metaAccount.substrateAccountId != .none
             }

@@ -31,7 +31,7 @@ private extension AssetExchangeFeeEstimatingRouter {
             chainAsset.chain.hasSwapHydra
         case .statemine:
             chainAsset.chain.hasSwapHub
-        case .none, .equilibrium, .evmNative, .evmAsset:
+        case .none, .equilibrium, .evmNative, .evmAsset, .tronNative, .trc20:
             false
         }
     }

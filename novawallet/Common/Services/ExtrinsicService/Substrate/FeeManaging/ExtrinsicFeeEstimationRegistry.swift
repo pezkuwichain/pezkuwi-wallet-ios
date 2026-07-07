@@ -34,7 +34,10 @@ private extension ExtrinsicFeeEstimationRegistry {
         }
 
         switch AssetType(rawType: asset.type) {
-        case .none:
+        // Tron chains have no substrate runtime and never build extrinsics, so this branch is
+        // unreachable for `.tronNative`/`.trc20` in practice - grouped with `.none` (native
+        // fallback) since that's the safe, side-effect-free default if it were ever reached.
+        case .none, .tronNative, .trc20:
             return estimatingWrapperFactory.createNativeFeeEstimatingWrapper(
                 extrinsicCreatingResultClosure: extrinsicCreatingResultClosure
             )

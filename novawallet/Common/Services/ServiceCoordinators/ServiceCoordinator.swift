@@ -23,6 +23,7 @@ final class ServiceCoordinator {
     let evmNativeService: AssetBalanceUpdatingServiceProtocol
     let githubPhishingService: ApplicationServiceProtocol
     let equilibriumService: AssetBalanceUpdatingServiceProtocol
+    let tronBalancesService: AssetBalanceUpdatingServiceProtocol
     let dappMediator: DAppInteractionMediating
     let delegatedAccountSyncService: DelegatedAccountSyncServiceProtocol
     let walletNotificationService: WalletNotificationServiceProtocol
@@ -38,6 +39,7 @@ final class ServiceCoordinator {
         evmNativeService: AssetBalanceUpdatingServiceProtocol,
         githubPhishingService: ApplicationServiceProtocol,
         equilibriumService: AssetBalanceUpdatingServiceProtocol,
+        tronBalancesService: AssetBalanceUpdatingServiceProtocol,
         delegatedAccountSyncService: DelegatedAccountSyncServiceProtocol,
         dappMediator: DAppInteractionMediating,
         walletNotificationService: WalletNotificationServiceProtocol,
@@ -51,6 +53,7 @@ final class ServiceCoordinator {
         self.evmAssetsService = evmAssetsService
         self.evmNativeService = evmNativeService
         self.equilibriumService = equilibriumService
+        self.tronBalancesService = tronBalancesService
         self.githubPhishingService = githubPhishingService
         self.delegatedAccountSyncService = delegatedAccountSyncService
         self.dappMediator = dappMediator
@@ -69,6 +72,7 @@ extension ServiceCoordinator: ServiceCoordinatorProtocol {
             evmAssetsService.update(selectedMetaAccount: selectedMetaAccount)
             evmNativeService.update(selectedMetaAccount: selectedMetaAccount)
             equilibriumService.update(selectedMetaAccount: selectedMetaAccount)
+            tronBalancesService.update(selectedMetaAccount: selectedMetaAccount)
             syncModeUpdateService.update(selectedMetaAccount: selectedMetaAccount)
             pendingMultisigSyncService.update(selectedMetaAccount: selectedMetaAccount)
         }
@@ -96,6 +100,7 @@ extension ServiceCoordinator: ServiceCoordinatorProtocol {
         evmAssetsService.setup()
         evmNativeService.setup()
         equilibriumService.setup()
+        tronBalancesService.setup()
         delegatedAccountSyncService.setup()
         dappMediator.setup()
         syncModeUpdateService.setup()
@@ -111,6 +116,7 @@ extension ServiceCoordinator: ServiceCoordinatorProtocol {
         evmAssetsService.throttle()
         evmNativeService.throttle()
         equilibriumService.throttle()
+        tronBalancesService.throttle()
         delegatedAccountSyncService.throttle()
         dappMediator.throttle()
         syncModeUpdateService.throttle()
@@ -205,6 +211,15 @@ extension ServiceCoordinator {
             logger: logger
         )
 
+        let tronBalancesService = TronBalanceUpdatingService(
+            selectedAccount: walletSettings.value,
+            chainRegistry: chainRegistry,
+            storageFacade: substrateStorageFacade,
+            eventCenter: EventCenter.shared,
+            operationQueue: assetsSyncOperationQueue,
+            logger: logger
+        )
+
         let operationQueue = OperationManagerFacade.sharedDefaultQueue
 
         let walletStorageCleaner = WalletStorageCleanerFactory.createWalletStorageCleaner(
@@ -252,6 +267,7 @@ extension ServiceCoordinator {
             evmNativeService: evmNativeService,
             githubPhishingService: githubPhishingAPIService,
             equilibriumService: equilibriumService,
+            tronBalancesService: tronBalancesService,
             delegatedAccountSyncService: delegatedAccountSyncService,
             dappMediator: DAppInteractionFactory.createMediator(for: urlHandlingFacade),
             walletNotificationService: walletNotificationService,

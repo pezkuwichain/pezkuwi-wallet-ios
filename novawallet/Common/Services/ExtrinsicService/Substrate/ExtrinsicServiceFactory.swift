@@ -51,6 +51,7 @@ extension ExtrinsicServiceFactoryProtocol {
             cryptoType: chain.isEthereumBased ? .ethereumEcdsa : .sr25519,
             addressPrefix: chain.addressPrefix,
             isEthereumBased: chain.isEthereumBased,
+            isTronBased: chain.isTronBased,
             isChainAccount: false,
             type: .watchOnly
         )
@@ -71,6 +72,7 @@ extension ExtrinsicServiceFactoryProtocol {
             cryptoType: chain.isEthereumBased ? .ethereumEcdsa : .sr25519,
             addressPrefix: chain.addressPrefix,
             isEthereumBased: chain.isEthereumBased,
+            isTronBased: chain.isTronBased,
             isChainAccount: false,
             type: .secrets
         )

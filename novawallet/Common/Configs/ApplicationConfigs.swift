@@ -153,83 +153,83 @@ extension ApplicationConfig: ApplicationConfigProtocol {
 
     var chainListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/chains.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/chains.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/chains_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/chains_dev.json")!
         #endif
     }
 
     var preConfiguredLightChainListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/chains.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/chains.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/chains_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/chains_dev.json")!
         #endif
     }
 
     var preConfiguredChainDirectoryURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/details")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/details")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/detailsDev")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/detailsDev")!
         #endif
     }
 
     var evmAssetsURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/assets/evm/v3/assets.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/assets/evm/v3/assets.json")!
         #else
             URL(
-                string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/assets/evm/v3/assets_dev.json"
+                string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/assets/evm/v3/assets_dev.json"
             )!
         #endif
     }
 
     var xcmTransfersURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers_dev.json")!
         #endif
     }
 
     var xcmDynamicTransfersURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers_dynamic.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers_dynamic.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers_dynamic_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers_dynamic_dev.json")!
         #endif
     }
 
     var globalConfigURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/global/config.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/global/config.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/global/config_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/global/config_dev.json")!
         #endif
     }
 
     var dAppsListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/dapps/dapps.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/dapps/dapps.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/dapps/dapps_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/dapps/dapps_dev.json")!
         #endif
     }
 
     var preferredValidatorsURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/staking/validators/v1/nova_validators.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/staking/validators/v1/nova_validators.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/staking/validators/v1/nova_validators_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/staking/validators/v1/nova_validators_dev.json")!
         #endif
     }
 
     var governanceDAppsListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/governance/v2/dapps.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/governance/v2/dapps.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/governance/v2/dapps_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/governance/v2/dapps_dev.json")!
         #endif
     }
 
@@ -252,7 +252,7 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var commonTypesURL: URL {
-        URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/types/default.json")!
+        URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/types/default.json")!
     }
 
     var learnPayoutURL: URL {
@@ -320,7 +320,7 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var slip44URL: URL {
-        URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/assets/slip44.json")!
+        URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/assets/slip44.json")!
     }
 
     var wikiURL: URL {
@@ -364,19 +364,19 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var whiteAppearanceIconsPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/icons/tokens/white/v1/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/icons/tokens/white/v1/"
     }
 
     var coloredAppearanceIconsPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/icons/tokens/colored/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/icons/tokens/colored/"
     }
 
     var bannersContentPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/banners/v2/content/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/banners/v2/content/"
     }
 
     var assetHubMigrationConfigsPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/migrations/asset_hub/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/migrations/asset_hub/"
     }
 
     // NOTE: no direct Android build.gradle counterpart found; converted by domain/path pattern only.

@@ -171,6 +171,11 @@ final class DAppOperationConfirmInteractor: DAppOperationBaseInteractor {
                     ofType: KnownType.signature.name,
                     with: codingFactory.createRuntimeJsonContext().toRawContext()
                 )
+            case .tronEcdsa:
+                // Unreachable: Tron chains have `noSubstrateRuntime` set, so this SCALE-encoded
+                // extrinsic signature path (substrate DApp browser signing) is never constructed
+                // for them. Kept exhaustive for compilation only.
+                throw DAppOperationConfirmInteractorError.invalidRawSignature(data: rawSignature)
             }
 
             let signature = try scaleEncoder.encode()

@@ -75,6 +75,11 @@ class AssetDetailsContainingViewFactory: AccountDetailsContainingViewFactoryProt
                 return true
             case .equilibrium:
                 return true
+            case .tronNative, .trc20:
+                // Phase 1 Tron support is read-only (balances/receive only) - transfers are
+                // explicitly out of scope, so the send action must stay disabled here regardless
+                // of whatever generic transfer UI this flag gates elsewhere.
+                return false
             }
         } else {
             return true

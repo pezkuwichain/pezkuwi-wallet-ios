@@ -15,6 +15,13 @@ extension KeystoreTagV2 {
         createTagForMetaId(metaId, accountId: accountId, suffix: Suffix.ethereumSecretKey)
     }
 
+    static func tronSecretKeyTagForMetaId(
+        _ metaId: String,
+        accountId: AccountId? = nil
+    ) -> String {
+        createTagForMetaId(metaId, accountId: accountId, suffix: Suffix.tronSecretKey)
+    }
+
     static func entropyTagForMetaId(
         _ metaId: String,
         accountId: AccountId? = nil
@@ -34,6 +41,13 @@ extension KeystoreTagV2 {
         accountId: AccountId? = nil
     ) -> String {
         createTagForMetaId(metaId, accountId: accountId, suffix: Suffix.ethereumDerivation)
+    }
+
+    static func tronDerivationTagForMetaId(
+        _ metaId: String,
+        accountId: AccountId? = nil
+    ) -> String {
+        createTagForMetaId(metaId, accountId: accountId, suffix: Suffix.tronDerivation)
     }
 
     static func derivationTagForMetaId(
@@ -60,6 +74,13 @@ extension KeystoreTagV2 {
         accountId: AccountId? = nil
     ) -> String {
         createTagForMetaId(metaId, accountId: accountId, suffix: Suffix.ethereumSeed)
+    }
+
+    static func tronSeedTagForMetaId(
+        _ metaId: String,
+        accountId: AccountId? = nil
+    ) -> String {
+        createTagForMetaId(metaId, accountId: accountId, suffix: Suffix.tronSeed)
     }
 }
 

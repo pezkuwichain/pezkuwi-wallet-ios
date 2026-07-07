@@ -219,7 +219,7 @@ final class AdvancedWalletPresenter {
             error = .invalidDerivationHardSoftPassword
         case .ed25519, .substrateEcdsa:
             error = .invalidDerivationHardPassword
-        case .ethereumEcdsa:
+        case .ethereumEcdsa, .tronEcdsa:
             error = .invalidDerivationHardSoftNumericPassword
         }
 

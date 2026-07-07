@@ -81,6 +81,7 @@ class StakingBondMoreTests: XCTestCase {
             cryptoType: .sr25519,
             addressPrefix: chain.addressPrefix,
             isEthereumBased: chain.isEthereumBased,
+            isTronBased: false,
             isChainAccount: false,
             type: .secrets
         )

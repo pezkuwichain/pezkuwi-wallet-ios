@@ -15,7 +15,7 @@ extension AssetModel {
             let value: T = try decoder.read(of: extras.currencyIdType)
 
             return value
-        case .none, .equilibrium, .evmNative, .evmAsset, .statemine:
+        case .none, .equilibrium, .evmNative, .evmAsset, .statemine, .tronNative, .trc20:
             return nil
         }
     }

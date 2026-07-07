@@ -57,7 +57,10 @@ final class CloudBackupSecretsExporter {
         case .ed25519, .substrateEcdsa, .ethereumEcdsa:
             let privateKeyHex = secretKey.toHex()
             return .init(publicKey: publicKeyHex, privateKey: privateKeyHex, nonce: nil)
-        case .none:
+        case .tronEcdsa, .none:
+            // Tron chain accounts are filtered out before reaching here - see
+            // `createChainAccountSecrets` below. Kept exhaustive for compilation, throwing
+            // defensively if this is ever reached unexpectedly.
             throw CloudBackupSecretsExporterError.invalidSecret(cryptoType)
         }
     }
@@ -221,7 +224,15 @@ final class CloudBackupSecretsExporter {
     private func createChainAccountSecrets(
         from wallet: MetaAccountModel
     ) throws -> Set<CloudBackup.DecryptedFileModel.ChainAccountSecrets> {
-        let chainAccountSecrets = try wallet.chainAccounts.map { chainAccount in
+        // Tron is not yet part of the cloud backup format (Phase 1, read-only support) - its
+        // secrets live under their own `tronSecretKeyTagForMetaId`/etc. tags, which the
+        // `isEthereumBased`-driven tag lookups below don't know about, so skip explicitly rather
+        // than emitting an empty-looking (all-nil) backup entry for it.
+        let backupableChainAccounts = wallet.chainAccounts.filter {
+            $0.cryptoType != MultiassetCryptoType.tronEcdsa.rawValue
+        }
+
+        let chainAccountSecrets = try backupableChainAccounts.map { chainAccount in
             let accountId = chainAccount.accountId.toHex()
             let entropyData = try fetchEntropy(for: wallet, chainAccount: chainAccount)
             let seed = try fetchSeed(

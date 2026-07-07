@@ -78,7 +78,10 @@ extension TransactionHistoryItemSource {
     init(assetTypeString: String?) {
         let assetType: AssetType? = assetTypeString.flatMap { .init(rawValue: $0) }
         switch assetType {
-        case .statemine, .orml, .ormlHydrationEvm, .none, .equilibrium:
+        // Phase 1 does not record any `TransactionHistoryItem` rows for Tron (no send/history),
+        // so this is unreachable dead code for `.tronNative`/`.trc20` - grouped with the
+        // catch-all `.substrate` source for a safe default if ever reached.
+        case .statemine, .orml, .ormlHydrationEvm, .none, .equilibrium, .tronNative, .trc20:
             self = .substrate
         case .evmAsset:
             self = .evmAsset

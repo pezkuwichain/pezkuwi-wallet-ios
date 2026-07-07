@@ -89,7 +89,7 @@ final class BalanceRemoteSubscriptionService: RemoteSubscriptionService {
                         chainAsset: chainAsset,
                         transactionSubscription: transactionSubscription
                     )
-                case .evmAsset, .evmNative, .equilibrium, .ormlHydrationEvm:
+                case .evmAsset, .evmNative, .equilibrium, .ormlHydrationEvm, .tronNative, .trc20:
                     logger.error("Unsupported asset type: \(customAssetType)")
                     return []
                 }

@@ -249,4 +249,19 @@ extension AssetBalance {
             blocked: false
         )
     }
+
+    // Tron (native TRX or TRC20) has no concept of reserved/frozen/locked balance visible to a
+    // read-only client - same simple "just a free spendable amount" shape as an EVM balance.
+    init(tronBalance: Balance, accountId: AccountId, chainAssetId: ChainAssetId) {
+        self.init(
+            chainAssetId: chainAssetId,
+            accountId: accountId,
+            freeInPlank: tronBalance,
+            reservedInPlank: 0,
+            frozenInPlank: 0,
+            edCountMode: .basedOnFree,
+            transferrableMode: .regular,
+            blocked: false
+        )
+    }
 }

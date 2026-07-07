@@ -66,7 +66,11 @@ private extension GiftSecretsManager {
             return Ed25519KeypairFactory()
         case .substrateEcdsa:
             return EcdsaKeypairFactory()
-        case .ethereumEcdsa:
+        case .ethereumEcdsa, .tronEcdsa:
+            // Gifts are not supported for Tron in Phase 1 - `cryptoType` here is only ever
+            // derived from the `ethereumBased: Bool` request flag (see `createKeyPair` above),
+            // so `.tronEcdsa` is unreachable from this file's own call sites; kept exhaustive
+            // to compile against the shared `MultiassetCryptoType` enum.
             return BIP32Secp256KeypairFactory()
         }
     }

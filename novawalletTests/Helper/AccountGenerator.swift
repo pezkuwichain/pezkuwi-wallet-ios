@@ -91,6 +91,7 @@ enum AccountGenerator {
             cryptoType: .sr25519,
             addressPrefix: ChainModel.AddressPrefix(SubstrateConstants.genericAddressPrefix),
             isEthereumBased: false,
+            isTronBased: false,
             isChainAccount: false,
             type: .watchOnly
         )

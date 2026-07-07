@@ -3,7 +3,15 @@ import NovaCrypto
 
 enum ChainFormat {
     case ethereum
+    case tron
     case substrate(_ prefix: UInt16, legacyPrefix: UInt16? = nil)
+}
+
+enum TronConstants {
+    // Tron mainnet address version/prefix byte, prepended to the 20-byte account id before
+    // Base58Check encoding. This is a fixed, publicly-documented Tron protocol constant (not
+    // something specific to this fork), the same value used by TronGrid/TronWeb/java-tron.
+    static let addressVersionByte: UInt8 = 0x41
 }
 
 extension ChainFormat {
@@ -21,6 +29,8 @@ extension AccountId {
         switch conversion {
         case .ethereum:
             toHex(includePrefix: true)
+        case .tron:
+            Base58Check.encode(payload: self, versionByte: TronConstants.addressVersionByte)
         case let .substrate(prefix, _):
             try SS58AddressFactory().address(
                 fromAccountId: self,
@@ -44,6 +54,7 @@ extension AccountId {
 
 enum AccountAddressConversionError: Error {
     case invalidEthereumAddress
+    case invalidTronAddress
     case invalidChainAddress
 }
 
@@ -58,10 +69,24 @@ extension AccountAddress {
         return accountId
     }
 
+    private func extractTronAccountId() throws -> AccountId {
+        let (versionByte, payload) = try Base58Check.decode(self)
+
+        guard
+            versionByte == TronConstants.addressVersionByte,
+            payload.count == SubstrateConstants.ethereumAddressLength else {
+            throw AccountAddressConversionError.invalidTronAddress
+        }
+
+        return payload
+    }
+
     func toAccountId(using conversion: ChainFormat) throws -> AccountId {
         switch conversion {
         case .ethereum:
             return try extractEthereumAccountId()
+        case .tron:
+            return try extractTronAccountId()
         case let .substrate(prefix, legacyPrefix):
             let factory = SS58AddressFactory()
             let type = try factory.type(fromAddress: self).uint16Value
@@ -82,6 +107,11 @@ extension AccountAddress {
     func toAccountId() throws -> AccountId {
         if hasPrefix("0x") {
             return try extractEthereumAccountId()
+        } else if let tronAccountId = try? extractTronAccountId() {
+            // Guarded by Base58Check's own 4-byte double-SHA256 checksum plus the 0x41 version
+            // byte check, so this cannot false-positive on a legitimate SS58 (blake2-checksummed)
+            // substrate address - falls through to the SS58 branch below on any mismatch.
+            return tronAccountId
         } else {
             let addressFactory = SS58AddressFactory()
             let type = try addressFactory.type(fromAddress: self).uint16Value
@@ -95,6 +125,8 @@ extension AccountAddress {
         switch conversion {
         case .ethereum:
             return try extractEthereumAccountId()
+        case .tron:
+            return try extractTronAccountId()
         case let .substrate(prefix, legacyPrefix):
             let addressFactory = SS58AddressFactory()
             let type = try addressFactory.type(fromAddress: self).uint16Value
@@ -151,6 +183,8 @@ extension ChainModel {
     var chainFormat: ChainFormat {
         if isEthereumBased {
             .ethereum
+        } else if isTronBased {
+            .tron
         } else {
             .substrate(
                 addressPrefix.toSubstrateFormat(),
