@@ -136,7 +136,7 @@ struct TronGridBroadcastResponse: Decodable {
     /// decoded via UTF8-from-hex to the human-readable
     /// "Validate signature error: java.lang.IllegalArgumentException: Invalid point compression").
     var decodedMessage: String? {
-        guard let message, let data = Data(hexString: message) else {
+        guard let message, let data = try? Data(hexString: message) else {
             return message
         }
 
