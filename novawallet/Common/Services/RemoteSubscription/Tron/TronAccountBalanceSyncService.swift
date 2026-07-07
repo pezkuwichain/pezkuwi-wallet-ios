@@ -127,6 +127,10 @@ final class TronAccountBalanceSyncService: BaseSyncService {
                 // is already held (see `executeCancellable`'s `dispatchInQueueWhenPossible(_:
                 // locking:)`), and `syncUp(afterDelay:ignoreIfSyncing:)` itself acquires the same
                 // non-reentrant `NSLock` - calling it inline here would self-deadlock.
+                // `pollInterval` is captured by value here (rather than via `self?.pollInterval`
+                // inside the inner closure) since it's an immutable `let` and the inner closure's
+                // own `[weak self]` shadows the outer, already-unwrapped `self`.
+                let pollInterval = pollInterval
                 workQueue.async { [weak self] in
                     self?.syncUp(afterDelay: pollInterval, ignoreIfSyncing: false)
                 }
