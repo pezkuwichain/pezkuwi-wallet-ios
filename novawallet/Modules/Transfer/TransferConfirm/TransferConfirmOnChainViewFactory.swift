@@ -63,6 +63,14 @@ struct TransferConfirmOnChainViewFactory {
                 account: selectedAccount,
                 validationProviderFactory: validationProviderFactory
             )
+        } else if chainAsset.asset.isAnyTron {
+            wireframe = TronTransferConfirmWireframe()
+
+            optInteractor = createTronInteractor(
+                for: chainAsset,
+                account: selectedAccount,
+                senderAccountAddress: senderAccountAddress
+            )
         } else {
             wireframe = TransferConfirmWireframe()
             optInteractor = createSubstrateInteractor(
@@ -176,6 +184,63 @@ struct TransferConfirmOnChainViewFactory {
             transferCommandFactory: EvmTransferCommandFactory(),
             extrinsicService: extrinsicService,
             validationProviderFactory: validationProviderFactory,
+            walletLocalSubscriptionFactory: WalletLocalSubscriptionFactory.shared,
+            priceLocalSubscriptionFactory: PriceProviderFactory.shared,
+            signingWrapper: signingWrapper,
+            persistExtrinsicService: persistentExtrinsicService,
+            persistenceFilter: AccountTypeExtrinsicPersistenceFilter(),
+            eventCenter: EventCenter.shared,
+            currencyManager: currencyManager,
+            operationQueue: operationQueue
+        )
+    }
+
+    private static func createTronInteractor(
+        for chainAsset: ChainAsset,
+        account: ChainAccountResponse,
+        senderAccountAddress: AccountAddress
+    ) -> TransferTronOnChainConfirmInteractor? {
+        let chain = chainAsset.chain
+        let asset = chainAsset.asset
+
+        guard
+            let nodeUrlString = chain.nodes.first?.url,
+            let nodeUrl = URL(string: nodeUrlString),
+            let currencyManager = CurrencyManager.shared else {
+            return nil
+        }
+
+        let operationQueue = OperationManagerFacade.sharedDefaultQueue
+
+        let operationFactory = TronGridOperationFactory(baseUrl: nodeUrl)
+        let commandFactory = TronTransferCommandFactory(operationFactory: operationFactory)
+
+        let transactionService = TronTransactionService(
+            ownerAddress: senderAccountAddress,
+            operationFactory: operationFactory,
+            commandFactory: commandFactory,
+            operationQueue: operationQueue
+        )
+
+        let signingWrapper = SigningWrapperFactory().createSigningWrapper(
+            for: account.metaId,
+            accountResponse: account
+        )
+
+        let repositoryFactory = SubstrateRepositoryFactory()
+        let transactionStorage = repositoryFactory.createTxRepository()
+        let persistentExtrinsicService = PersistentExtrinsicService(
+            repository: transactionStorage,
+            operationQueue: OperationManagerFacade.sharedDefaultQueue
+        )
+
+        return TransferTronOnChainConfirmInteractor(
+            selectedAccount: account,
+            chain: chain,
+            asset: asset,
+            ownerAddress: senderAccountAddress,
+            feeProxy: TronTransactionFeeProxy(),
+            transactionService: transactionService,
             walletLocalSubscriptionFactory: WalletLocalSubscriptionFactory.shared,
             priceLocalSubscriptionFactory: PriceProviderFactory.shared,
             signingWrapper: signingWrapper,

@@ -237,7 +237,11 @@ extension NSPredicate {
     }
 
     static func filterTransferTransactions() -> NSPredicate {
-        let paths = CallCodingPath.substrateTransfers + [.erc20Tranfer, .evmNativeTransfer]
+        let paths = CallCodingPath.substrateTransfers +
+            [.erc20Tranfer, .evmNativeTransfer, .tronNativeTransfer]
+        // Note: a Tron TRC20 transfer's `callPath` deliberately reuses `.erc20Tranfer`'s exact
+        // value (see `CallCodingPath+Tron.swift`), so it's already covered by `.erc20Tranfer`
+        // above without a separate `.trc20Transfer` entry here.
 
         let predicates = paths.map { filterTransactionsByCodingPath($0) }
 

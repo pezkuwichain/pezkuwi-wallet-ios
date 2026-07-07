@@ -6,6 +6,10 @@ enum TransactionHistoryItemSource: Int16, Codable {
     case substrate = 0
     case evmAsset = 1
     case evmNative = 2
+    // Appended last, like `MultiassetCryptoType.tronEcdsa`, so persisted CoreData raw values
+    // (0...2) for existing history items are unaffected.
+    case tronAsset = 3
+    case tronNative = 4
 }
 
 struct TransactionHistoryItem: Codable {

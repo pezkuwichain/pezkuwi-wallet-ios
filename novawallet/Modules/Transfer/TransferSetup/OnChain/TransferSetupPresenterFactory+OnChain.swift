@@ -53,6 +53,9 @@ extension TransferSetupPresenterFactory {
             )
 
             optInteractor = createEvmInteractor(for: chainAsset, validationProviderFactory: validationProviderFactory)
+        } else if chainAsset.asset.isAnyTron {
+            wireframe = TronOnChainTransferSetupWireframe(transferCompletion: transferCompletion)
+            optInteractor = createTronInteractor(for: chainAsset)
         } else {
             wireframe = OnChainTransferSetupWireframe(transferCompletion: transferCompletion)
             optInteractor = createSubstrateInteractor(for: chainAsset)
@@ -155,6 +158,45 @@ extension TransferSetupPresenterFactory {
             transferAggregationWrapperFactory: assetTransferAggregationWrapperFactory,
             currencyManager: currencyManager,
             operationQueue: OperationManagerFacade.sharedDefaultQueue
+        )
+    }
+
+    private func createTronInteractor(for chainAsset: ChainAsset) -> TronOnChainTransferSetupInteractor? {
+        let chain = chainAsset.chain
+        let asset = chainAsset.asset
+
+        guard
+            let selectedAccount = wallet.fetch(for: chain.accountRequest()),
+            let senderAccountAddress = selectedAccount.toAddress(),
+            let nodeUrlString = chain.nodes.first?.url,
+            let nodeUrl = URL(string: nodeUrlString),
+            let currencyManager = CurrencyManager.shared else {
+            return nil
+        }
+
+        let operationQueue = OperationManagerFacade.sharedDefaultQueue
+
+        let operationFactory = TronGridOperationFactory(baseUrl: nodeUrl)
+        let commandFactory = TronTransferCommandFactory(operationFactory: operationFactory)
+
+        let transactionService = TronTransactionService(
+            ownerAddress: senderAccountAddress,
+            operationFactory: operationFactory,
+            commandFactory: commandFactory,
+            operationQueue: operationQueue
+        )
+
+        return TronOnChainTransferSetupInteractor(
+            selectedAccount: selectedAccount,
+            chain: chain,
+            asset: asset,
+            ownerAddress: senderAccountAddress,
+            feeProxy: TronTransactionFeeProxy(),
+            transactionService: transactionService,
+            walletLocalSubscriptionFactory: WalletLocalSubscriptionFactory.shared,
+            priceLocalSubscriptionFactory: PriceProviderFactory.shared,
+            currencyManager: currencyManager,
+            operationQueue: operationQueue
         )
     }
 
