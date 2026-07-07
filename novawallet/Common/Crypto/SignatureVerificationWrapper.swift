@@ -118,6 +118,12 @@ final class SignatureVerificationWrapper: SignatureVerificationWrapperProtocol {
                 originalData: originalData,
                 rawPublicKey: rawPublicKey
             )
+        case .tronEcdsa:
+            // Out of scope for Phase 1 (read-only Tron support, no signing/broadcast). Tron's
+            // transaction signing convention (SHA256-based, not Ethereum's keccak256) differs
+            // from `verifyEthereumEcdsa` above, so deliberately not reusing it as a placeholder -
+            // that would look plausible but likely verify against the wrong hash.
+            throw TronSigningNotImplementedError.notImplemented
         }
     }
 }

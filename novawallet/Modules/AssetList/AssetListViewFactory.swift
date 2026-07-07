@@ -79,9 +79,15 @@ struct AssetListViewFactory {
             locale: localizationManager.selectedLocale
         ) else { return nil }
 
+        guard let pezkuwiDashboardModule = PezkuwiDashboardViewFactory.createView(
+            output: presenter,
+            inputOwner: presenter
+        ) else { return nil }
+
         let view = AssetListViewController(
             presenter: presenter,
             bannersViewProvider: bannerModule,
+            pezkuwiDashboardViewProvider: pezkuwiDashboardModule,
             localizationManager: localizationManager
         )
 

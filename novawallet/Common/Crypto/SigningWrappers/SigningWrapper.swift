@@ -68,6 +68,14 @@ final class SigningWrapper: BaseSigner, SigningWrapperProtocol {
     }
 
     override func signData(_ data: Data, context _: ExtrinsicSigningContext) throws -> IRSignatureProtocol {
+        // Phase 1 Tron support is read-only - no signing/broadcast is wired up. Guarded explicitly
+        // (rather than falling through to the tag lookup below, which is keyed off
+        // `isEthereumBased` and would look up the *substrate* secret key tag for a Tron account,
+        // since Tron sets `isTronBased`, not `isEthereumBased`).
+        guard cryptoType != .tronEcdsa else {
+            throw TronSigningNotImplementedError.notImplemented
+        }
+
         let tag: String = isEthereumBased ?
             KeystoreTagV2.ethereumSecretKeyTagForMetaId(metaId, accountId: accountId) :
             KeystoreTagV2.substrateSecretKeyTagForMetaId(metaId, accountId: accountId)
@@ -83,6 +91,8 @@ final class SigningWrapper: BaseSigner, SigningWrapperProtocol {
             return try signEcdsa(data, secretKey: secretKey)
         case .ethereumEcdsa:
             return try signEthereum(data, secretKey: secretKey)
+        case .tronEcdsa:
+            throw TronSigningNotImplementedError.notImplemented
         }
     }
 }

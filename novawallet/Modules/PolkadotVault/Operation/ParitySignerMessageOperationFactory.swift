@@ -34,6 +34,10 @@ enum ParitySignerCryptoType: UInt8 {
             self = .ecdsa
         case .ethereumEcdsa:
             return nil
+        case .tronEcdsa:
+            // Parity Signer / Polkadot Vault (real third-party hardware protocol) has no Tron
+            // support, exactly like it already has none for Ethereum above - same treatment.
+            return nil
         }
     }
 

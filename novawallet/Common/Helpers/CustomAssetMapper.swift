@@ -76,6 +76,13 @@ struct CustomAssetMapper {
             return handlers.equilibriumHandler(wrappedExtras)
         case .none:
             return handlers.nativeHandler()
+        case .tronNative, .trc20:
+            // Tron assets never flow through this mapper (or `WalletRemoteSubscription`/
+            // `ChainRegistry` at all) - they're fetched via a standalone TronGrid REST poller
+            // (see `Common/Network/TronGrid/`), since Tron has no substrate-style JSON-RPC.
+            // Throwing here (rather than silently treating as native) makes that assumption
+            // loudly visible if it's ever violated.
+            throw MapperError.unexpectedType(type)
         }
     }
 
@@ -103,6 +110,9 @@ struct CustomAssetMapper {
             return handlers.equilibriumHandler()
         case .none:
             return handlers.nativeHandler()
+        case .tronNative, .trc20:
+            // See the matching comment in `mapAssetWithExtras` above.
+            throw MapperError.unexpectedType(type)
         }
     }
 }

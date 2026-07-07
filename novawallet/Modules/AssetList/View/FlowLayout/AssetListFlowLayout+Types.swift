@@ -7,6 +7,7 @@ extension AssetListFlowLayout {
     enum SectionType: CaseIterable {
         case summary
         case organizer
+        case pezkuwiDashboard
         case banners
         case settings
         case assetGroup
@@ -18,8 +19,10 @@ extension AssetListFlowLayout {
             case 1:
                 self = .organizer
             case 2:
-                self = .banners
+                self = .pezkuwiDashboard
             case 3:
+                self = .banners
+            case 4:
                 self = .settings
             default:
                 self = .assetGroup
@@ -32,12 +35,14 @@ extension AssetListFlowLayout {
                 return 0
             case .organizer:
                 return 1
-            case .banners:
+            case .pezkuwiDashboard:
                 return 2
-            case .settings:
+            case .banners:
                 return 3
-            case .assetGroup:
+            case .settings:
                 return 4
+            case .assetGroup:
+                return 5
             }
         }
 
@@ -57,7 +62,7 @@ extension AssetListFlowLayout {
             switch self {
             case .summary:
                 return 10.0
-            case .settings, .assetGroup, .organizer, .banners:
+            case .settings, .assetGroup, .organizer, .banners, .pezkuwiDashboard:
                 return 0
             }
         }
@@ -68,6 +73,7 @@ extension AssetListFlowLayout {
         case alert
         case totalBalance
         case organizerItem(itemIndex: Int)
+        case pezkuwiDashboard
         case banner
         case settings
         case asset(sectionIndex: Int, itemIndex: Int)
@@ -84,8 +90,10 @@ extension AssetListFlowLayout {
             case 1:
                 self = .organizerItem(itemIndex: indexPath.row)
             case 2:
-                self = .banner
+                self = .pezkuwiDashboard
             case 3:
+                self = .banner
+            case 4:
                 self = indexPath.row == 0 ? .settings : .emptyState
             default:
                 self = .asset(sectionIndex: indexPath.section, itemIndex: indexPath.row)
@@ -98,9 +106,10 @@ extension AssetListFlowLayout {
             case .alert: IndexPath(item: 1, section: 0)
             case .totalBalance: IndexPath(item: 2, section: 0)
             case let .organizerItem(itemIndex): IndexPath(item: itemIndex, section: 1)
-            case .banner: IndexPath(item: 0, section: 2)
-            case .settings: IndexPath(item: 0, section: 3)
-            case .emptyState: IndexPath(item: 1, section: 3)
+            case .pezkuwiDashboard: IndexPath(item: 0, section: 2)
+            case .banner: IndexPath(item: 0, section: 3)
+            case .settings: IndexPath(item: 0, section: 4)
+            case .emptyState: IndexPath(item: 1, section: 4)
             case let .asset(sectionIndex, itemIndex): IndexPath(item: itemIndex, section: sectionIndex)
             }
         }

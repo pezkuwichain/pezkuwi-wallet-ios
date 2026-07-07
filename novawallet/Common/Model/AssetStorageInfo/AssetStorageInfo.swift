@@ -4,6 +4,7 @@ import BigInt
 
 enum AssetStorageInfoError: Error {
     case unexpectedTypeExtras
+    case unsupportedForTron
 }
 
 struct OrmlTokenStorageInfo {
@@ -176,6 +177,12 @@ extension AssetStorageInfo {
             )
 
             return .native(info: info)
+        case .tronNative, .trc20:
+            // Unreachable: this computes a *substrate storage key* for balance queries, which
+            // requires `codingFactory` (runtime metadata) - Tron chains have `noSubstrateRuntime`
+            // and never reach this call path (their balances come from the standalone TronGrid
+            // REST poller, see `Common/Network/TronGrid/`).
+            throw AssetStorageInfoError.unsupportedForTron
         }
     }
 }

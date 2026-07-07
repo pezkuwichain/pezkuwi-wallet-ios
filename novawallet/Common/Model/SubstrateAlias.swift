@@ -29,7 +29,7 @@ extension AccountId {
         }
 
         switch chainFormat {
-        case .ethereum:
+        case .ethereum, .tron:
             return data.count == SubstrateConstants.ethereumAddressLength ? data : nil
         case .substrate:
             return data.count == SubstrateConstants.accountIdLength ? data : nil

@@ -66,19 +66,19 @@ final class ApplicationConfig {
 
 extension ApplicationConfig: ApplicationConfigProtocol {
     var termsURL: URL {
-        URL(string: "https://novawallet.io/terms")!
+        URL(string: "https://pezkuwichain.io/terms.html")!
     }
 
     var privacyPolicyURL: URL {
-        URL(string: "https://novawallet.io/privacy")!
+        URL(string: "https://pezkuwichain.io/privacy.html")!
     }
 
     var supportEmail: String {
-        "support@novawallet.io"
+        "support@pezkuwichain.io"
     }
 
     var websiteURL: URL {
-        URL(string: "https://novawallet.io")!
+        URL(string: "https://pezkuwichain.io")!
     }
 
     var appStoreURL: URL {
@@ -86,15 +86,15 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var socialURL: URL {
-        URL(string: "https://t.me/novawallet")!
+        URL(string: "https://t.me/pezkuwichainBot")!
     }
 
     var twitterURL: URL {
-        URL(string: "https://twitter.com/NovaWalletApp")!
+        URL(string: "https://x.com/bizinikiwi")!
     }
 
     var youtubeURL: URL {
-        URL(string: "https://www.youtube.com/channel/UChoQr3YPETJKKVvhQ0AfV6A")!
+        URL(string: "https://www.youtube.com/@SatoshiQazi")!
     }
 
     // swiftlint:disable force_cast
@@ -110,7 +110,7 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     // swiftlint:enable force_cast
 
     var opensourceURL: URL {
-        URL(string: "https://github.com/novasamatech")!
+        URL(string: "https://github.com/pezkuwichain")!
     }
 
     // swiftlint:disable force_cast
@@ -128,7 +128,7 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var purchaseAppName: String {
-        "Nova Wallet"
+        "Pezkuwi Wallet"
     }
 
     var moonPayApiKey: String {
@@ -136,7 +136,7 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var purchaseRedirect: URL {
-        URL(string: "novawallet://novawallet.io/redirect")!
+        URL(string: "pezkuwiwallet://pezkuwichain.io/redirect")!
     }
 
     var phishingListURL: URL {
@@ -153,83 +153,83 @@ extension ApplicationConfig: ApplicationConfigProtocol {
 
     var chainListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/chains.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/chains.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/chains_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/chains_dev.json")!
         #endif
     }
 
     var preConfiguredLightChainListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/chains.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/chains.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/chains_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/chains_dev.json")!
         #endif
     }
 
     var preConfiguredChainDirectoryURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/details")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/details")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/v22/preConfigured/detailsDev")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/v22/preConfigured/detailsDev")!
         #endif
     }
 
     var evmAssetsURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/assets/evm/v3/assets.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/assets/evm/v3/assets.json")!
         #else
             URL(
-                string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/assets/evm/v3/assets_dev.json"
+                string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/assets/evm/v3/assets_dev.json"
             )!
         #endif
     }
 
     var xcmTransfersURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers_dev.json")!
         #endif
     }
 
     var xcmDynamicTransfersURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers_dynamic.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers_dynamic.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/xcm/v8/transfers_dynamic_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/xcm/v8/transfers_dynamic_dev.json")!
         #endif
     }
 
     var globalConfigURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/global/config.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/global/config.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/global/config_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/global/config_dev.json")!
         #endif
     }
 
     var dAppsListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/dapps/dapps.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/dapps/dapps.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/dapps/dapps_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/dapps/dapps_dev.json")!
         #endif
     }
 
     var preferredValidatorsURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/staking/validators/v1/nova_validators.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/staking/validators/v1/nova_validators.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/staking/validators/v1/nova_validators_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/staking/validators/v1/nova_validators_dev.json")!
         #endif
     }
 
     var governanceDAppsListURL: URL {
         #if F_RELEASE
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/governance/v2/dapps.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/governance/v2/dapps.json")!
         #else
-            URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/governance/v2/dapps_dev.json")!
+            URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/governance/v2/dapps_dev.json")!
         #endif
     }
 
@@ -252,53 +252,54 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var commonTypesURL: URL {
-        URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/chains/types/default.json")!
+        URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/chains/types/default.json")!
     }
 
     var learnPayoutURL: URL {
         // swiftlint:disable:next line_length
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/staking/staking-faq#q-what-is-the-difference-between-restake-rewards-and-transferable-rewards")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/staking/staking-faq#q-what-is-the-difference-between-restake-rewards-and-transferable-rewards")!
     }
 
     var learnControllerAccountURL: URL {
         // swiftlint:disable:next line_length
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/staking/staking-faq#q-what-are-stash-and-controller-accounts")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/staking/staking-faq#q-what-are-stash-and-controller-accounts")!
     }
 
     var paritySignerTroubleshoutingURL: URL {
         // swiftlint:disable:next line_length
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/hardware-wallets/parity-signer/troubleshooting")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/hardware-wallets/parity-signer/troubleshooting")!
     }
 
     var polkadotVaultTroubleshoutingURL: URL {
         // swiftlint:disable:next line_length
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/hardware-wallets/polkadot-vault/troubleshooting")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/hardware-wallets/polkadot-vault/troubleshooting")!
     }
 
     var ledgerGuideURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/hardware-wallets/ledger-devices")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/wallet-management/hardware-wallets/ledger-devices")!
     }
 
     var ledgerMigrationURL: URL {
         // swiftlint:disable:next line_length
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/hardware-wallets/ledger-nano-x/ledger-app-migration")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/wallet-management/hardware-wallets/ledger-nano-x/ledger-app-migration")!
     }
 
     var learnRecommendedValidatorsURL: URL {
         // swiftlint:disable:next line_length
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/staking/staking-faq#q-how-does-nova-wallet-select-validators-collators")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/staking/staking-faq#q-how-does-pezkuwi-wallet-select-validators-collators")!
     }
 
     var controllerDeprecationURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/staking/controller-account-deprecation")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/staking/controller-account-deprecation")!
     }
 
+    // NOTE: no direct Android build.gradle counterpart found; converted by domain/path pattern only.
     var learnGovernanceDelegateMetadata: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/governance/add-delegate-information")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/governance/add-delegate-information")!
     }
 
     var learnNetworkManagementURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/misc/developer-documentation/integrate-network")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/misc/developer-documentation/integrate-network")!
     }
 
     // swiftlint:disable line_length
@@ -319,27 +320,27 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var slip44URL: URL {
-        URL(string: "https://raw.githubusercontent.com/novasamatech/nova-utils/master/assets/slip44.json")!
+        URL(string: "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/master/assets/slip44.json")!
     }
 
     var wikiURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/about-pezkuwi-wallet")!
     }
 
     var proxyWikiURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/delegated-authorities-proxies")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/wallet-management/delegated-authorities-proxies")!
     }
 
     var multisigWikiURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/multisig-wallets")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/wallet-management/multisig-wallets")!
     }
 
     var unifiedAddressWikiURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/asset-management/how-to-receive-tokens#unified-and-legacy-addresses")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/asset-management/how-to-receive-tokens#unified-and-legacy-addresses")!
     }
 
     var giftsWikiURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/asset-management/gifting-tokens")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/asset-management/gifting-tokens")!
     }
 
     var externalUniversalLinkURL: URL {
@@ -355,7 +356,7 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var deepLinkScheme: String {
-        "novawallet"
+        "pezkuwiwallet"
     }
 
     var deepLinkHost: String {
@@ -363,23 +364,24 @@ extension ApplicationConfig: ApplicationConfigProtocol {
     }
 
     var whiteAppearanceIconsPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/icons/tokens/white/v1/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/icons/tokens/white/v1/"
     }
 
     var coloredAppearanceIconsPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/icons/tokens/colored/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/icons/tokens/colored/"
     }
 
     var bannersContentPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/banners/v2/content/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/banners/v2/content/"
     }
 
     var assetHubMigrationConfigsPath: String {
-        "https://raw.githubusercontent.com/novasamatech/nova-utils/refs/heads/master/migrations/asset_hub/"
+        "https://raw.githubusercontent.com/pezkuwichain/pezkuwi-wallet-utils/refs/heads/master/migrations/asset_hub/"
     }
 
+    // NOTE: no direct Android build.gradle counterpart found; converted by domain/path pattern only.
     var watchOnlyURL: URL {
-        URL(string: "https://docs.novawallet.io/nova-wallet-wiki/wallet-management/watch-only-wallets/scam-warning")!
+        URL(string: "https://docs.pezkuwichain.io/wallet-wiki/wallet-management/watch-only-wallets/scam-warning")!
     }
 
     // swiftlint:enable line_length

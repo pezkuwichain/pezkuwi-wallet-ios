@@ -64,6 +64,9 @@ final class GiftSigningWrapper: BaseSigner, SigningWrapperProtocol {
                 data,
                 secretKey: secretKey
             )
+        case .tronEcdsa:
+            // Gifts are not supported for Tron in Phase 1 (read-only support only).
+            throw TronSigningNotImplementedError.notImplemented
         }
     }
 }

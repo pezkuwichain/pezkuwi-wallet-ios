@@ -42,7 +42,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>novawallet</string>
+				<string>pezkuwiwallet</string>
 			</array>
 		</dict>
 		<dict>
@@ -83,7 +83,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Camera is used to scan QR codes with addresses, Polkadot Vault transactions, or connect via WalletConnect</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Face ID is used to authorize in Nova Wallet</string>
+	<string>Face ID is used to authorize in Pezkuwi Wallet</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone is used for KYC media session</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
@@ -92,21 +92,21 @@
 	<string>Photo library access is used to allow selection of QR code with addresses, Polkadot Vault transactions, or connect via WalletConnect</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
-		<key>iCloud.io.novafoundation.novawallet.Documents</key>
+		<key>iCloud.io.pezkuwichain.wallet.Documents</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
 			<key>NSUbiquitousContainerName</key>
-			<string>Backup Nova Wallet</string>
+			<string>Backup Pezkuwi Wallet</string>
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>ANY</string>
 		</dict>
-		<key>iCloud.io.novafoundation.novawallet.dev.Documents</key>
+		<key>iCloud.io.pezkuwichain.wallet.dev.Documents</key>
 		<dict>
 			<key>NSUbiquitousContainerIsDocumentScopePublic</key>
 			<true/>
 			<key>NSUbiquitousContainerName</key>
-			<string>Backup Nova Wallet Dev</string>
+			<string>Backup Pezkuwi Wallet Dev</string>
 			<key>NSUbiquitousContainerSupportedFolderLevels</key>
 			<string>ANY</string>
 		</dict>

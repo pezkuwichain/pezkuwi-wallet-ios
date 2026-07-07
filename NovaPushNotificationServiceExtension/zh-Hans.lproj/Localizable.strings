@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🗳️公投状态变更";
 "push.notification.referendum.status.updated.subtitle" = "%@公投#%@状态从%@变为%@";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ 公投 #%@ 状态变为 %@";
-"push.notification.new.release.title" = "Nova Wallet有新的更新可用！";
-"push.notification.new.release.subtitle" = "下载Nova Wallet v%@以获取所有新功能！";
+"push.notification.new.release.title" = "Pezkuwi Wallet有新的更新可用！";
+"push.notification.new.release.subtitle" = "下载Pezkuwi Wallet v%@以获取所有新功能！";
 "push.notification.new.referendum.title" = "🗳️新公投";
 "push.notification.new.referendum.subtitle" = "%@公投#%@现已生效！";
 "push.notification.referendum.killed" = "已废止";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "已批准";
 "push.notification.referendum.deciding" = "决定中";
 "push.notification.referendum.created" = "准备中";
-"push.notification.default.title" = "Nova 钱包";
+"push.notification.default.title" = "Pezkuwi 钱包";
 "push.notification.unsupported.body" = "不支持的消息内容";
 "push.notification.sent.tokens.subtitle" = "向 %@ 发送 %@ %@ 在 %@";
 "push.notification.receive.tokens.subtitle" = "在 %@ 收到 %@ %@";

@@ -72,7 +72,7 @@ extension AssetConversionFeeInstallingFactory: ExtrinsicFeeInstallingFactoryProt
                 chainAsset: chainAsset,
                 accountClosure: accountClosure
             )
-        case .none, .orml, .ormlHydrationEvm, .statemine, .equilibrium:
+        case .none, .orml, .ormlHydrationEvm, .statemine, .equilibrium, .tronNative, .trc20:
             .createWithResult(ExtrinsicNativeFeeInstaller())
         case .evmNative, .evmAsset:
             .createWithError(

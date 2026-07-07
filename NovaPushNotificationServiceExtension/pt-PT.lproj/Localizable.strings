@@ -1,7 +1,7 @@
 "push.notification.sent.tokens.no.address.subtitle" = "Enviado %@ %@ em %@";
 "push.notification.receive.tokens.title" = "⬇️ Recebido";
 "push.notification.sent.tokens.title" = "💸 Enviado";
-"push.notification.staking.reward.title" = "✨ Nova recompensa";
+"push.notification.staking.reward.title" = "✨ Pezkuwi recompensa";
 "push.notification.staking.reward.subtitle" = "Recebido %@ de staking %@";
 "push.notification.referendum.approved.title" = "✅ Referendo aprovado!";
 "push.notification.referendum.approved.subtitle" = "%@ referendo #%@ terminou e foi aprovado 	ud83c	df89";
@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🏛️ Status do referendo alterado";
 "push.notification.referendum.status.updated.subtitle" = "%@ Referendo #%@ alterou o status de %@ para %@";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ Referendo #%@ alterou o status para %@";
-"push.notification.new.release.title" = "Uma nova atualização da Nova Wallet está disponível!";
-"push.notification.new.release.subtitle" = "Baixe Nova Wallet v%@ para obter todas as novas funcionalidades!";
+"push.notification.new.release.title" = "Uma nova atualização da Pezkuwi Wallet está disponível!";
+"push.notification.new.release.subtitle" = "Baixe Pezkuwi Wallet v%@ para obter todas as novas funcionalidades!";
 "push.notification.new.referendum.title" = "🏛️ Novo referendo";
 "push.notification.new.referendum.subtitle" = "%@ Referendo #%@ está agora ativo!";
 "push.notification.referendum.killed" = "Eliminado";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "Aprovado";
 "push.notification.referendum.deciding" = "Decidindo";
 "push.notification.referendum.created" = "Preparando";
-"push.notification.default.title" = "Nova Wallet";
+"push.notification.default.title" = "Pezkuwi Wallet";
 "push.notification.unsupported.body" = "Conteúdo da mensagem não suportado";
 "push.notification.sent.tokens.subtitle" = "Enviado %@ %@ para %@ em %@";
 "push.notification.receive.tokens.subtitle" = "Recebido %@ %@ em %@";

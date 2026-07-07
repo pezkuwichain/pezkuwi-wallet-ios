@@ -31,11 +31,15 @@ final class CloudBackupFileModelConverter {
             return .ed25519
         case .substrateEcdsa:
             return .ecdsa
-        case .ethereumEcdsa, .none:
+        case .ethereumEcdsa, .tronEcdsa, .none:
             throw CloudBackupFileModelConvertingError.unexpectedLocalCryptoType(cryptoType)
         }
     }
 
+    // NOTE: Tron chain accounts are deliberately filtered out before this is called (see
+    // `convertToPublicInfo` below) - Phase 1 does not extend the (cross-platform, shared JSON)
+    // cloud backup format with a Tron case, so this throws defensively if ever reached rather
+    // than silently mis-encoding a Tron account under an unrelated crypto type.
     private func convertChainAccountCryptoTypeToBackup(
         _ cryptoType: UInt8
     ) throws -> CloudBackup.ChainAccountCryptoType {
@@ -48,7 +52,7 @@ final class CloudBackupFileModelConverter {
             return .substrateEcdsa
         case .ethereumEcdsa:
             return .ethereumEcdsa
-        case .none:
+        case .tronEcdsa, .none:
             throw CloudBackupFileModelConvertingError.unexpectedLocalCryptoType(cryptoType)
         }
     }
@@ -142,7 +146,14 @@ extension CloudBackupFileModelConverter: CloudBackupFileModelConverting {
             let cryptoType = try localWallet.substrateCryptoType.map { try convertSubstrateCryptoTypeToBackup($0) }
             let walletType = try convertWalletTypeToBackup(localWallet.type)
 
-            let chainAccounts = try localWallet.chainAccounts.map { localChainAccount in
+            // Tron accounts are not yet part of the (cross-platform) cloud backup format - skip
+            // them rather than failing the whole wallet's backup. See the comment on
+            // `convertChainAccountCryptoTypeToBackup` above.
+            let backupableChainAccounts = localWallet.chainAccounts.filter {
+                $0.cryptoType != MultiassetCryptoType.tronEcdsa.rawValue
+            }
+
+            let chainAccounts = try backupableChainAccounts.map { localChainAccount in
                 try convertChainAccountToBackup(localChainAccount)
             }
 

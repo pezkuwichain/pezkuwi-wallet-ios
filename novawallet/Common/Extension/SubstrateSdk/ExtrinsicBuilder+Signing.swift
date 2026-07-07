@@ -39,6 +39,11 @@ extension ExtrinsicBuilderProtocol {
                 using: codingFactory,
                 metadata: codingFactory.metadata
             )
+        case .tron:
+            // Unreachable: Tron chains have `noSubstrateRuntime` and never build a SCALE-encoded
+            // extrinsic in the first place, so this is never called for a Tron account. Phase 1
+            // is read-only (no Tron signing/broadcast at all).
+            throw ExtrinsicBuilderExtensionError.invalidRawSignature(data: Data())
         }
     }
 }

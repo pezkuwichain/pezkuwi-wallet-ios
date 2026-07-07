@@ -93,7 +93,9 @@ final class ImportWalletUrlParsingService {
             return NSPredicate.deriviationPathHardSoftPassword
         case .ed25519, .substrateEcdsa:
             return NSPredicate.deriviationPathHardPassword
-        case .ethereumEcdsa:
+        case .ethereumEcdsa, .tronEcdsa:
+            // Tron's BIP44 derivation path (`//44//195//0/0/0`) uses the identical
+            // hard/soft/numeric junction syntax as Ethereum's.
             return NSPredicate.deriviationPathHardSoftNumericPassword
         }
     }

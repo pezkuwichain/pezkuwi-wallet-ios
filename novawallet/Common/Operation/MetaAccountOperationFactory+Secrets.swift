@@ -55,6 +55,37 @@ extension MetaAccountOperationFactory {
             let ethereumPublicKey = ethereumKeypair.publicKey().rawData()
             let ethereumAddress = try ethereumPublicKey.ethereumAddressFromPublicKey()
 
+            // Tron: same secp256k1/BIP32 derivation mechanics as Ethereum above, but its own
+            // BIP44 coin-type path (`DerivationPathConstants.defaultTron`, coin type 195) and its
+            // own keystore tag namespace. Unlike Ethereum, Tron has no master-key slot on
+            // `MetaAccountModel` (avoiding a Core Data migration) - it is stored as a dedicated
+            // per-chain `ChainAccountModel` for `KnowChainId.tron`, attached below via
+            // `replacingChainAccount`. The raw 20-byte account id is computed exactly like
+            // Ethereum's (`keccak256(pubkey)[-20:]`, via the same `ethereumAddressFromPublicKey()`
+            // helper) - only the *display* encoding differs (Base58Check with a 0x41 version byte,
+            // applied later by `ChainFormat.tron`), so reusing that helper here is intentional and
+            // correct, not a shortcut.
+            let tronJunctionResult = try getJunctionResult(
+                from: DerivationPathConstants.defaultTron,
+                ethereumBased: true
+            )
+
+            let tronChaincodes = tronJunctionResult?.chaincodes ?? []
+
+            let tronSeedFactory = BIP32SeedFactory()
+            let tronSeedResult = try tronSeedFactory.deriveSeed(from: mnemonic.toString(), password: password)
+
+            let tronKeypairFactory = createKeypairFactory(.tronEcdsa)
+
+            let tronKeypair = try tronKeypairFactory.createKeypairFromSeed(
+                tronSeedResult.seed,
+                chaincodeList: tronChaincodes
+            )
+
+            let tronSecretKey = tronKeypair.privateKey().rawData()
+            let tronPublicKey = tronKeypair.publicKey().rawData()
+            let tronAccountId = try tronPublicKey.ethereumAddressFromPublicKey()
+
             let metaId = metaAccount.metaId
 
             try saveSecretKey(substrateKeypair.secretKey, metaId: metaId, ethereumBased: false)
@@ -65,10 +96,28 @@ extension MetaAccountOperationFactory {
             try saveDerivationPath(request.ethereumDerivationPath, metaId: metaId, ethereumBased: true)
             try saveSeed(ethereumSeedResult.seed, metaId: metaId, ethereumBased: true)
 
+            try saveTronSecretKey(tronSecretKey, metaId: metaId, accountId: tronAccountId)
+            try saveTronDerivationPath(
+                DerivationPathConstants.defaultTron,
+                metaId: metaId,
+                accountId: tronAccountId
+            )
+            try saveTronSeed(tronSeedResult.seed, metaId: metaId, accountId: tronAccountId)
+
             try saveEntropy(mnemonic.entropy(), metaId: metaId)
+
+            let tronChainAccount = ChainAccountModel(
+                chainId: KnowChainId.tron,
+                accountId: tronAccountId,
+                publicKey: tronPublicKey,
+                cryptoType: MultiassetCryptoType.tronEcdsa.rawValue,
+                proxy: nil,
+                multisig: nil
+            )
 
             return metaAccount.replacingEthereumPublicKey(ethereumPublicKey)
                 .replacingEthereumAddress(ethereumAddress)
+                .replacingChainAccount(tronChainAccount)
         }
     }
 
@@ -133,7 +182,7 @@ extension MetaAccountOperationFactory {
                 publicKey = try EDPublicKey(rawData: keystore.publicKeyData)
             case .substrateEcdsa:
                 publicKey = try SECPublicKey(rawData: keystore.publicKeyData)
-            case .ethereumEcdsa:
+            case .ethereumEcdsa, .tronEcdsa:
                 throw AccountCreationError.unsupportedNetwork
             }
 
@@ -188,6 +237,15 @@ extension MetaAccountOperationFactory {
         chainId: ChainModel.Id
     ) -> BaseOperation<MetaAccountModel> {
         ClosureOperation { [self] in
+            // NOTE: this generic "add chain account from mnemonic" path is not wired up to any
+            // Tron UI entry point in Phase 1 (read-only support only). Guard explicitly rather
+            // than silently mis-deriving: falling through with `ethereumBased == false` would
+            // save the secret key under the substrate tag namespace and derive the account id via
+            // `publicKeyToAccountId()` (blake2-based), which is wrong for a secp256k1 Tron key.
+            guard request.cryptoType != .tronEcdsa else {
+                throw AccountCreationError.unsupportedNetwork
+            }
+
             let ethereumBased = request.cryptoType == .ethereumEcdsa
 
             let junctionResult = try getJunctionResult(
@@ -252,6 +310,11 @@ extension MetaAccountOperationFactory {
         chainId: ChainModel.Id
     ) -> BaseOperation<MetaAccountModel> {
         ClosureOperation { [self] in
+            // See the matching guard/comment in the mnemonic-based overload above.
+            guard request.cryptoType != .tronEcdsa else {
+                throw AccountCreationError.unsupportedNetwork
+            }
+
             let ethereumBased = request.cryptoType == .ethereumEcdsa
 
             let junctionResult = try getJunctionResult(
@@ -309,6 +372,11 @@ extension MetaAccountOperationFactory {
         chainId: ChainModel.Id
     ) -> BaseOperation<MetaAccountModel> {
         ClosureOperation { [self] in
+            // See the matching guard/comment in the mnemonic-based overload above.
+            guard request.cryptoType != .tronEcdsa else {
+                throw AccountCreationError.unsupportedNetwork
+            }
+
             let ethereumBased = request.cryptoType == .ethereumEcdsa
 
             let publicKey = request.publicKey
@@ -352,6 +420,11 @@ extension MetaAccountOperationFactory {
         ClosureOperation { [self] in
             let keystoreExtractor = KeystoreExtractor()
 
+            // See the matching guard/comment in the mnemonic-based overload above.
+            guard request.cryptoType != .tronEcdsa else {
+                throw AccountCreationError.unsupportedNetwork
+            }
+
             let ethereumBased = request.cryptoType == .ethereumEcdsa
 
             guard let data = request.keystore.data(using: .utf8) else {
@@ -376,7 +449,7 @@ extension MetaAccountOperationFactory {
                 publicKey = try SNPublicKey(rawData: keystore.publicKeyData)
             case .ed25519:
                 publicKey = try EDPublicKey(rawData: keystore.publicKeyData)
-            case .substrateEcdsa, .ethereumEcdsa:
+            case .substrateEcdsa, .ethereumEcdsa, .tronEcdsa:
                 publicKey = try SECPublicKey(rawData: keystore.publicKeyData)
             }
 

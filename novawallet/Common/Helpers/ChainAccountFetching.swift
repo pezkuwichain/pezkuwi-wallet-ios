@@ -4,6 +4,7 @@ struct ChainAccountRequest: Equatable, Hashable {
     let chainId: ChainModel.Id
     let addressPrefix: ChainModel.AddressPrefix
     let isEthereumBased: Bool
+    let isTronBased: Bool
     let supportsGenericLedger: Bool
     let supportsMultisigs: Bool
 }
@@ -17,6 +18,7 @@ struct ChainAccountResponse {
     let cryptoType: MultiassetCryptoType
     let addressPrefix: ChainModel.AddressPrefix
     let isEthereumBased: Bool
+    let isTronBased: Bool
     let isChainAccount: Bool
     let type: MetaAccountModelType
 }
@@ -65,25 +67,23 @@ extension ChainAccountResponse {
     }
 
     var chainFormat: ChainFormat {
-        isEthereumBased
-            ? .ethereum
-            : .substrate(addressPrefix.toSubstrateFormat())
+        if isEthereumBased {
+            .ethereum
+        } else if isTronBased {
+            .tron
+        } else {
+            .substrate(addressPrefix.toSubstrateFormat())
+        }
     }
 
     func toDisplayAddress() throws -> DisplayAddress {
-        let chainFormat: ChainFormat = isEthereumBased
-            ? .ethereum
-            : .substrate(addressPrefix.toSubstrateFormat())
         let address = try accountId.toAddress(using: chainFormat)
 
         return DisplayAddress(address: address, username: name)
     }
 
     func toAddress() -> AccountAddress? {
-        let chainFormat: ChainFormat = isEthereumBased
-            ? .ethereum
-            : .substrate(addressPrefix.toSubstrateFormat())
-        return try? accountId.toAddress(using: chainFormat)
+        try? accountId.toAddress(using: chainFormat)
     }
 
     // TODO: Remove when fully migrate to Ethereum checksumed addresses
@@ -102,6 +102,16 @@ extension MetaAccountModel {
     private func executeHasAccount(for chain: ChainModel) -> Bool {
         if chainAccounts.contains(where: { $0.chainId == chain.chainId }) {
             return true
+        }
+
+        // Tron has no master-key slot (unlike substrate/ethereum) - it is only ever represented
+        // via a dedicated per-chain `ChainAccountModel` entry (see `chainAccounts` check above).
+        // Wallets created before Tron support shipped simply have no Tron account yet, by design:
+        // falling through to the substrate/ethereum master-key check below would incorrectly
+        // report `true` (since `substrateAccountId` is essentially always present) and later
+        // produce a bogus, non-cryptographically-valid "Tron address" from unrelated key material.
+        if chain.isTronBased {
+            return false
         }
 
         if chain.isEthereumBased {
@@ -126,9 +136,16 @@ extension MetaAccountModel {
                 cryptoType: cryptoType,
                 addressPrefix: request.addressPrefix,
                 isEthereumBased: request.isEthereumBased,
+                isTronBased: request.isTronBased,
                 isChainAccount: true,
                 type: type
             )
+        }
+
+        // See the matching comment in `executeHasAccount` above: Tron never falls back to a
+        // master-key slot, so a missing dedicated `ChainAccountModel` means "no account yet".
+        if request.isTronBased {
+            return nil
         }
 
         if request.isEthereumBased {
@@ -145,6 +162,7 @@ extension MetaAccountModel {
                 cryptoType: MultiassetCryptoType.ethereumEcdsa,
                 addressPrefix: request.addressPrefix,
                 isEthereumBased: request.isEthereumBased,
+                isTronBased: false,
                 isChainAccount: false,
                 type: type
             )
@@ -167,6 +185,7 @@ extension MetaAccountModel {
             cryptoType: cryptoType,
             addressPrefix: request.addressPrefix,
             isEthereumBased: false,
+            isTronBased: false,
             isChainAccount: false,
             type: type
         )
@@ -234,6 +253,7 @@ extension MetaAccountModel {
                 cryptoType: cryptoType,
                 addressPrefix: request.addressPrefix,
                 isEthereumBased: request.isEthereumBased,
+                isTronBased: request.isTronBased,
                 isChainAccount: true,
                 type: type
             )
@@ -253,6 +273,7 @@ extension MetaAccountModel {
                 cryptoType: MultiassetCryptoType.ethereumEcdsa,
                 addressPrefix: request.addressPrefix,
                 isEthereumBased: request.isEthereumBased,
+                isTronBased: false,
                 isChainAccount: false,
                 type: type
             )
@@ -260,6 +281,7 @@ extension MetaAccountModel {
 
         if
             !request.isEthereumBased,
+            !request.isTronBased,
             let substrateAccountId = substrateAccountId,
             let substratePublicKey = substratePublicKey,
             let substrateCryptoType = substrateCryptoType,
@@ -274,6 +296,7 @@ extension MetaAccountModel {
                 cryptoType: cryptoType,
                 addressPrefix: request.addressPrefix,
                 isEthereumBased: false,
+                isTronBased: false,
                 isChainAccount: false,
                 type: type
             )
@@ -292,6 +315,7 @@ extension MetaAccountModel {
                 cryptoType: cryptoType,
                 addressPrefix: request.addressPrefix,
                 isEthereumBased: request.isEthereumBased,
+                isTronBased: request.isTronBased,
                 isChainAccount: true,
                 type: type
             )
@@ -367,6 +391,7 @@ extension ChainModel {
             chainId: chainId,
             addressPrefix: addressPrefix,
             isEthereumBased: isEthereumBased,
+            isTronBased: isTronBased,
             supportsGenericLedger: supportsGenericLedgerApp,
             supportsMultisigs: hasMultisig
         )
@@ -380,7 +405,7 @@ extension ChainModel {
         switch chainFormat {
         case .substrate:
             return 32
-        case .ethereum:
+        case .ethereum, .tron:
             return 20
         }
     }

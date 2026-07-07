@@ -82,6 +82,7 @@ class ControllerAccountTests: XCTestCase {
             cryptoType: .substrateEcdsa,
             addressPrefix: chain.addressPrefix,
             isEthereumBased: chain.isEthereumBased,
+            isTronBased: false,
             isChainAccount: false,
             type: .secrets
         )

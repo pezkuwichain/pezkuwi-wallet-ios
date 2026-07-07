@@ -92,7 +92,7 @@ enum HydraDxTokenConverter {
                     chainId: chain.chainId,
                     assetId: asset.assetId
                 )
-            case .statemine, .equilibrium, .evmAsset, .evmNative:
+            case .statemine, .equilibrium, .evmAsset, .evmNative, .tronNative, .trc20:
                 return
             }
         }

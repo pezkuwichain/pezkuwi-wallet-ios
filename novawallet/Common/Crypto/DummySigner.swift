@@ -20,7 +20,7 @@ final class DummySigner: SigningWrapperProtocol {
             )
         case .ed25519:
             type = .ed25519(seed: seed)
-        case .substrateEcdsa, .ethereumEcdsa:
+        case .substrateEcdsa, .ethereumEcdsa, .tronEcdsa:
             type = .ecdsa(seed: seed)
         }
     }

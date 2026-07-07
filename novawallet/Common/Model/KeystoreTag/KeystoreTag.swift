@@ -21,10 +21,13 @@ extension KeystoreTagV2 {
     enum Suffix {
         static let substrateSecretKey = "-substrateSecretKey"
         static let ethereumSecretKey = "-ethereumSecretKey"
+        static let tronSecretKey = "-tronSecretKey"
         static let entropy = "-entropy"
         static let substrateDerivation = "-substrateDeriv"
         static let ethereumDerivation = "-ethereumDeriv"
+        static let tronDerivation = "-tronDeriv"
         static let substrateSeed = "-substrateSeed"
         static let ethereumSeed = "-ethereumSeed"
+        static let tronSeed = "-tronSeed"
     }
 }

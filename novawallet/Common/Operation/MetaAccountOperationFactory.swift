@@ -53,7 +53,8 @@ final class MetaAccountOperationFactory {
             return Ed25519KeypairFactory()
         case .substrateEcdsa:
             return EcdsaKeypairFactory()
-        case .ethereumEcdsa:
+        case .ethereumEcdsa, .tronEcdsa:
+            // Tron uses the identical secp256k1/BIP32 derivation as Ethereum.
             return BIP32Secp256KeypairFactory()
         }
     }
@@ -137,6 +138,46 @@ final class MetaAccountOperationFactory {
         try keystore.saveKey(seed, with: tag)
     }
 
+    // MARK: - Tron save functions
+    //
+    // Tron is represented as a dedicated per-chain `ChainAccountModel` (see
+    // `newSecretsMetaAccountOperation(request:mnemonic:)`), not as a third master-key slot on
+    // `MetaAccountModel` (that would need a Core Data schema migration). These are therefore kept
+    // as separate, additive methods rather than folding a third case into the existing
+    // `ethereumBased: Bool`-driven `saveSecretKey`/`saveDerivationPath`/`saveSeed` above, to avoid
+    // touching their ~15 existing call sites for a case they never need to handle.
+
+    func saveTronSecretKey(
+        _ secretKey: Data,
+        metaId: String,
+        accountId: AccountId? = nil
+    ) throws {
+        let tag = KeystoreTagV2.tronSecretKeyTagForMetaId(metaId, accountId: accountId)
+        try keystore.saveKey(secretKey, with: tag)
+    }
+
+    func saveTronDerivationPath(
+        _ derivationPath: String,
+        metaId: String,
+        accountId: AccountId? = nil
+    ) throws {
+        guard !derivationPath.isEmpty,
+              let derivationPathData = derivationPath.asSecretData()
+        else { return }
+
+        let tag = KeystoreTagV2.tronDerivationTagForMetaId(metaId, accountId: accountId)
+        try keystore.saveKey(derivationPathData, with: tag)
+    }
+
+    func saveTronSeed(
+        _ seed: Data,
+        metaId: String,
+        accountId: AccountId? = nil
+    ) throws {
+        let tag = KeystoreTagV2.tronSeedTagForMetaId(metaId, accountId: accountId)
+        try keystore.saveKey(seed, with: tag)
+    }
+
     // MARK: - Meta account generation function
 
     func generateKeypair(
@@ -152,7 +193,7 @@ final class MetaAccountOperationFactory {
         )
 
         switch cryptoType {
-        case .sr25519, .ethereumEcdsa:
+        case .sr25519, .ethereumEcdsa, .tronEcdsa:
             return (
                 publicKey: keypair.publicKey().rawData(),
                 secretKey: keypair.privateKey().rawData()
@@ -176,7 +217,7 @@ final class MetaAccountOperationFactory {
         publicKey: Data,
         cryptoType: MultiassetCryptoType
     ) throws -> MetaAccountModel {
-        guard cryptoType != .ethereumEcdsa else {
+        guard cryptoType != .ethereumEcdsa, cryptoType != .tronEcdsa else {
             throw AccountCreationError.unsupportedNetwork
         }
 

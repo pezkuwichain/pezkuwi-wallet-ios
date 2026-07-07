@@ -5,7 +5,7 @@ import Foundation_iOS
 import BigInt
 import UIKit
 
-final class AssetListPresenter: RampFlowManaging, BannersModuleInputOwnerProtocol {
+final class AssetListPresenter: RampFlowManaging, BannersModuleInputOwnerProtocol, PezkuwiDashboardModuleInputOwnerProtocol {
     typealias SuccessAssetListAssetAccountPrice = AssetListAssetAccountPrice
     typealias FailedAssetListAssetAccountPrice = AssetListAssetAccountPrice
 
@@ -13,6 +13,7 @@ final class AssetListPresenter: RampFlowManaging, BannersModuleInputOwnerProtoco
 
     weak var view: AssetListViewProtocol?
     weak var bannersModule: BannersModuleInputProtocol?
+    weak var pezkuwiDashboardModule: PezkuwiDashboardModuleInputProtocol?
 
     let wireframe: AssetListWireframeProtocol
     let interactor: AssetListInteractorInputProtocol
@@ -556,6 +557,7 @@ extension AssetListPresenter: AssetListPresenterProtocol {
     func refresh() {
         interactor.refresh()
         bannersModule?.refresh()
+        pezkuwiDashboardModule?.refresh()
     }
 
     func presentSearch() {
@@ -791,6 +793,18 @@ extension AssetListPresenter: BannersModuleOutputProtocol {
 
     func didUpdateContent(state: BannersState) {
         provideBanners(state: state)
+    }
+}
+
+// MARK: PezkuwiDashboardModuleOutputProtocol
+
+extension AssetListPresenter: PezkuwiDashboardModuleOutputProtocol {
+    func didReceivePezkuwiDashboard(available: Bool) {
+        view?.didReceivePezkuwiDashboard(available: available)
+    }
+
+    func didChangePezkuwiDashboardHeight() {
+        view?.didReceivePezkuwiDashboardHeightChange()
     }
 }
 

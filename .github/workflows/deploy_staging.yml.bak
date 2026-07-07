@@ -58,15 +58,15 @@ jobs:
 
           # Set bundle IDs and signing based on configuration
           if [ "$CONFIG" = "Staging" ]; then
-            BUNDLE_ID="io.novafoundation.novawallet.staging"
-            EXTENSION_BUNDLE_ID="io.novafoundation.novawallet.staging.NovaPushNotificationServiceExtension"
-            PROFILE_SPEC="match AdHoc io.novafoundation.novawallet.staging"
-            EXTENSION_PROFILE_SPEC="match AdHoc io.novafoundation.novawallet.staging.NovaPushNotificationServiceExtension"
+            BUNDLE_ID="io.pezkuwichain.wallet.staging"
+            EXTENSION_BUNDLE_ID="io.pezkuwichain.wallet.staging.NovaPushNotificationServiceExtension"
+            PROFILE_SPEC="match AdHoc io.pezkuwichain.wallet.staging"
+            EXTENSION_PROFILE_SPEC="match AdHoc io.pezkuwichain.wallet.staging.NovaPushNotificationServiceExtension"
           else
-            BUNDLE_ID="io.novafoundation.novawallet.dev"
-            EXTENSION_BUNDLE_ID="io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
-            PROFILE_SPEC="match AdHoc io.novafoundation.novawallet.dev"
-            EXTENSION_PROFILE_SPEC="match AdHoc io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
+            BUNDLE_ID="io.pezkuwichain.wallet.dev"
+            EXTENSION_BUNDLE_ID="io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"
+            PROFILE_SPEC="match AdHoc io.pezkuwichain.wallet.dev"
+            EXTENSION_PROFILE_SPEC="match AdHoc io.pezkuwichain.wallet.dev.NovaPushNotificationServiceExtension"
           fi
 
           echo "bundle_id=$BUNDLE_ID" >> $GITHUB_OUTPUT

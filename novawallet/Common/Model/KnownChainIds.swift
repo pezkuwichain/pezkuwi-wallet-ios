@@ -1,6 +1,11 @@
 import Foundation
 
 enum KnowChainId {
+    // Pezkuwi chains
+    static let pezkuwi = "1aa94987791a5544e9667ec249d2cef1b8fdd6083c85b93fc37892d54a1156ca"
+    static let pezkuwiAssetHub = "e7c15092dcbe3f320260ddbbc685bfceed9125a3b3d8436db2766201dec3b949"
+    static let pezkuwiPeople = "69a8d025ab7b63363935d7d9397e0f652826c94271c1bc55c4fdfe72cccf1cfa"
+
     static let kusama = "b0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe"
     static let kusamaAssetHub = "48239ef607d7928874027a43a67689209727dfb3d3dc5e5b03a39bdc2eda771a"
     static let polkadot = "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"
@@ -25,6 +30,7 @@ enum KnowChainId {
     static let calamari = "4ac80c99289841dd946ef92765bf659a307d39189b3ce374a92b5f0415ee17a1"
     static let zeitgeist = "1bf2a2ecb4a868de66ea8610f2ce7c8c43706561b6476031315f6640fe38e060"
     static let ethereum = "eip155:1"
+    static let tron = "tron:0x2b6653dc"
     static let rococo = "a84b46a3e602245284bb9a72c4abd58ee979aa7a5d7f8c4dfdddfaaf0665a4ae"
     static let westend = "e143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e"
     static let westmint = "67f9723393ef76214df0118c34bbbd3dbebc8ed46a10973a8c969d48fe7598c9"

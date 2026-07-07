@@ -10,8 +10,8 @@
 "push.notification.referendum.status.updated.title" = "🗳️ Referandum durumu değişti";
 "push.notification.referendum.status.updated.subtitle" = "%@ Referandum #%@ durumu %@'dan %@'a değişti";
 "push.notification.referendum.single.status.updated.subtitle" = "%@ Referandum #%@ durumu %@ olarak değişti";
-"push.notification.new.release.title" = "Nova Wallet'in yeni güncellemesi mevcut!";
-"push.notification.new.release.subtitle" = "Tüm yeni özellikleri almak için Nova Wallet v%@'yi indirin!";
+"push.notification.new.release.title" = "Pezkuwi Wallet'in yeni güncellemesi mevcut!";
+"push.notification.new.release.subtitle" = "Tüm yeni özellikleri almak için Pezkuwi Wallet v%@'yi indirin!";
 "push.notification.new.referendum.title" = "🗳️ Yeni referandum";
 "push.notification.new.referendum.subtitle" = "%@ Referandum #%@ şimdi canlı!";
 "push.notification.referendum.killed" = "Kaldırıldı";
@@ -22,7 +22,7 @@
 "push.notification.referendum.approved" = "Onaylandı";
 "push.notification.referendum.deciding" = "Karar Veriliyor";
 "push.notification.referendum.created" = "Hazırlanıyor";
-"push.notification.default.title" = "Nova Wallet";
+"push.notification.default.title" = "Pezkuwi Wallet";
 "push.notification.unsupported.body" = "Desteklenmeyen mesaj içeriği";
 "push.notification.sent.tokens.subtitle" = "%@ %@, %@ adına %@ üzerine gönderildi";
 "push.notification.receive.tokens.subtitle" = "%@ %@, %@ üzerinde alındı";

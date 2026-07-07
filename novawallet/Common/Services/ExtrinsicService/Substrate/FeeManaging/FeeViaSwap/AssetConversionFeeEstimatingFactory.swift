@@ -64,7 +64,8 @@ extension AssetConversionFeeEstimatingFactory: ExtrinsicCustomFeeEstimatingFacto
                 quoteFactory: assetHubQuoteFactory,
                 feeBufferInPercentage: feeBufferInPercentage
             )
-        case .none, .equilibrium, .evmNative, .evmAsset, .orml, .ormlHydrationEvm, .statemine:
+        case .none, .equilibrium, .evmNative, .evmAsset, .orml, .ormlHydrationEvm, .statemine,
+             .tronNative, .trc20:
             return nil
         }
     }

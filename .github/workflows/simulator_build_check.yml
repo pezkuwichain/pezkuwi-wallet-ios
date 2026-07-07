@@ -1,0 +1,130 @@
+name: Simulator build check (no signing)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'redesign/**'
+
+jobs:
+  build:
+    name: Build for iOS Simulator (compile-only, no code signing)
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show available Xcode versions
+        run: ls /Applications | grep Xcode
+
+      - name: Resolve Swift Package dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project novawallet.xcodeproj \
+            -scheme novawallet
+
+      - name: Set MINT_PATH
+        run: echo "MINT_PATH=$GITHUB_WORKSPACE/.mint" >> "$GITHUB_ENV"
+
+      - name: Restore Mint cache
+        id: mint-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.mint
+          key: ${{ runner.os }}-xcode-mint-${{ hashFiles('**/CIMintfile', '**/Mintfile') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-mint-
+
+      - name: Install Mint
+        run: brew install mint
+
+      - name: Mint bootstrap (installs Sourcery, etc.)
+        if: steps.mint-cache.outputs.cache-hit != 'true'
+        run: mint bootstrap --mintfile CIMintfile
+
+      - name: Install Ruby gems (xcodeproj, for the fix-up script below)
+        run: bundle install
+
+      - name: Add PezkuwiDashboard files to the Xcode project
+        run: bundle exec ruby Scripts/ci_add_pezkuwi_dashboard_files.rb
+
+      - name: Create dummy GoogleService-Info-Dev.plist
+        run: |
+          cat > novawallet/GoogleService-Info-Dev.plist << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CLIENT_ID</key>
+            <string>dummy.apps.googleusercontent.com</string>
+            <key>REVERSED_CLIENT_ID</key>
+            <string>com.googleusercontent.apps.dummy</string>
+            <key>API_KEY</key>
+            <string>dummy</string>
+            <key>GCM_SENDER_ID</key>
+            <string>000000000000</string>
+            <key>PLIST_VERSION</key>
+            <string>1</string>
+            <key>BUNDLE_ID</key>
+            <string>io.pezkuwichain.wallet.dev</string>
+            <key>PROJECT_ID</key>
+            <string>dummy-project</string>
+            <key>STORAGE_BUCKET</key>
+            <string>dummy-project.appspot.com</string>
+            <key>IS_ADS_ENABLED</key>
+            <false/>
+            <key>IS_ANALYTICS_ENABLED</key>
+            <false/>
+            <key>IS_APPINVITE_ENABLED</key>
+            <false/>
+            <key>IS_GCM_ENABLED</key>
+            <true/>
+            <key>IS_SIGNIN_ENABLED</key>
+            <true/>
+            <key>GOOGLE_APP_ID</key>
+            <string>1:000000000000:ios:0000000000000000000000</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Build for Simulator (no signing required)
+        env:
+          # SwiftFormat/SwiftLint build phases already check this and exit early — matches
+          # the real pull_request.yml/push_develop.yml workflows, not something invented here.
+          RUN_IN_CI: true
+          # Compile-only check — these feed Scripts/inject-keys.sh (Sourcery-generated
+          # CIKeys.generated.swift). Real values aren't needed to prove the code compiles,
+          # but the script runs under `set -u` and errors on any unset var.
+          MERCURYO_PRODUCTION_SECRET: dummy
+          MERCURYO_TEST_SECRET: dummy
+          ACALA_AUTH_TOKEN: dummy
+          MOONBEAM_HISTORY_API_KEY: dummy
+          MOONRIVER_HISTORY_API_KEY: dummy
+          ETHERSCAN_HISTORY_API_KEY: dummy
+          ACALA_TEST_AUTH_TOKEN: dummy
+          MOONBEAM_API_KEY: dummy
+          MOONBEAM_TEST_API_KEY: dummy
+          INFURA_API_KEY: dummy
+          WC_PROJECT_ID: dummy
+          DWELLIR_API_KEY: dummy
+          POLKASSEMBLY_SUMMARY_API_KEY: dummy
+        run: |
+          xcodebuild build \
+            -project novawallet.xcodeproj \
+            -scheme novawallet \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            ONLY_ACTIVE_ARCH=YES \
+            EXCLUDED_ARCHS=x86_64 \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Upload fixed project.pbxproj
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fixed-project-pbxproj
+          path: novawallet.xcodeproj/project.pbxproj
