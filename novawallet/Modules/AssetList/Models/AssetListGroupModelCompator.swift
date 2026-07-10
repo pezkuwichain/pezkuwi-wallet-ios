@@ -19,14 +19,13 @@ enum AssetListGroupModelComparator {
         "DOT": 3,
         "KSM": 4,
         "USDC": 5,
-        "BTC": 6,
-        "ETH": 7,
-        "BNB": 8,
-        "TRX": 9,
+        "TRX": 6,
+        "BTC": 7,
+        "ETH": 8,
+        "BNB": 9,
         "AVAX": 10,
         "LINK": 11,
-        "UNI": 12,
-        "TAO": 13
+        "TAO": 12
     ]
 
     static func defaultComparator(
