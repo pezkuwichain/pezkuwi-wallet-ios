@@ -129,6 +129,16 @@ extension ConnectionFactory: ConnectionFactoryProtocol {
         for chain: ChainNodeConnectable,
         delegate: WebSocketEngineDelegate?
     ) throws -> ChainConnection {
+        // Tron nodes are plain REST APIs (TronGrid), not WS JSON-RPC endpoints - a WebSocketEngine
+        // has nothing to speak to. Today this is also implied by extractNodeUrls' ws-scheme filter
+        // (Tron nodes are configured as https://, so urlModels ends up empty), but that's incidental:
+        // a misconfigured chain entry with a wss:// Tron node would slip through and attempt a real
+        // handshake. Guard explicitly instead of relying on the URL filter alone. Tron balance/transfer
+        // operations already go through their own TronGridOperationFactory, independent of this pool.
+        guard !chain.isTronBased else {
+            throw ConnectionFactoryError.noNodes
+        }
+
         let healthCheckMethod: HealthCheckMethod = chain.hasSubstrateRuntime ? .substrate : .websocketPingPong
         let nodeSwitcher = JSONRRPCodeNodeSwitcher(codes: ConnectionNodeSwitchCode.allCodes)
 

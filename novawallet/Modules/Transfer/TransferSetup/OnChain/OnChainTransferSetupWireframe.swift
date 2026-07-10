@@ -33,3 +33,9 @@ class OnChainTransferSetupWireframe: OnChainTransferSetupWireframeProtocol {
 }
 
 final class EvmOnChainTransferSetupWireframe: OnChainTransferSetupWireframe, EvmValidationErrorPresentable {}
+
+// No extra `...Presentable` conformance needed (unlike `EvmOnChainTransferSetupWireframe` above,
+// which needs `EvmValidationErrorPresentable` for `EvmValidationProviderFactory`'s gas-price
+// staleness validator) - the Tron send path has no equivalent extra validator, see
+// `TronOnChainTransferInteractor`'s `didReceiveTronFee` doc comment for why.
+final class TronOnChainTransferSetupWireframe: OnChainTransferSetupWireframe {}

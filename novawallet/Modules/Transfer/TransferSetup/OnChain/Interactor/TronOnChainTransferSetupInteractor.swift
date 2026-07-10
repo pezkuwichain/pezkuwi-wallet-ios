@@ -1,0 +1,5 @@
+import Foundation
+
+final class TronOnChainTransferSetupInteractor: TronOnChainTransferInteractor {}
+
+extension TronOnChainTransferSetupInteractor: OnChainTransferSetupInteractorInputProtocol {}

@@ -6233,6 +6233,16 @@
 		CA8D91616B55AF9A02215FBB /* LedgerPerformOperationViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A399F229B59A854FEA6D91 /* LedgerPerformOperationViewLayout.swift */; };
 		CB0F9E874ECC151E5A8FA9E2 /* DelegatedSignValidationWireframe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E7C9CFEB793E2B6F5B9CA4 /* DelegatedSignValidationWireframe.swift */; };
 		CB284AD6AE1D6536FA53EE54 /* ChainModel+Tron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC844FA946041F2005451AA /* ChainModel+Tron.swift */; };
+		AE3395E896DFF718C73213F8 /* TronGridTransactionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD50243B6D5890C91A43FB2E /* TronGridTransactionModels.swift */; };
+		8954B6D78E52480DE74CDB8A /* CallCodingPath+Tron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D047F16B2FC0CB073FD54F /* CallCodingPath+Tron.swift */; };
+		AC1B9ACFC6E26C765FAA159E /* TronTransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDD64F198A73D7ED742AC7D /* TronTransferType.swift */; };
+		715E40E6236833B6C603B56E /* TronTransferCommandFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92864C4A8C3BB22AC253C326 /* TronTransferCommandFactory.swift */; };
+		938D45EE1905A987FD091529 /* TronOnChainTransferInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B25CF33825DFEFED882320 /* TronOnChainTransferInteractor.swift */; };
+		B8C5E512990552396E2B8495 /* TronOnChainTransferSetupInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CE99F07E1713EEF1AA63B1 /* TronOnChainTransferSetupInteractor.swift */; };
+		609E9832743F2BCCD2D96268 /* TransferTronOnChainConfirmInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AA948DB492DD682933BD03 /* TransferTronOnChainConfirmInteractor.swift */; };
+		6F00BD303A0376E20A3D0EA7 /* TronFeeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DA165BF644C16F362CB816 /* TronFeeModel.swift */; };
+		BF51EE2E38A57959CC5FA5C2 /* TronTransactionFeeProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30681C8233FA003C26215E55 /* TronTransactionFeeProxy.swift */; };
+		2A8F582E2769A5173B89233E /* TronTransactionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55DC124C0B17E9B06765B1D /* TronTransactionService.swift */; };
 		CB2E57FC45AC1E2980E3492E /* NPoolsUnstakeSetupViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE86742207CDAD889A01B40A /* NPoolsUnstakeSetupViewLayout.swift */; };
 		CB48D6AC528CF9AAE8766CC5 /* LedgerNetworkSelectionViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03974ECD8AEF39FDCA277D7 /* LedgerNetworkSelectionViewFactory.swift */; };
 		CB86DDFBAB085C75CA39E98D /* SwipeGovReferendumDetailsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C10F180389B0A921A81BD6A /* SwipeGovReferendumDetailsInteractor.swift */; };
@@ -9010,6 +9020,16 @@
 		2F83F91EC9B29C21D087D869 /* ExportInteractor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ExportInteractor.swift; sourceTree = "<group>"; };
 		2F8A45125DF93218FC6C5119 /* ParaStkYourCollatorsViewFactory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ParaStkYourCollatorsViewFactory.swift; sourceTree = "<group>"; };
 		2FC844FA946041F2005451AA /* ChainModel+Tron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ChainModel+Tron.swift"; path = "novawallet/Common/Model/Tron/ChainModel+Tron.swift"; sourceTree = SOURCE_ROOT; };
+		BD50243B6D5890C91A43FB2E /* TronGridTransactionModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronGridTransactionModels.swift"; path = "novawallet/Common/Network/TronGrid/TronGridTransactionModels.swift"; sourceTree = SOURCE_ROOT; };
+		24D047F16B2FC0CB073FD54F /* CallCodingPath+Tron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CallCodingPath+Tron.swift"; path = "novawallet/Common/Model/Tron/CallCodingPath+Tron.swift"; sourceTree = SOURCE_ROOT; };
+		7BDD64F198A73D7ED742AC7D /* TronTransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronTransferType.swift"; path = "novawallet/Common/Model/Tron/TronTransferType.swift"; sourceTree = SOURCE_ROOT; };
+		92864C4A8C3BB22AC253C326 /* TronTransferCommandFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronTransferCommandFactory.swift"; path = "novawallet/Common/TransferCommands/TronTransferCommandFactory.swift"; sourceTree = SOURCE_ROOT; };
+		83B25CF33825DFEFED882320 /* TronOnChainTransferInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronOnChainTransferInteractor.swift"; path = "novawallet/Modules/Transfer/BaseTransfer/OnChain/TronOnChainTransferInteractor.swift"; sourceTree = SOURCE_ROOT; };
+		32CE99F07E1713EEF1AA63B1 /* TronOnChainTransferSetupInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronOnChainTransferSetupInteractor.swift"; path = "novawallet/Modules/Transfer/TransferSetup/OnChain/Interactor/TronOnChainTransferSetupInteractor.swift"; sourceTree = SOURCE_ROOT; };
+		E8AA948DB492DD682933BD03 /* TransferTronOnChainConfirmInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TransferTronOnChainConfirmInteractor.swift"; path = "novawallet/Modules/Transfer/TransferConfirm/OnChain/TransferTronOnChainConfirmInteractor.swift"; sourceTree = SOURCE_ROOT; };
+		16DA165BF644C16F362CB816 /* TronFeeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronFeeModel.swift"; path = "novawallet/Common/Services/ExtrinsicService/Tron/TronFeeModel.swift"; sourceTree = SOURCE_ROOT; };
+		30681C8233FA003C26215E55 /* TronTransactionFeeProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronTransactionFeeProxy.swift"; path = "novawallet/Common/Services/ExtrinsicService/Tron/TronTransactionFeeProxy.swift"; sourceTree = SOURCE_ROOT; };
+		E55DC124C0B17E9B06765B1D /* TronTransactionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TronTransactionService.swift"; path = "novawallet/Common/Services/ExtrinsicService/Tron/TronTransactionService.swift"; sourceTree = SOURCE_ROOT; };
 		2FC9F0E50317E1583EA8E345 /* GovernanceUnlockSetupViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GovernanceUnlockSetupViewController.swift; sourceTree = "<group>"; };
 		301287CBBF23EF58186A7BB5 /* DAppAuthConfirmViewLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DAppAuthConfirmViewLayout.swift; sourceTree = "<group>"; };
 		3089A0A7C992300CE839A050 /* ParaStkYieldBoostStartPresenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ParaStkYieldBoostStartPresenter.swift; sourceTree = "<group>"; };
@@ -16266,6 +16286,7 @@
 		0DDD416FAA46DF5DC138E9B4 /* TronGrid */ = {
 			isa = PBXGroup;
 			children = (
+				BD50243B6D5890C91A43FB2E /* TronGridTransactionModels.swift */,
 				C80E44028131D2D8497BF10D /* TronGridAccountResponse.swift */,
 				DD104E94A3E055606B0D7ED1 /* TronGridTriggerConstantContractResponse.swift */,
 				095A444798D797FE42D8574E /* TronGridOperationFactory.swift */,
@@ -16491,6 +16512,8 @@
 		19AC4E7A8D38B4DF1638F1D0 /* Tron */ = {
 			isa = PBXGroup;
 			children = (
+				7BDD64F198A73D7ED742AC7D /* TronTransferType.swift */,
+				24D047F16B2FC0CB073FD54F /* CallCodingPath+Tron.swift */,
 				2FC844FA946041F2005451AA /* ChainModel+Tron.swift */,
 			);
 			name = Tron;
@@ -18372,6 +18395,7 @@
 		2DA4D5CB2EB368D4006FCCC0 /* TransferCommands */ = {
 			isa = PBXGroup;
 			children = (
+				92864C4A8C3BB22AC253C326 /* TronTransferCommandFactory.swift */,
 				2DA4D5BC2EB364DA006FCCC0 /* SubstrateTransferCommandFactory.swift */,
 				2DA4D5C62EB365F1006FCCC0 /* EvmTransferCommandFactory.swift */,
 			);
@@ -22730,6 +22754,7 @@
 				0C3205E12A897B32002EB914 /* Validation */,
 				84A59158292AA65500BCCF8F /* Substrate */,
 				84A59157292AA64E00BCCF8F /* Evm */,
+				0B1E9BC18FA89387587CA47A /* Tron */,
 			);
 			path = ExtrinsicService;
 			sourceTree = "<group>";
@@ -23826,6 +23851,7 @@
 		848F8B1428634F7700204BC4 /* OnChain */ = {
 			isa = PBXGroup;
 			children = (
+				83B25CF33825DFEFED882320 /* TronOnChainTransferInteractor.swift */,
 				84735C6227E05FE6001DD1E6 /* OnChainTransferInteractor.swift */,
 				8466780E27EB2939007935D3 /* OnChainTransferPresenter.swift */,
 				84A59165292B601600BCCF8F /* EvmOnChainTransferInteractor.swift */,
@@ -25420,6 +25446,17 @@
 			path = Operation;
 			sourceTree = "<group>";
 		};
+		0B1E9BC18FA89387587CA47A /* Tron */ = {
+			isa = PBXGroup;
+			children = (
+				16DA165BF644C16F362CB816 /* TronFeeModel.swift */,
+				30681C8233FA003C26215E55 /* TronTransactionFeeProxy.swift */,
+				E55DC124C0B17E9B06765B1D /* TronTransactionService.swift */,
+			);
+			name = Tron;
+			path = Tron;
+			sourceTree = "<group>";
+		};
 		84A59157292AA64E00BCCF8F /* Evm */ = {
 			isa = PBXGroup;
 			children = (
@@ -26634,6 +26671,7 @@
 		84CFE446292B979B00CDDD7C /* Interactor */ = {
 			isa = PBXGroup;
 			children = (
+				32CE99F07E1713EEF1AA63B1 /* TronOnChainTransferSetupInteractor.swift */,
 				B765BDAA27726E2586953368 /* OnChainTransferSetupInteractor.swift */,
 				84CFE440292B8CDA00CDDD7C /* EvmOnChainTransferSetupInteractor.swift */,
 			);
@@ -27279,6 +27317,7 @@
 		84ED6BE128698BF300B3C558 /* OnChain */ = {
 			isa = PBXGroup;
 			children = (
+				E8AA948DB492DD682933BD03 /* TransferTronOnChainConfirmInteractor.swift */,
 				D385A8FCB0E6F3F6B6872F01 /* TransferOnChainConfirmPresenter.swift */,
 				ED5CED3C58CD433B19978EC4 /* TransferOnChainConfirmInteractor.swift */,
 				84CFE442292B8F3E00CDDD7C /* TransferEvmOnChainConfirmInteractor.swift */,
@@ -31160,6 +31199,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE3395E896DFF718C73213F8 /* TronGridTransactionModels.swift in Sources */,
+				8954B6D78E52480DE74CDB8A /* CallCodingPath+Tron.swift in Sources */,
+				AC1B9ACFC6E26C765FAA159E /* TronTransferType.swift in Sources */,
+				715E40E6236833B6C603B56E /* TronTransferCommandFactory.swift in Sources */,
+				938D45EE1905A987FD091529 /* TronOnChainTransferInteractor.swift in Sources */,
+				B8C5E512990552396E2B8495 /* TronOnChainTransferSetupInteractor.swift in Sources */,
+				609E9832743F2BCCD2D96268 /* TransferTronOnChainConfirmInteractor.swift in Sources */,
+				6F00BD303A0376E20A3D0EA7 /* TronFeeModel.swift in Sources */,
+				BF51EE2E38A57959CC5FA5C2 /* TronTransactionFeeProxy.swift in Sources */,
+				2A8F582E2769A5173B89233E /* TronTransactionService.swift in Sources */,
 				84A9ECC429129FF10094C763 /* GovernanceRemainedLockViewModel.swift in Sources */,
 				F4C2009C2727ED1C00B0F3D0 /* SystemRemarkCall.swift in Sources */,
 				AEF505102616769F0098574D /* InitiatedBonding.swift in Sources */,

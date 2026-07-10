@@ -68,17 +68,20 @@ final class SigningWrapper: BaseSigner, SigningWrapperProtocol {
     }
 
     override func signData(_ data: Data, context _: ExtrinsicSigningContext) throws -> IRSignatureProtocol {
-        // Phase 1 Tron support is read-only - no signing/broadcast is wired up. Guarded explicitly
-        // (rather than falling through to the tag lookup below, which is keyed off
-        // `isEthereumBased` and would look up the *substrate* secret key tag for a Tron account,
-        // since Tron sets `isTronBased`, not `isEthereumBased`).
-        guard cryptoType != .tronEcdsa else {
-            throw TronSigningNotImplementedError.notImplemented
+        // Tag selection is keyed off `isEthereumBased` for the substrate-vs-ethereum split, but a
+        // Tron account has `isTronBased == true` and `isEthereumBased == false` (see
+        // `ChainAccountResponse`) - falling through to the two-way `isEthereumBased` check below
+        // for `.tronEcdsa` would incorrectly resolve the *substrate* secret key tag for a Tron
+        // account. Handled as an explicit third case instead.
+        let tag: String
+        switch cryptoType {
+        case .tronEcdsa:
+            tag = KeystoreTagV2.tronSecretKeyTagForMetaId(metaId, accountId: accountId)
+        case .sr25519, .ed25519, .substrateEcdsa, .ethereumEcdsa:
+            tag = isEthereumBased ?
+                KeystoreTagV2.ethereumSecretKeyTagForMetaId(metaId, accountId: accountId) :
+                KeystoreTagV2.substrateSecretKeyTagForMetaId(metaId, accountId: accountId)
         }
-
-        let tag: String = isEthereumBased ?
-            KeystoreTagV2.ethereumSecretKeyTagForMetaId(metaId, accountId: accountId) :
-            KeystoreTagV2.substrateSecretKeyTagForMetaId(metaId, accountId: accountId)
 
         let secretKey = try keystore.fetchKey(for: tag)
 
@@ -92,7 +95,7 @@ final class SigningWrapper: BaseSigner, SigningWrapperProtocol {
         case .ethereumEcdsa:
             return try signEthereum(data, secretKey: secretKey)
         case .tronEcdsa:
-            throw TronSigningNotImplementedError.notImplemented
+            return try signTron(data, secretKey: secretKey)
         }
     }
 }

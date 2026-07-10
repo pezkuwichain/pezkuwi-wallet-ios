@@ -9,34 +9,41 @@ enum AssetListGroupModelComparator {
         compare(lhs: lhs, rhs: rhs, by: keyPath, zeroValue: 0)
     }
 
+    // Explicit default ordering for the main asset list - kept identical to
+    // TokenSorting.kt's mainTokensFirstAscendingOrder on Android. Symbols not
+    // listed here fall through to pure alphabetical ordering.
+    private static let symbolPriorityOrder: [String: UInt8] = [
+        "HEZ": 0,
+        "PEZ": 1,
+        "USDT": 2,
+        "DOT": 3,
+        "KSM": 4,
+        "USDC": 5,
+        "TRX": 6,
+        "BTC": 7,
+        "ETH": 8,
+        "BNB": 9,
+        "AVAX": 10,
+        "LINK": 11,
+        "TAO": 12
+    ]
+
     static func defaultComparator(
         lhs: AssetListAssetGroupModel,
         rhs: AssetListAssetGroupModel
     ) -> Bool {
-        let lhsPriority = priority(for: lhs.multichainToken)
-        let rhsPriority = priority(for: rhs.multichainToken)
+        let lhsSymbolPriority = symbolPriorityOrder[lhs.multichainToken.symbol]
+        let rhsSymbolPriority = symbolPriorityOrder[rhs.multichainToken.symbol]
 
-        return if lhsPriority != rhsPriority {
-            lhsPriority < rhsPriority
-        } else {
-            lhs.multichainToken.symbol.lexicographicallyPrecedes(rhs.multichainToken.symbol)
-        }
-    }
-
-    private static func priority(for token: MultichainToken) -> UInt8 {
-        let matchesChain: (ChainModel.Id) -> Bool = { knownChainId in
-            token.instances.contains { $0.chainAssetId.chainId == knownChainId && $0.utility }
+        if let lhsSymbolPriority, let rhsSymbolPriority {
+            return lhsSymbolPriority < rhsSymbolPriority
+        } else if lhsSymbolPriority != nil {
+            return true
+        } else if rhsSymbolPriority != nil {
+            return false
         }
 
-        return if matchesChain(KnowChainId.polkadotAssetHub) {
-            0
-        } else if matchesChain(KnowChainId.kusamaAssetHub) {
-            1
-        } else if token.instances.allSatisfy({ $0.testnet }) {
-            3
-        } else {
-            2
-        }
+        return lhs.multichainToken.symbol.lexicographicallyPrecedes(rhs.multichainToken.symbol)
     }
 
     static func compare<T, V: Comparable>(
