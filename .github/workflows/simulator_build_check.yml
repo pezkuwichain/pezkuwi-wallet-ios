@@ -6,6 +6,9 @@ on:
     branches:
       - 'redesign/**'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build for iOS Simulator (compile-only, no code signing)

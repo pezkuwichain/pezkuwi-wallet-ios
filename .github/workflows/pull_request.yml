@@ -23,6 +23,9 @@ env:
   #   - Continues build even on failures to gather maximum information
   DEBUG_CI: false
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build app

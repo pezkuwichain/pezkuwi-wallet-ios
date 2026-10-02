@@ -5,6 +5,9 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: read
+
 jobs:
   update:
     name: Update app version
