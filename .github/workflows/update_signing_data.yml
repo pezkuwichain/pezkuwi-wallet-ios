@@ -9,6 +9,9 @@ env:
   BUILD_NUMBER: ${{ github.run_number }}
   RUN_IN_CI: true
 
+permissions:
+  contents: read
+
 jobs:
   update_signing_data:
     runs-on: macos-26

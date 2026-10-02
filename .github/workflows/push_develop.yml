@@ -18,6 +18,9 @@ env:
   RELEASE_NOTES: ${{ github.event.head_commit.message }}
   RUN_IN_CI: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build and upload to Firebase
