@@ -3,24 +3,20 @@ name: Build and Test on PR
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+# The PR gate needs no credentials: the app is built for the iOS simulator without code
+# signing and the unit tests run on a simulator. API keys and GoogleService plists are
+# replaced by non-secret placeholders (see Scripts/ci-placeholder-keys.sh). Signed and
+# distributed builds live in the other workflows.
 env:
-  IOS_BUNDLE_ID: "io.novafoundation.novawallet.dev"
-  IOS_EXTENSION_BUNDLE_ID: "io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
-  PROVISIONING_PROFILE_SPECIFIER: "match Development io.novafoundation.novawallet.dev"
-  EXTENSION_PROVISIONING_PROFILE_SPECIFIER: "match Development io.novafoundation.novawallet.dev.NovaPushNotificationServiceExtension"
-  CODE_SIGN_IDENTITY: "Apple Development"
-  EXPORT_METHOD: "development"
-  BUILD_NUMBER: ${{ github.run_number }}
   RUN_IN_CI: true
-  # DEBUG MODE: Set to 'true' to enable enhanced debugging for build failures
-  # What it does:
-  #   - Enables verbose xcodebuild logging
-  #   - Collects and uploads build artifacts (logs, test results)
-  #   - Continues build even on failures to gather maximum information
+  # DEBUG MODE: Set to 'true' to enable verbose test logging and upload the build logs
   DEBUG_CI: false
 
 jobs:
@@ -31,36 +27,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup iOS Environment
         uses: ./.github/actions/install
         with:
-          scw_access_key: ${{ secrets.SCW_ACCESS_KEY }}
-          scw_secret_key: ${{ secrets.SCW_SECRET_KEY }}
-          scw_default_project_id: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
-          scw_default_organization_id: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
+          placeholder_keys: "true"
 
       - name: Build app
-        run: |
-          # Pass debug flag to fastlane if DEBUG_CI is enabled
-          if [ "${{ env.DEBUG_CI }}" = "true" ]; then
-            echo "🔍 Building app in debug mode..."
-            bundle exec fastlane build_app_ci debug:true
-          else
-            bundle exec fastlane build_app_ci
-          fi
-
-      # Upload build artifacts for debugging - only when DEBUG_CI is enabled
-      - name: Upload build artifacts
-        if: env.DEBUG_CI == 'true' && (failure() || success())
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts-${{ github.run_number }}
-          path: |
-            ./fastlane/build_logs/
-          retention-days: 3
+        run: bundle exec fastlane build_app_simulator
 
   test:
     name: Run tests
@@ -69,17 +43,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Setup iOS Environment
         uses: ./.github/actions/install
         with:
-          scw_access_key: ${{ secrets.SCW_ACCESS_KEY }}
-          scw_secret_key: ${{ secrets.SCW_SECRET_KEY }}
-          scw_default_project_id: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
-          scw_default_organization_id: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
+          placeholder_keys: "true"
 
       - name: Run tests
-        run: bundle exec fastlane run_unit_tests
+        run: |
+          if [ "${{ env.DEBUG_CI }}" = "true" ]; then
+            bundle exec fastlane run_unit_tests debug:true
+          else
+            bundle exec fastlane run_unit_tests
+          fi
+
+      - name: Upload test logs
+        if: env.DEBUG_CI == 'true' && (failure() || success())
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ github.run_number }}
+          path: |
+            ./fastlane/build_logs/
+            ./fastlane/test_output/
+          retention-days: 3

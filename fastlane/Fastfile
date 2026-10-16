@@ -50,6 +50,27 @@ platform :ios do
     )
   end
 
+  desc "Build the app for the iOS simulator without code signing"
+  desc "Compile check for pull requests: needs no certificates, profiles or Apple account."
+  desc "Example usage: fastlane build_app_simulator"
+  lane :build_app_simulator do
+    # Lanes run from ./fastlane; xcodebuild must run from the project root.
+    Dir.chdir("..") do
+      sh(
+        "xcodebuild build " \
+        "-project #{main_target}.xcodeproj " \
+        "-scheme #{main_scheme} " \
+        "-configuration Debug " \
+        "-destination 'generic/platform=iOS Simulator' " \
+        "-clonedSourcePackagesDirPath source_packages " \
+        "-skipPackagePluginValidation -skipMacroValidation " \
+        "ARCHS=arm64 ONLY_ACTIVE_ARCH=YES " \
+        "CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO " \
+        "RUN_IN_CI=#{ENV['RUN_IN_CI']}"
+      )
+    end
+  end
+
   desc "Distribute app to Firebase"
   desc "Parameters:"
   desc "- 'release_notes : <value>' to define release notes"
