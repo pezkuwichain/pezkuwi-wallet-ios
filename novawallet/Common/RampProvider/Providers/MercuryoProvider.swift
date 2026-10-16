@@ -30,10 +30,12 @@ final class MercuryoProvider: BaseURLStringProviding,
     private let displayURL = "mercuryo.io"
 
     #if F_RELEASE
-        let configuration: Configuration = .production
+        static let defaultConfiguration: Configuration = .production
     #else
-        let configuration: Configuration = .debug
+        static let defaultConfiguration: Configuration = .debug
     #endif
+
+    let configuration: Configuration
 
     let offRampHookFactory: OffRampHookFactoryProtocol
     let onRampHookFactory: OnRampHookFactoryProtocol
@@ -44,11 +46,13 @@ final class MercuryoProvider: BaseURLStringProviding,
     }
 
     init(
+        configuration: Configuration = MercuryoProvider.defaultConfiguration,
         offRampHookFactory: OffRampHookFactoryProtocol = MercuryoOffRampHookFactory(),
         onRampHookFactory: OnRampHookFactoryProtocol = MercuryoOnRampHookFactory(),
         merchantIdFactory: MerchantTransactionIdFactoryProtocol = UUIDMerchantTransactionIdFactory(),
         ipAddressProvider: IPAddressProviderProtocol = IPAddressProvider()
     ) {
+        self.configuration = configuration
         self.offRampHookFactory = offRampHookFactory
         self.onRampHookFactory = onRampHookFactory
         self.merchantIdFactory = merchantIdFactory
