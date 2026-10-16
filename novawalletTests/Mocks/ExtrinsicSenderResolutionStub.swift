@@ -22,6 +22,7 @@ final class ExtrinsicSenderResolutionFactoryStub {
                 cryptoType: .sr25519,
                 addressPrefix: chain.addressPrefix,
                 isEthereumBased: chain.isEthereumBased,
+                isTronBased: chain.isTronBased,
                 isChainAccount: true,
                 type: .secrets
             )
