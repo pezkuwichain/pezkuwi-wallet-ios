@@ -9,18 +9,25 @@ inputs:
     description: "Skip Mint, SPM and Google service plist setup (for signing-only workflows)"
     required: false
     default: "false"
+  placeholder_keys:
+    description: >-
+      Use non-secret placeholder values for the API keys and dummy GoogleService plists
+      instead of fetching them from Scaleway Secret Manager. Enough to compile the app for
+      the iOS simulator and run unit tests; not usable for signed or distributed builds.
+    required: false
+    default: "false"
   scw_access_key:
-    description: "Scaleway Access Key"
-    required: true
+    description: "Scaleway Access Key (required unless placeholder_keys is true)"
+    required: false
   scw_secret_key:
-    description: "Scaleway Secret Key"
-    required: true
+    description: "Scaleway Secret Key (required unless placeholder_keys is true)"
+    required: false
   scw_default_project_id:
-    description: "Scaleway Default Project ID"
-    required: true
+    description: "Scaleway Default Project ID (required unless placeholder_keys is true)"
+    required: false
   scw_default_organization_id:
-    description: "Scaleway Default Organization ID"
-    required: true
+    description: "Scaleway Default Organization ID (required unless placeholder_keys is true)"
+    required: false
 
 runs:
   using: "composite"
@@ -53,6 +60,7 @@ runs:
       run: mint bootstrap --mintfile CIMintfile
 
     - uses: scaleway/action-scw-secret@v0
+      if: inputs.placeholder_keys != 'true'
       with:
         # ENV_NAME,SECRET_NAME (with path)
         secret-names: |
@@ -84,8 +92,13 @@ runs:
         default-project-id: ${{ inputs.scw_default_project_id }}
         default-organization-id: ${{ inputs.scw_default_organization_id }}
 
+    - name: Placeholder keys setup
+      if: inputs.placeholder_keys == 'true'
+      shell: bash
+      run: ./Scripts/ci-placeholder-keys.sh
+
     - name: Google service plist files setup
-      if: inputs.minimal_mode != 'true'
+      if: inputs.minimal_mode != 'true' && inputs.placeholder_keys != 'true'
       shell: bash
       run: |
         echo "${GOOGLE_DEV_SERVICE_FILE_CONTENT}" > "./novawallet/GoogleService-Info-Dev.plist"
