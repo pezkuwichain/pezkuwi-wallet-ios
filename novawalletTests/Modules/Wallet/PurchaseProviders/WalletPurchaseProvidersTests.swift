@@ -96,7 +96,12 @@ class WalletRampProvidersTests: XCTestCase {
         let accountId = try address.toAccountId()
         let redirectUrl = ApplicationConfig.shared.purchaseRedirect
 
-        let providerConfig = MercuryoProvider.Configuration.debug
+        // A fixed secret keeps the expected signature independent of the key the build was given.
+        let providerConfig = MercuryoProvider.Configuration(
+            baseUrl: MercuryoProvider.Configuration.debug.baseUrl,
+            widgetId: MercuryoProvider.Configuration.debug.widgetId,
+            secret: "mercuryo-unit-test-secret"
+        )
         let host = providerConfig.baseUrl
         let widgetId = providerConfig.widgetId
 
@@ -116,7 +121,8 @@ class WalletRampProvidersTests: XCTestCase {
             }
         }
 
-        let signature = "v2:5f5817088fbc190d4b58b99618d2ea1c0ccd77f3aa4fc81db729b4edf5a59810465b8e8e2ed39f402c2b515ced678d89a91a8f9bf7c9597b811e16cbc50cfa8f"
+        // SHA-512 of address + secret + IP address + merchant transaction id
+        let signature = "v2:9d89ccea5dae8e1077eed92833fab8893e22e1573612eba747d58e44f564e0dae451fdb86424dffe43c970b094d89a51fcddfd27702cb3a2170f020dc9d45e18"
 
         // swiftlint:disable next long_string
         let expectedURL = switch rampActionType {
@@ -131,11 +137,13 @@ class WalletRampProvidersTests: XCTestCase {
         let provider = switch rampActionType {
         case .offRamp:
             MercuryoProvider(
+                configuration: providerConfig,
                 merchantIdFactory: merchantIdFactory,
                 ipAddressProvider: ipAddressProvider
             )
         case .onRamp:
             MercuryoProvider(
+                configuration: providerConfig,
                 merchantIdFactory: merchantIdFactory,
                 ipAddressProvider: ipAddressProvider
             )
